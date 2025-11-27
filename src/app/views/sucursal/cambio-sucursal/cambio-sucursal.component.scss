@@ -1,0 +1,73 @@
+/* Contenedor centrado */
+.cambio-sucursal-mobile {
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+}
+
+/* Tarjeta estilo app móvil */
+.card-mobile {
+    width: 100%;
+    max-width: 380px;
+    background: #ffffff;
+    padding: 22px;
+    border-radius: 14px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+}
+
+/* Título */
+.title-mobile {
+    text-align: center;
+    margin-bottom: 18px;
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #333;
+}
+
+/* Etiqueta */
+.label-mobile {
+    font-size: 0.95rem;
+    font-weight: 500;
+    margin-bottom: 6px;
+    display: block;
+    color: #555;
+}
+
+/* Select estilo mobile */
+.select-mobile {
+    width: 100%;
+    padding: 12px;
+    font-size: 1rem;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    margin-bottom: 20px;
+    background: #fafafa;
+}
+
+/* Contenedor de botones */
+.actions-mobile {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* Botón estilo app */
+.btn-mobile {
+    width: 100%;
+    padding: 12px;
+    border-radius: 10px;
+    font-size: 1.05rem;
+    font-weight: 600;
+    text-align: center;
+    border: none;
+}
+
+.primary {
+    background: #1976d2;
+    color: white;
+}
+
+.secondary {
+    background: #e0e0e0;
+    color: #333;
+}

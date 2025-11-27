@@ -1,0 +1,32 @@
+.card-periodo {
+    max-width: 450px;
+    background: #ffffff;
+    border-radius: 16px;
+    margin-top: 30px;
+}
+
+.titulo {
+    text-align: center;
+    font-weight: 600;
+    margin-bottom: 25px;
+}
+
+.input-style {
+    border-radius: 8px;
+    padding: 10px 12px;
+}
+
+.btn-primary {
+    border-radius: 10px !important;
+}
+
+.btn-outline-secondary {
+    border-radius: 10px !important;
+}
+
+@media (max-width: 768px) {
+    .card-periodo {
+        padding: 25px;
+        margin: 10px;
+    }
+}

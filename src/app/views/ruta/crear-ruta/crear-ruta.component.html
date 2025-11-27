@@ -1,0 +1,37 @@
+<c-modal #modalCrearRuta id="modalCrearRuta" size="lg" [visible]="visible" (visibleChange)="onVisibleChange($event)">
+  <c-modal-header>
+    <h5 cModalTitle>Crear Nueva Ruta</h5>
+    <button cButtonClose (click)="cerrarModal()" aria-label="Close"></button>
+  </c-modal-header>
+
+  <c-modal-body>
+    <div class="mb-3">
+      <label class="form-label fw-semibold">Nombre de la Ruta</label>
+      <input class="form-control" [(ngModel)]="nombre" placeholder="Ej: Ruta Centro" />
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label fw-semibold">Dirección</label>
+      <input class="form-control" [(ngModel)]="direccion" placeholder="Ej: Calle Principal 123" />
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label fw-semibold">Zona</label>
+      <input class="form-control" [(ngModel)]="zona" placeholder="Ej: Zona Norte" />
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label fw-semibold">Estado</label>
+      <select class="form-control" [(ngModel)]="estado">
+        <option value="ACTIVO">Activo</option>
+        <option value="INACTIVO">Inactivo</option>
+        <option value="SUSPENDIDO">Suspendido</option>
+      </select>
+    </div>
+  </c-modal-body>
+
+  <c-modal-footer>
+    <button cButton color="secondary" (click)="cerrarModal()">Cancelar</button>
+    <button cButton color="primary" (click)="crear()">Crear Ruta</button>
+  </c-modal-footer>
+</c-modal>

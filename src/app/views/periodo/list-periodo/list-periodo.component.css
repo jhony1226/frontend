@@ -1,0 +1,261 @@
+.periodo-list-container {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* ---------- HEADER ---------- */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.header h2 {
+  margin: 0;
+  font-weight: 600;
+  flex: 1;
+  min-width: 200px;
+}
+
+.header button {
+  margin-top: 0;
+  white-space: nowrap;
+}
+
+/* ---------- FILTERS ---------- */
+.filters {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.filters mat-form-field {
+  flex: 1;
+  min-width: 200px;
+}
+
+/* ---------- TABLE (Desktop) ---------- */
+.desktop-table {
+  display: block;
+  overflow-x: auto;
+}
+
+.desktop-table table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.desktop-table th,
+.desktop-table td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+.desktop-table th {
+  background-color: #f5f5f5;
+  font-weight: 600;
+}
+
+.desktop-table tr:hover {
+  background-color: #fafafa;
+}
+
+.estado {
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.estado.activo {
+  background: #d1f7d6;
+  color: #137333;
+}
+
+.estado.cerrado {
+  background: #ffe5cc;
+  color: #a44a1f;
+}
+
+.estado.vencido {
+  background: #ffd6d6;
+  color: #b30000;
+}
+
+/* ---------- CARDS (Mobile) ---------- */
+.mobile-cards {
+  display: none;
+}
+
+/* Mobile table styles */
+.mobile-table {
+  display: none;
+  overflow-x: auto;
+  margin-bottom: 12px;
+}
+
+.mobile-table table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.mobile-table th,
+.mobile-table td {
+  padding: 8px 6px;
+  text-align: left;
+  border-bottom: 1px solid #eee;
+  font-size: 14px;
+}
+
+.mobile-table thead th {
+  background: #f7f7f7;
+  font-weight: 600;
+}
+
+.mobile-cards .card {
+  background: white;
+  border-radius: 10px;
+  padding: 15px;
+  margin-bottom: 15px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.mobile-cards .card h3 {
+  margin: 0 0 10px 0;
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.mobile-cards .card p {
+  margin: 8px 0;
+  font-size: 14px;
+  color: #555;
+}
+
+.mobile-cards .card .estado {
+  display: block;
+  margin-top: 10px;
+  text-align: center;
+}
+
+.mobile-cards .card-actions {
+  margin-top: 15px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+/* ---------- RESPONSIVE RULES ---------- */
+
+/* Tablets (768px to 1024px) */
+@media (max-width: 1024px) {
+  .desktop-table {
+    font-size: 14px;
+  }
+
+  .desktop-table th,
+  .desktop-table td {
+    padding: 10px;
+  }
+
+  .filters mat-form-field {
+    min-width: 150px;
+  }
+}
+
+/* Mobile and small tablets (less than 1024px) - show mobile cards */
+@media (max-width: 1024px) {
+  .periodo-list-container {
+    padding: 15px;
+  }
+
+  /* Force desktop/table toggles to avoid other global styles hiding the mobile view */
+  .desktop-table {
+    display: none !important;
+  }
+
+  .mobile-cards {
+    display: block !important;
+  }
+
+  /* Show the mobile-optimized table on small screens */
+  .mobile-table {
+    display: block !important;
+  }
+
+  .header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .header h2 {
+    font-size: 20px;
+    margin-bottom: 10px;
+  }
+
+  .header button {
+    width: 100%;
+  }
+
+  .filters {
+    flex-direction: column;
+  }
+
+  .filters mat-form-field {
+    width: 100%;
+    min-width: unset;
+  }
+
+  .mobile-cards .card {
+    padding: 12px;
+    margin-bottom: 12px;
+  }
+
+  .mobile-cards .card h3 {
+    font-size: 15px;
+    margin-bottom: 8px;
+  }
+
+  .mobile-cards .card p {
+    font-size: 13px;
+  }
+}
+
+/* Small Mobile (less than 480px) */
+@media (max-width: 480px) {
+  .periodo-list-container {
+    padding: 10px;
+  }
+
+  .header h2 {
+    font-size: 18px;
+  }
+
+  .mobile-cards .card {
+    padding: 10px;
+  }
+
+  .mobile-cards .card h3 {
+    font-size: 14px;
+  }
+
+  .mobile-cards .card p {
+    font-size: 12px;
+  }
+
+  .mobile-cards .card-actions {
+    gap: 5px;
+  }
+}
+
+/* Utilities */
+.mat-elevation-z4 {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}

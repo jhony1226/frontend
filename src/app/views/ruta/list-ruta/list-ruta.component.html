@@ -1,0 +1,50 @@
+<div class="card mt-4">
+  <div class="card-header d-flex justify-content-between align-items-center">
+    <h5 class="mb-0">Gestión de Rutas</h5>
+    <button class="btn btn-primary btn-sm" (click)="abrirModalCrearRuta()">
+      <i class="fas fa-plus"></i> Crear Ruta
+    </button>
+  </div>
+  <div class="card-body">
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th>Nombre</th>
+          <th>Dirección</th>
+          <th>Zona</th>
+          <th>Estado</th>
+          <th>Creado</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let ruta of rutas">
+          <td>{{ ruta.nombre }}</td>
+          <td>{{ ruta.direccion }}</td>
+          <td>{{ ruta.zona }}</td>
+          <td>
+            <span [class]="'badge badge-' + (ruta.estado === 'ACTIVO' ? 'success' : ruta.estado === 'INACTIVO' ? 'secondary' : 'warning')">
+              {{ ruta.estado }}
+            </span>
+          </td>
+          <td>{{ ruta.createdAt | slice:0:10 }}</td>
+          <td>
+            <button class="btn btn-sm btn-outline-danger" (click)="eliminarRuta(ruta.id)">
+              Eliminar
+            </button>
+          </td>
+        </tr>
+        <tr *ngIf="rutas.length === 0">
+          <td colspan="6" class="text-center text-muted py-4">No hay rutas creadas</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Modal para crear ruta -->
+<app-crear-ruta
+  [visible]="modalVisible"
+  (visibleChange)="onModalVisibleChange($event)"
+  (rutaCreada)="onRutaCreada($event)"
+></app-crear-ruta>

@@ -1,0 +1,54 @@
+<div class="card-container shadow p-4 mx-auto mt-4">
+  <h3 class="mb-4">Crear Nueva Sucursal</h3>
+
+  <form (ngSubmit)="crear()">
+    <div class="mb-3">
+      <label class="form-label fw-semibold">Nombre de la Sucursal</label>
+      <input
+        class="form-control"
+        [(ngModel)]="nombre"
+        name="nombre"
+        placeholder="Ej: Sucursal Centro"
+        required
+      />
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label fw-semibold">Dirección</label>
+      <input
+        class="form-control"
+        [(ngModel)]="direccion"
+        name="direccion"
+        placeholder="Ej: Cra 10 #20-30"
+        required
+      />
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label fw-semibold">Ciudad</label>
+      <input
+        class="form-control"
+        [(ngModel)]="ciudad"
+        name="ciudad"
+        placeholder="Ej: Bogotá"
+        required
+      />
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label fw-semibold">Estado</label>
+      <select class="form-control" [(ngModel)]="estado" name="estado">
+        <option value="ACTIVA">Activa</option>
+        <option value="INACTIVA">Inactiva</option>
+        <option value="MANTENIMIENTO">Mantenimiento</option>
+      </select>
+    </div>
+
+    <div class="mt-4 d-flex gap-2">
+      <button type="submit" class="btn btn-primary flex-grow-1 py-2">Crear Sucursal</button>
+      <button type="button" class="btn btn-outline-secondary flex-grow-1 py-2" (click)="cancelar()">
+        Cancelar
+      </button>
+    </div>
+  </form>
+</div>
