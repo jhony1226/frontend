@@ -89,67 +89,61 @@
   color: #b30000;
 }
 
-/* ---------- CARDS (Mobile) ---------- */
-.mobile-cards {
-  display: none;
+/* ---------- VISTA MÓVIL (Tarjetas) ---------- */
+.mobile-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding-bottom: 20px;
 }
 
-/* Mobile table styles */
-.mobile-table {
-  display: none;
-  overflow-x: auto;
-  margin-bottom: 12px;
-}
-
-.mobile-table table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.mobile-table th,
-.mobile-table td {
-  padding: 8px 6px;
-  text-align: left;
-  border-bottom: 1px solid #eee;
-  font-size: 14px;
-}
-
-.mobile-table thead th {
-  background: #f7f7f7;
-  font-weight: 600;
-}
-
-.mobile-cards .card {
-  background: white;
+.mobile-card {
+  padding: 16px;
   border-radius: 10px;
-  padding: 15px;
-  margin-bottom: 15px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  background: white;
+  border: 1px solid #e0e0e0;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
 }
 
-.mobile-cards .card h3 {
-  margin: 0 0 10px 0;
+/* Borde lateral de color según estado */
+.mobile-card .estado.activo {
+  border-left: 5px solid #2e7d32;
+}
+
+.mobile-card .estado.cerrado {
+  border-left: 5px solid #ff9800;
+}
+
+.mobile-card .estado.vencido {
+  border-left: 5px solid #c62828;
+}
+
+.mobile-card mat-card-title {
+  font-size: 18px;
   font-weight: 600;
-  font-size: 16px;
+  color: #1a237e;
+  margin-bottom: 8px;
 }
 
-.mobile-cards .card p {
-  margin: 8px 0;
+.mobile-card mat-card-content p {
+  margin: 6px 0;
+  color: #616161;
   font-size: 14px;
-  color: #555;
+  display: flex;
+  justify-content: space-between;
 }
 
-.mobile-cards .card .estado {
-  display: block;
-  margin-top: 10px;
-  text-align: center;
-}
-
-.mobile-cards .card-actions {
-  margin-top: 15px;
+.mobile-card mat-card-actions {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px dashed #e0e0e0;
   display: flex;
   justify-content: flex-end;
-  gap: 10px;
+  gap: 8px;
 }
 
 /* ---------- RESPONSIVE RULES ---------- */
@@ -181,13 +175,8 @@
     display: none !important;
   }
 
-  .mobile-cards {
-    display: block !important;
-  }
-
-  /* Show the mobile-optimized table on small screens */
-  .mobile-table {
-    display: block !important;
+  .mobile-list {
+    display: flex !important;
   }
 
   .header {
@@ -213,17 +202,16 @@
     min-width: unset;
   }
 
-  .mobile-cards .card {
+  .mobile-card {
     padding: 12px;
     margin-bottom: 12px;
   }
 
-  .mobile-cards .card h3 {
-    font-size: 15px;
-    margin-bottom: 8px;
+  .mobile-card mat-card-title {
+    font-size: 16px;
   }
 
-  .mobile-cards .card p {
+  .mobile-card mat-card-content p {
     font-size: 13px;
   }
 }
@@ -238,19 +226,19 @@
     font-size: 18px;
   }
 
-  .mobile-cards .card {
+  .mobile-card {
     padding: 10px;
   }
 
-  .mobile-cards .card h3 {
-    font-size: 14px;
+  .mobile-card mat-card-title {
+    font-size: 15px;
   }
 
-  .mobile-cards .card p {
+  .mobile-card mat-card-content p {
     font-size: 12px;
   }
 
-  .mobile-cards .card-actions {
+  .mobile-card mat-card-actions {
     gap: 5px;
   }
 }

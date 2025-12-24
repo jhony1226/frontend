@@ -13,6 +13,14 @@ export const routes: Routes = [
           ),
         data: { title: 'Gestión de Rutas' },
       },
+      {
+        path: 'crear-ruta',
+        loadComponent: () =>
+          import('./crear-ruta/crear-ruta.component').then(
+            (m) => m.CrearRutaComponent
+          ),
+        data: { title: 'Crear Ruta' },
+      },
     ],
   },
 ];

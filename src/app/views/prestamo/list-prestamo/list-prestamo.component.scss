@@ -7,15 +7,6 @@
   margin: 0 auto;
 }
 
-.list-card {
-  background: #ffffff;
-  border-radius: 16px;
-  padding: 1.5rem;
-  box-shadow:
-    0 12px 30px rgba(0, 0, 0, 0.12),
-    0 4px 12px rgba(0, 0, 0, 0.08);
-}
-
 /* =========================================
    HEADER
    ========================================= */
@@ -113,8 +104,8 @@ tr.mat-row:hover {
   background-color: #fafafa;
 }
 
- 
-/* ---------- TABLE (Desktop) ---------- */
+
+ /* ---------- TABLE (Desktop) ---------- */
 .desktop-table {
   display: block;
   overflow-x: auto;
@@ -141,7 +132,7 @@ tr.mat-row:hover {
   background-color: #fafafa;
 }
 
- 
+
 
 /* =========================================
    BADGES DE ESTADO (Etiquetas de color)
@@ -156,16 +147,22 @@ tr.mat-row:hover {
 }
 
 /* Estilos dinámicos según el texto */
-.badge.activa {
+.badge.activo {
   background-color: #e8f5e9;
   color: #2e7d32;
   border: 1px solid #c8e6c9;
 }
 
-.badge.inactiva {
+.badge.inactivo {
   background-color: #ffebee;
   color: #c62828;
   border: 1px solid #ffcdd2;
+}
+
+.badge.pagado {
+  background-color: #e3f2fd;
+  color: #1565c0;
+  border: 1px solid #bbdefb;
 }
 
 /* =========================================
@@ -192,12 +189,16 @@ tr.mat-row:hover {
 }
 
 /* Borde lateral de color según estado (Truco visual) */
-.mobile-card.activa {
+.mobile-card.activo {
   border-left: 5px solid #2e7d32;
 }
 
-.mobile-card.inactiva {
+.mobile-card.inactivo {
   border-left: 5px solid #c62828;
+}
+
+.mobile-card.pagado {
+  border-left: 5px solid #1565c0;
 }
 
 .mobile-card mat-card-title {

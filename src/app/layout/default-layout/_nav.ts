@@ -50,39 +50,29 @@ export const navItems: INavData[] = [
         url: '/ruta',
         icon: 'nav-icon-bullet',
       },
+      {
+        name: 'Crear Ruta',
+        url: '/ruta/crear-ruta',
+        icon: 'nav-icon-bullet',
+      },
     ],
   },
   {
-    name: 'Prestamos',
+    name: 'Préstamos',
+    url: '/prestamo',
     iconComponent: { name: 'cil-chart-pie' },
-    url: '/charts',
-  },
-  {
-    name: 'Rutas',
-    iconComponent: { name: 'cil-star' },
-    url: '/icons',
     children: [
-      {
-        name: 'CoreUI Free',
-        url: '/icons/coreui-icons',
-        icon: 'nav-icon-bullet',
-        badge: {
-          color: 'success',
-          text: 'FREE',
-        },
-      },
-      {
-        name: 'CoreUI Flags',
-        url: '/icons/flags',
+      {        name: 'Gestión de Préstamos',
+        url: '/prestamo',
         icon: 'nav-icon-bullet',
       },
-      {
-        name: 'CoreUI Brands',
-        url: '/icons/brands',
+      {        name: 'Crear Préstamo',
+        url: '/prestamo/crear-prestamo',
         icon: 'nav-icon-bullet',
       },
     ],
   },
+    
   {
     name: 'Clientes',
     url: '/notifications',

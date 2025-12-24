@@ -15,6 +15,11 @@
     0 12px 30px rgba(0, 0, 0, 0.12),
     0 4px 12px rgba(0, 0, 0, 0.08);
 }
+.empty {
+  text-align: center;
+  padding: 24px;
+  color: #757575;
+}
 
 /* =========================================
    HEADER
@@ -73,23 +78,19 @@ mat-icon.edit {
   color: #1565c0;
 }
 
-/* Azul */
 mat-icon.delete {
   color: #c62828;
 }
 
-/* Rojo */
-
 /* =========================================
-   TABLA DE ESCRITORIO (Estilo "Periodo")
+   TABLA DE ESCRITORIO
    ========================================= */
 table {
   width: 100%;
   border-collapse: collapse;
-  /* Importante para bordes limpios */
 }
 
-/* Encabezado Gris (Igual que en Periodos) */
+/* Encabezado Gris */
 th.mat-header-cell {
   background-color: #f5f5f5;
   color: #424242;
@@ -113,7 +114,6 @@ tr.mat-row:hover {
   background-color: #fafafa;
 }
 
- 
 /* ---------- TABLE (Desktop) ---------- */
 .desktop-table {
   display: block;
@@ -141,8 +141,6 @@ tr.mat-row:hover {
   background-color: #fafafa;
 }
 
- 
-
 /* =========================================
    BADGES DE ESTADO (Etiquetas de color)
    ========================================= */
@@ -156,16 +154,22 @@ tr.mat-row:hover {
 }
 
 /* Estilos dinámicos según el texto */
-.badge.activa {
+.badge.activo {
   background-color: #e8f5e9;
   color: #2e7d32;
   border: 1px solid #c8e6c9;
 }
 
-.badge.inactiva {
+.badge.inactivo {
   background-color: #ffebee;
   color: #c62828;
   border: 1px solid #ffcdd2;
+}
+
+.badge.warning {
+  background-color: #fff3e0;
+  color: #ef6c00;
+  border: 1px solid #ffcc02;
 }
 
 /* =========================================
@@ -188,16 +192,19 @@ tr.mat-row:hover {
   flex-direction: column;
   position: relative;
   overflow: hidden;
-  /* Para el borde lateral */
 }
 
-/* Borde lateral de color según estado (Truco visual) */
-.mobile-card.activa {
+/* Borde lateral de color según estado */
+.mobile-card.activo {
   border-left: 5px solid #2e7d32;
 }
 
-.mobile-card.inactiva {
+.mobile-card.inactivo {
   border-left: 5px solid #c62828;
+}
+
+.mobile-card.warning {
+  border-left: 5px solid #ef6c00;
 }
 
 .mobile-card mat-card-title {
@@ -213,7 +220,6 @@ tr.mat-row:hover {
   font-size: 14px;
   display: flex;
   justify-content: space-between;
-  /* Alinea etiqueta izq y valor der */
 }
 
 .mobile-card mat-card-actions {
@@ -224,6 +230,7 @@ tr.mat-row:hover {
   justify-content: flex-end;
   gap: 8px;
 }
+  
 
 /* =========================================
    RESPONSIVE

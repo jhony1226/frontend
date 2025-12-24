@@ -73,6 +73,11 @@ export const routes: Routes = [
         loadChildren: () => import('./views/ruta/routes').then((m) => m.routes),
       },
       {
+        path: 'prestamo',
+        loadChildren: () =>
+          import('./views/prestamo/routes').then((m) => m.routes),
+      },
+      {
         path: 'sucursal',
         loadChildren: () =>
           import('./views/sucursal/routes').then((m) => m.routes),

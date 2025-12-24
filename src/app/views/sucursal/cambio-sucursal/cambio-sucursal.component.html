@@ -1,20 +1,27 @@
-<div class="cambio-sucursal-mobile">
-    <div class="card-mobile">
-        <h2 class="title-mobile">Cambio de Sucursal</h2>
+<mat-card class="change-card">
+  <mat-card-title>
+    Cambio de Sucursal
+  </mat-card-title>
 
-        <label for="sucursalSelect" class="label-mobile">Seleccionar sucursal</label>
-        <select id="sucursalSelect" class="select-mobile" (change)="selectedId = $any($event.target).value">
-            <option value="">-- Seleccione --</option>
-            <option *ngFor="let s of sucursales" [value]="s.id">
-                {{ s.name }}
-            </option>
-        </select>
+  <form class="change-form">
 
-        <div class="actions-mobile">
-            <button class="btn-mobile primary" (click)="changeSucursal()">
-                Cambiar
-            </button>
-            
-        </div>
+    <!-- Sucursal -->
+    <mat-form-field appearance="outline">
+      <mat-label>Seleccionar sucursal</mat-label>
+      <mat-select [(ngModel)]="selectedId" name="sucursal" required>
+        <mat-option value="">-- Seleccione --</mat-option>
+        <mat-option *ngFor="let s of sucursales" [value]="s.id">
+          {{ s.name }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <!-- Acciones -->
+    <div class="actions">
+      <button mat-raised-button color="primary" type="button" (click)="changeSucursal()">
+        Cambiar
+      </button>
     </div>
-</div>
+
+  </form>
+</mat-card>

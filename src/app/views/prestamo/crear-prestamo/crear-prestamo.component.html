@@ -1,0 +1,71 @@
+<mat-card class="loan-card">
+  <mat-card-title>
+    {{ isEditing ? 'Editar Préstamo' : 'Crear Nuevo Préstamo' }}
+  </mat-card-title>
+
+  <form (ngSubmit)="crear()" class="loan-form">
+
+    <!-- Cliente -->
+    <mat-form-field appearance="outline">
+      <mat-label>Cliente</mat-label>
+      <mat-select [(ngModel)]="clienteSeleccionado" name="cliente" required>
+        <mat-option *ngFor="let cliente of clientes" [value]="cliente">
+          {{ cliente.nombre }} {{ cliente.apellido }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <!-- Período -->
+    <mat-form-field appearance="outline">
+      <mat-label>Período</mat-label>
+      <mat-select [(ngModel)]="periodoSeleccionado" name="periodo" required>
+        <mat-option *ngFor="let periodo of periodos" [value]="periodo">
+          {{ periodo.nombre }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <!-- Valores -->
+    <div class="grid">
+      <mat-form-field appearance="outline">
+        <mat-label>Valor</mat-label>
+        <input matInput type="number" [(ngModel)]="valor" name="valor" required />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Saldo Pendiente</mat-label>
+        <input matInput type="number" [(ngModel)]="saldoPendiente" name="saldoPendiente" required />
+      </mat-form-field>
+    </div>
+
+    <!-- Fecha -->
+    <mat-form-field appearance="outline">
+      <mat-label>Fecha</mat-label>
+      <input matInput [matDatepicker]="picker" [(ngModel)]="fecha" name="fecha" required />
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+
+    <!-- Estado -->
+    <mat-form-field appearance="outline">
+      <mat-label>Estado</mat-label>
+      <mat-select [(ngModel)]="estado" name="estado">
+        <mat-option value="ACTIVO">Activo</mat-option>
+        <mat-option value="INACTIVO">Inactivo</mat-option>
+        <mat-option value="PAGADO">Pagado</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <!-- Acciones -->
+    <div class="actions">
+      <button mat-raised-button color="primary" type="submit">
+        {{ isEditing ? 'Actualizar Préstamo' : 'Crear Préstamo' }}
+      </button>
+
+      <button mat-stroked-button color="warn" type="button" (click)="cancelar()">
+        Cancelar
+      </button>
+    </div>
+
+  </form>
+</mat-card>

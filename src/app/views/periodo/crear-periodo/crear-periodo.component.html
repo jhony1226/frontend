@@ -1,39 +1,59 @@
-<div class="card-periodo shadow p-4 mx-auto">
-    <h3 class="titulo">Crear Periodo</h3>
+<mat-card class="period-card">
+  <mat-card-title>
+    Crear Nuevo Período
+  </mat-card-title>
 
-    <div class="mb-3">
-        <label class="form-label fw-semibold">Nombre</label>
-        <input class="form-control input-style" [(ngModel)]="nombre" placeholder="Nombre del periodo" />
+  <form class="period-form">
+
+    <!-- Nombre -->
+    <mat-form-field appearance="outline">
+      <mat-label>Nombre</mat-label>
+      <input matInput [(ngModel)]="nombre" name="nombre" placeholder="Nombre del periodo" required />
+    </mat-form-field>
+
+    <!-- Valor -->
+    <mat-form-field appearance="outline">
+      <mat-label>Valor</mat-label>
+      <input matInput type="number" [(ngModel)]="valor" name="valor" placeholder="Ingrese el valor" required />
+    </mat-form-field>
+
+    <!-- Fechas -->
+    <div class="grid">
+      <mat-form-field appearance="outline">
+        <mat-label>Fecha inicio</mat-label>
+        <input matInput [matDatepicker]="pickerInicio" [(ngModel)]="fechaInicio" name="fechaInicio" required />
+        <mat-datepicker-toggle matSuffix [for]="pickerInicio"></mat-datepicker-toggle>
+        <mat-datepicker #pickerInicio></mat-datepicker>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Fecha fin</mat-label>
+        <input matInput [matDatepicker]="pickerFin" [(ngModel)]="fechaFin" name="fechaFin" required />
+        <mat-datepicker-toggle matSuffix [for]="pickerFin"></mat-datepicker-toggle>
+        <mat-datepicker #pickerFin></mat-datepicker>
+      </mat-form-field>
     </div>
 
-    <div class="mb-3">
-        <label class="form-label fw-semibold">Valor</label>
-        <input class="form-control input-style" type="number" [(ngModel)]="valor" placeholder="Ingrese el valor" />
+    <!-- Estado -->
+    <mat-form-field appearance="outline">
+      <mat-label>Estado</mat-label>
+      <mat-select [(ngModel)]="estado" name="estado">
+        <mat-option value="ACTIVO">Activo</mat-option>
+        <mat-option value="CERRADO">Cerrado</mat-option>
+        <mat-option value="VENCIDO">Vencido</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <!-- Acciones -->
+    <div class="actions">
+      <button mat-raised-button color="primary" type="button" (click)="crear()">
+        Crear Período
+      </button>
+
+      <button mat-stroked-button color="warn" type="button" (click)="cancelar()">
+        Cancelar
+      </button>
     </div>
 
-    <div class="row">
-        <div class="col-12 col-md-6 mb-3">
-            <label class="form-label fw-semibold">Fecha inicio</label>
-            <input class="form-control input-style" type="date" [(ngModel)]="fechaInicio" />
-        </div>
-
-        <div class="col-12 col-md-6 mb-3">
-            <label class="form-label fw-semibold">Fecha fin</label>
-            <input class="form-control input-style" type="date" [(ngModel)]="fechaFin" />
-        </div>
-    </div>  
-    <!-- ✅ SELECT DE ESTADO AGREGADO -->
-    <div class="mb-3">
-        <label class="form-label fw-semibold">Estado</label>
-        <select class="form-control input-style" [(ngModel)]="estado">
-            <option value="ACTIVO">Activo</option>
-            <option value="CERRADO">Cerrado</option>
-            <option value="VENCIDO">Vencido</option>
-        </select>
-    </div>
-
-    <div class="mt-4 d-flex gap-2">
-        <button class="btn btn-primary flex-grow-1 py-2" (click)="crear()">Crear</button>
-        <button class="btn btn-outline-secondary flex-grow-1 py-2" (click)="cancelar()">Cancelar</button>
-    </div>
-</div>
+  </form>
+</mat-card>

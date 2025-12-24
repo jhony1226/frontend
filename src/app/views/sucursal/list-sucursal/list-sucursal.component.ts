@@ -143,6 +143,7 @@ export class ListSucursalComponent implements OnInit {
     if (Array.isArray(guardadas) && guardadas.length > 0) {
       this.dataSource.data = guardadas;
     } else {
+      localStorage.setItem('sucursales', JSON.stringify(sucursales));
       this.dataSource.data = sucursales;
     }
   }

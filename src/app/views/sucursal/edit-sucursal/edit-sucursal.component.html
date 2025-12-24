@@ -1,54 +1,48 @@
-<div class="card-container shadow p-4 mx-auto mt-4">
-  <h3 class="mb-4">Editar Sucursal</h3>
+<mat-card class="sucursal-card">
+  <mat-card-title>
+    Editar Sucursal
+  </mat-card-title>
 
-  <form (ngSubmit)="guardar()">
-    <div class="mb-3">
-      <label class="form-label fw-semibold">Nombre de la Sucursal</label>
-      <input
-        class="form-control"
-        [(ngModel)]="nombre"
-        name="nombre"
-        placeholder="Ej: Sucursal Centro"
-        required
-      />
-    </div>
+  <form (ngSubmit)="guardar()" class="sucursal-form">
 
-    <div class="mb-3">
-      <label class="form-label fw-semibold">Dirección</label>
-      <input
-        class="form-control"
-        [(ngModel)]="direccion"
-        name="direccion"
-        placeholder="Ej: Cra 10 #20-30"
-        required
-      />
-    </div>
+    <!-- Nombre -->
+    <mat-form-field appearance="outline">
+      <mat-label>Nombre de la Sucursal</mat-label>
+      <input matInput [(ngModel)]="nombre" name="nombre" placeholder="Ej: Sucursal Centro" required />
+    </mat-form-field>
 
-    <div class="mb-3">
-      <label class="form-label fw-semibold">Ciudad</label>
-      <input
-        class="form-control"
-        [(ngModel)]="ciudad"
-        name="ciudad"
-        placeholder="Ej: Bogotá"
-        required
-      />
-    </div>
+    <!-- Dirección -->
+    <mat-form-field appearance="outline">
+      <mat-label>Dirección</mat-label>
+      <input matInput [(ngModel)]="direccion" name="direccion" placeholder="Ej: Cra 10 #20-30" required />
+    </mat-form-field>
 
-    <div class="mb-3">
-      <label class="form-label fw-semibold">Estado</label>
-      <select class="form-control" [(ngModel)]="estado" name="estado">
-        <option value="ACTIVA">Activa</option>
-        <option value="INACTIVA">Inactiva</option>
-        <option value="MANTENIMIENTO">Mantenimiento</option>
-      </select>
-    </div>
+    <!-- Ciudad -->
+    <mat-form-field appearance="outline">
+      <mat-label>Ciudad</mat-label>
+      <input matInput [(ngModel)]="ciudad" name="ciudad" placeholder="Ej: Bogotá" required />
+    </mat-form-field>
 
-    <div class="mt-4 d-flex gap-2">
-      <button type="submit" class="btn btn-primary flex-grow-1 py-2">Guardar Cambios</button>
-      <button type="button" class="btn btn-outline-secondary flex-grow-1 py-2" (click)="cancelar()">
+    <!-- Estado -->
+    <mat-form-field appearance="outline">
+      <mat-label>Estado</mat-label>
+      <mat-select [(ngModel)]="estado" name="estado">
+        <mat-option value="ACTIVA">Activa</mat-option>
+        <mat-option value="INACTIVA">Inactiva</mat-option>
+        <mat-option value="MANTENIMIENTO">Mantenimiento</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <!-- Acciones -->
+    <div class="actions">
+      <button mat-raised-button color="primary" type="submit">
+        Guardar Cambios
+      </button>
+
+      <button mat-stroked-button color="warn" type="button" (click)="cancelar()">
         Cancelar
       </button>
     </div>
+
   </form>
-</div>
+</mat-card>

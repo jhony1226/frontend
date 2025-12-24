@@ -10,12 +10,14 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSortModule } from '@angular/material/sort';
 import { MatSelectModule } from '@angular/material/select';
+import { MatCardModule } from '@angular/material/card';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-list-periodo',
   templateUrl: './list-periodo.component.html',
-  styleUrls: ['./list-periodo.component.css'],
+  styleUrls: ['./list-periodo.component.scss'],
   standalone: true,
   imports: [
     CommonModule,
@@ -28,6 +30,7 @@ import Swal from 'sweetalert2';
     MatIconModule,
     MatSortModule,
     MatSelectModule,
+    MatCardModule,
   ],
 })
 export class ListPeriodoComponent implements OnInit {
@@ -43,13 +46,15 @@ export class ListPeriodoComponent implements OnInit {
   paginator!: MatPaginator;
   projectData: any;
   message: string = '';
+  isMobile = false;
 
-  constructor(public _projectService: ProjectService, private _router: Router) {
+  constructor(public _projectService: ProjectService, private _router: Router, private responsive: BreakpointObserver) {
     this.projectData = {};
     this.dataSource = new MatTableDataSource(this.projectData);
   }
 
   ngOnInit(): void {
+    this.detectMobile();
     /*
     this._projectService.listProject().subscribe({
       next: (v) => {
@@ -132,6 +137,16 @@ export class ListPeriodoComponent implements OnInit {
     // Usamos setTimeout para asegurar que la vista ya renderizó el paginator
     setTimeout(() => {
       this.dataSource.paginator = this.paginator;
+    });
+  }
+
+  detectMobile() {
+    this.responsive.observe([Breakpoints.Handset]).subscribe((result) => {
+      this.isMobile = result.matches;
+      // Reasignamos el paginador si cambiamos de vista
+      if (!this.isMobile) {
+        setTimeout(() => (this.dataSource.paginator = this.paginator));
+      }
     });
   }
 

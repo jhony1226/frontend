@@ -1,53 +1,33 @@
-/* Contenedor centrado */
-.cambio-sucursal-mobile {
-    padding: 20px;
-    display: flex;
-    justify-content: center;
+.change-card {
+  max-width: 520px;
+  margin: 2rem auto;
+  padding: 1.5rem;
+   background: #ffffff;
+   border-radius: 16px;
+  box-shadow:
+    0 12px 30px rgba(0, 0, 0, 0.12),
+    0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
-/* Tarjeta estilo app móvil */
-.card-mobile {
-    width: 100%;
-    max-width: 380px;
-    background: #ffffff;
-    padding: 22px;
-    border-radius: 14px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+.change-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
 
-/* Título */
-.title-mobile {
-    text-align: center;
-    margin-bottom: 18px;
-    font-size: 1.3rem;
-    font-weight: 600;
-    color: #333;
+.actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+  margin-top: 1rem;
 }
 
-/* Etiqueta */
-.label-mobile {
-    font-size: 0.95rem;
-    font-weight: 500;
-    margin-bottom: 6px;
-    display: block;
-    color: #555;
+mat-card-title {
+  text-align: center;
+  font-weight: 600;
+  margin-bottom: 1rem;
+   color: #0d47a1;
 }
-
-/* Select estilo mobile */
-.select-mobile {
-    width: 100%;
-    padding: 12px;
-    font-size: 1rem;
-    border-radius: 8px;
-    border: 1px solid #ccc;
-    margin-bottom: 20px;
-    background: #fafafa;
-}
-
-/* Contenedor de botones */
-.actions-mobile {
-    display: flex;
-    flex-direction: column;
     gap: 12px;
 }
 

@@ -1,50 +1,37 @@
-import {
-  Component,
-  EventEmitter,
-  Input,
-  Output,
-  ViewChild,
-} from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import {
-  ModalComponent,
-  ModalModule,
-  ButtonModule,
-  ButtonCloseDirective,
-} from '@coreui/angular';
+import { Router } from '@angular/router';
+import { MatCardModule } from '@angular/material/card';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
+import { MatSelectModule } from '@angular/material/select';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-crear-ruta',
-  templateUrl: './crear-ruta.component.html',
-  styleUrls: ['./crear-ruta.component.scss'],
   standalone: true,
   imports: [
     CommonModule,
     FormsModule,
-    ModalModule,
-    ButtonModule,
-    ButtonCloseDirective,
+    MatCardModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule,
+    MatSelectModule,
+    MatIconModule,
   ],
+  templateUrl: './crear-ruta.component.html',
+  styleUrls: ['./crear-ruta.component.scss'],
 })
 export class CrearRutaComponent {
-  @Input() visible: boolean = false;
-  @Output() visibleChange = new EventEmitter<boolean>();
-  @Output() rutaCreada = new EventEmitter<any>();
-  @ViewChild('modalCrearRuta') modalCrearRuta?: ModalComponent;
-
   nombre: string = '';
   direccion: string = '';
   zona: string = '';
   estado: string = 'ACTIVO';
 
-  onVisibleChange(newValue: boolean) {
-    this.visible = newValue;
-    this.visibleChange.emit(newValue);
-    if (!newValue) {
-      this.resetForm();
-    }
-  }
+  constructor(private router: Router) {}
 
   crear() {
     // Validación mínima
@@ -60,28 +47,24 @@ export class CrearRutaComponent {
       direccion: this.direccion,
       zona: this.zona,
       estado: this.estado,
-      createdAt: new Date().toISOString(),
+      createdAt: new Date().toLocaleDateString(),
     };
-    const existentes = JSON.parse(localStorage.getItem('rutas') || '[]');
-    existentes.push(nuevaRuta);
-    localStorage.setItem('rutas', JSON.stringify(existentes));
+    // Guardar en localStorage
+    const rutasGuardadas = JSON.parse(
+      localStorage.getItem('rutas') || '[]'
+    );
+    rutasGuardadas.push(nuevaRuta);
+    localStorage.setItem('rutas', JSON.stringify(rutasGuardadas));
 
-    console.log('Ruta creada:', nuevaRuta);
-    window.alert('Ruta creada exitosamente');
-    this.rutaCreada.emit(nuevaRuta);
-    this.cerrarModal();
+    window.alert('¡Ruta creada exitosamente!');
+    this.cancelar();
   }
 
-  cerrarModal() {
-    this.visible = false;
-    this.visibleChange.emit(false);
-    this.resetForm();
-  }
-
-  private resetForm() {
+  cancelar() {
     this.nombre = '';
     this.direccion = '';
     this.zona = '';
     this.estado = 'ACTIVO';
+    this.router.navigate(['/ruta']);
   }
 }

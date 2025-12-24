@@ -73,12 +73,9 @@ mat-icon.edit {
   color: #1565c0;
 }
 
-/* Azul */
 mat-icon.delete {
   color: #c62828;
 }
-
-/* Rojo */
 
 /* =========================================
    TABLA DE ESCRITORIO (Estilo "Periodo")
@@ -86,7 +83,6 @@ mat-icon.delete {
 table {
   width: 100%;
   border-collapse: collapse;
-  /* Importante para bordes limpios */
 }
 
 /* Encabezado Gris (Igual que en Periodos) */
@@ -113,7 +109,6 @@ tr.mat-row:hover {
   background-color: #fafafa;
 }
 
- 
 /* ---------- TABLE (Desktop) ---------- */
 .desktop-table {
   display: block;
@@ -141,8 +136,6 @@ tr.mat-row:hover {
   background-color: #fafafa;
 }
 
- 
-
 /* =========================================
    BADGES DE ESTADO (Etiquetas de color)
    ========================================= */
@@ -156,13 +149,19 @@ tr.mat-row:hover {
 }
 
 /* Estilos dinámicos según el texto */
-.badge.activa {
+.badge.activo {
   background-color: #e8f5e9;
   color: #2e7d32;
   border: 1px solid #c8e6c9;
 }
 
-.badge.inactiva {
+.badge.cerrado {
+  background-color: #ffebee;
+  color: #c62828;
+  border: 1px solid #ffcdd2;
+}
+
+.badge.vencido {
   background-color: #ffebee;
   color: #c62828;
   border: 1px solid #ffcdd2;
@@ -188,15 +187,18 @@ tr.mat-row:hover {
   flex-direction: column;
   position: relative;
   overflow: hidden;
-  /* Para el borde lateral */
 }
 
 /* Borde lateral de color según estado (Truco visual) */
-.mobile-card.activa {
+.mobile-card.activo {
   border-left: 5px solid #2e7d32;
 }
 
-.mobile-card.inactiva {
+.mobile-card.cerrado {
+  border-left: 5px solid #ff9800;
+}
+
+.mobile-card.vencido {
   border-left: 5px solid #c62828;
 }
 
@@ -213,7 +215,6 @@ tr.mat-row:hover {
   font-size: 14px;
   display: flex;
   justify-content: space-between;
-  /* Alinea etiqueta izq y valor der */
 }
 
 .mobile-card mat-card-actions {
