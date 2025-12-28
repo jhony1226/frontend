@@ -1,0 +1,97 @@
+/* ---------- CARD ---------- */
+.client-card {
+  max-width: 720px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background: #ffffff;
+  border-radius: 18px;
+  box-shadow:
+    0 16px 40px rgba(0, 0, 0, 0.12),
+    0 6px 18px rgba(0, 0, 0, 0.08);
+}
+
+/* ---------- TITLE ---------- */
+mat-card-title {
+  text-align: center;
+  font-weight: 700;
+  font-size: 1.4rem;
+  margin-bottom: 1.5rem;
+  color: #0d47a1;
+  letter-spacing: 0.3px;
+}
+
+/* ---------- FORM ---------- */
+.client-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+/* ---------- FORM ROW ---------- */
+.form-row {
+  display: flex;
+  gap: 1rem;
+}
+
+.form-row mat-form-field {
+  flex: 1;
+  width: 100%;
+}
+
+/* ---------- INPUT ---------- */
+mat-form-field {
+  --mat-form-field-container-height: 56px;
+}
+
+mat-form-field.mat-focused .mat-mdc-form-field-outline {
+  border-color: #0d47a1;
+}
+
+/* ---------- ACTIONS ---------- */
+.actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 1.75rem;
+}
+
+.actions button {
+  flex: 1;
+  padding: 0.75rem 0;
+  font-weight: 600;
+}
+
+/* ---------- PRIMARY BUTTON ---------- */
+button[color="primary"] {
+  box-shadow: 0 4px 10px rgba(13, 71, 161, 0.35);
+}
+
+/* ---------- RESPONSIVE ---------- */
+@media (max-width: 768px) {
+  .client-card {
+    padding: 1.5rem;
+    margin: 1rem;
+  }
+
+  .form-row {
+    flex-direction: column;
+  }
+
+  .actions {
+    flex-direction: column;
+  }
+
+  .actions button {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  mat-card-title {
+    font-size: 1.25rem;
+  }
+
+  .client-form {
+    gap: 1rem;
+  }
+}

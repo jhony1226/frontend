@@ -1,0 +1,67 @@
+<mat-card class="period-card">
+  <mat-card-title>
+    Crear Nuevo Cobro
+  </mat-card-title>
+
+  <form class="period-form" [formGroup]="cobroForm" (ngSubmit)="onSubmit()">
+
+    <!-- Cliente -->
+    <mat-form-field appearance="outline">
+      <mat-label>Cliente</mat-label>
+      <mat-select formControlName="cliente_id">
+        <mat-option value="">Seleccione un cliente</mat-option>
+        <mat-option *ngFor="let cliente of clientes" [value]="cliente.id">
+          {{ cliente.nombre }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <!-- Préstamo Asociado -->
+    <mat-form-field appearance="outline">
+      <mat-label>Préstamo Asociado</mat-label>
+      <mat-select formControlName="prestamo_id">
+        <mat-option value="">Seleccione un préstamo</mat-option>
+        <mat-option *ngFor="let prestamo of prestamos" [value]="prestamo.id">
+          {{ prestamo.descripcion }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <!-- Fecha de Cobro -->
+    <mat-form-field appearance="outline">
+      <mat-label>Fecha de Cobro</mat-label>
+      <input matInput [matDatepicker]="picker" formControlName="fecha_cobro" />
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+
+    <!-- Valor (Monto) -->
+    <mat-form-field appearance="outline">
+      <mat-label>Valor (Monto)</mat-label>
+      <input matInput type="number" step="0.01" formControlName="monto_cobrado" placeholder="Ingrese el monto" />
+    </mat-form-field>
+
+    <!-- Estado -->
+    <mat-form-field appearance="outline">
+      <mat-label>Estado</mat-label>
+      <mat-select formControlName="estado">
+        <mat-option value="Pendiente">Pendiente</mat-option>
+        <mat-option value="Pagado">Pagado</mat-option>
+        <mat-option value="Parcial">Parcial</mat-option>
+        <mat-option value="Anulado">Anulado</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <!-- Acciones -->
+    <div class="actions">
+      <button mat-raised-button color="primary" type="submit" [disabled]="cobroForm.invalid">
+        Crear Cobro
+      </button>
+
+      <button mat-stroked-button color="warn" type="button" (click)="cancelar()">
+        Cancelar
+      </button>
+    </div>
+
+  </form>
+</mat-card>

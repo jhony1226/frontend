@@ -135,8 +135,6 @@ export class ListRutaComponent implements OnInit {
   }
 
   editRuta(ruta: any) {
-    this.router.navigate(['/ruta/edit-ruta'], {
-      queryParams: { id: ruta.id },
-    });
+    this.router.navigate(['/ruta/edit-ruta', ruta.id]);
   }
 }

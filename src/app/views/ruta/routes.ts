@@ -21,6 +21,14 @@ export const routes: Routes = [
           ),
         data: { title: 'Crear Ruta' },
       },
+      {
+        path: 'edit-ruta/:id',
+        loadComponent: () =>
+          import('./edit-ruta/edit-ruta.component').then(
+            (m) => m.EditRutaComponent
+          ),
+        data: { title: 'Editar Ruta' },
+      },
     ],
   },
 ];

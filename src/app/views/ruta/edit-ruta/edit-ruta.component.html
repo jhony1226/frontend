@@ -1,0 +1,48 @@
+<mat-card class="route-card">
+  <mat-card-title>
+    Editar Ruta
+  </mat-card-title>
+
+  <form class="route-form" (ngSubmit)="actualizar()">
+
+    <!-- Nombre -->
+    <mat-form-field appearance="outline">
+      <mat-label>Nombre de la Ruta</mat-label>
+      <input matInput [(ngModel)]="nombre" name="nombre" placeholder="Ej: Ruta Centro" required />
+    </mat-form-field>
+
+    <!-- Dirección -->
+    <mat-form-field appearance="outline">
+      <mat-label>Dirección</mat-label>
+      <input matInput [(ngModel)]="direccion" name="direccion" placeholder="Ej: Calle Principal 123" required />
+    </mat-form-field>
+
+    <!-- Zona -->
+    <mat-form-field appearance="outline">
+      <mat-label>Zona</mat-label>
+      <input matInput [(ngModel)]="zona" name="zona" placeholder="Ej: Zona Norte" required />
+    </mat-form-field>
+
+    <!-- Estado -->
+    <mat-form-field appearance="outline">
+      <mat-label>Estado</mat-label>
+      <mat-select [(ngModel)]="estado" name="estado">
+        <mat-option value="ACTIVO">Activo</mat-option>
+        <mat-option value="INACTIVO">Inactivo</mat-option>
+        <mat-option value="SUSPENDIDO">Suspendido</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <!-- Acciones -->
+    <div class="actions">
+      <button mat-raised-button color="primary" type="submit">
+        Actualizar Ruta
+      </button>
+
+      <button mat-stroked-button color="warn" type="button" (click)="cancelar()">
+        Cancelar
+      </button>
+    </div>
+
+  </form>
+</mat-card>

@@ -47,7 +47,7 @@ export const navItems: INavData[] = [
     children: [
       {
         name: 'Gestión de Rutas',
-        url: '/ruta',
+        url: '/ruta/list-ruta',
         icon: 'nav-icon-bullet',
       },
       {
@@ -58,15 +58,34 @@ export const navItems: INavData[] = [
     ],
   },
   {
+    name: 'Clientes',
+    url: '/cliente',
+    iconComponent: { name: 'cil-people' },
+    children: [
+      {
+        name: 'Gestión de Clientes',
+        url: '/cliente/list-cliente',
+        icon: 'nav-icon-bullet',
+      },
+      {
+        name: 'Crear Cliente',
+        url: '/cliente/crear-cliente',
+        icon: 'nav-icon-bullet',
+      },
+    ],
+  },
+  {
     name: 'Préstamos',
     url: '/prestamo',
     iconComponent: { name: 'cil-chart-pie' },
     children: [
-      {        name: 'Gestión de Préstamos',
+      {
+        name: 'Gestión de Préstamos',
         url: '/prestamo',
         icon: 'nav-icon-bullet',
       },
-      {        name: 'Crear Préstamo',
+      {
+        name: 'Crear Préstamo',
         url: '/prestamo/crear-prestamo',
         icon: 'nav-icon-bullet',
       },
@@ -74,53 +93,44 @@ export const navItems: INavData[] = [
   },
     
   {
-    name: 'Clientes',
-    url: '/notifications',
+    name: 'Cobros',
+    url: '/cobro',
     iconComponent: { name: 'cil-bell' },
     children: [
       {
-        name: 'Alerts',
-        url: '/notifications/alerts',
+        name: 'Gestión de Cobros',
+        url: '/cobro/list-cobro',
         icon: 'nav-icon-bullet',
       },
       {
-        name: 'Badges',
-        url: '/notifications/badges',
+        name: 'Crear Cobro',
+        url: '/cobro/crear-cobro',
+        icon: 'nav-icon-bullet',
+      },
+      
+    ],
+  },
+  
+  {
+    name: 'Gastos',
+    url: '/gasto',
+    iconComponent: { name: 'cil-calculator' },
+    children: [
+      {
+        name: 'Gestión de Gastos',
+        url: '/gasto/list-gasto',
         icon: 'nav-icon-bullet',
       },
       {
-        name: 'Modal',
-        url: '/notifications/modal',
-        icon: 'nav-icon-bullet',
-      },
-      {
-        name: 'Toast',
-        url: '/notifications/toasts',
+        name: 'Crear Gasto',
+        url: '/gasto/crear-gasto',
         icon: 'nav-icon-bullet',
       },
     ],
   },
   {
-    name: 'Cobros',
-    url: '/widgets',
-    iconComponent: { name: 'cil-calculator' },
-    badge: {
-      color: 'info',
-      text: 'NEW',
-    },
-  },
-  {
-    name: 'Gastos',
-    url: '/widgets',
-    iconComponent: { name: 'cil-calculator' },
-    badge: {
-      color: 'info',
-      text: 'NEW',
-    },
-  },
-  {
     title: true,
-    name: 'Configuracion',
+    name: 'Configuración',
   },
   {
     name: 'Usuarios',
@@ -141,7 +151,7 @@ export const navItems: INavData[] = [
   },
 
   {
-    name: 'Sesion',
+    name: 'Sesión',
     url: 'https://coreui.io/angular/docs/',
     iconComponent: { name: 'cil-description' },
     attributes: { target: '_blank' },

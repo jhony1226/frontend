@@ -73,6 +73,10 @@ export const routes: Routes = [
         loadChildren: () => import('./views/ruta/routes').then((m) => m.routes),
       },
       {
+        path: 'cliente',
+        loadChildren: () => import('./views/cliente/routes').then((m) => m.routes),
+      },
+      {
         path: 'prestamo',
         loadChildren: () =>
           import('./views/prestamo/routes').then((m) => m.routes),
@@ -81,6 +85,16 @@ export const routes: Routes = [
         path: 'sucursal',
         loadChildren: () =>
           import('./views/sucursal/routes').then((m) => m.routes),
+      },
+      {
+        path: 'cobro',
+        loadChildren: () =>
+          import('./views/cobro/routes').then((m) => m.routes),
+      },
+      {
+        path: 'gasto',
+        loadChildren: () =>
+          import('./views/gasto/routes').then((m) => m.routes),
       },
     ],
   },
