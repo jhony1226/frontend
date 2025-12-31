@@ -17,19 +17,19 @@
       <input matInput [(ngModel)]="direccion" name="direccion" placeholder="Ej: Cra 10 #20-30" required />
     </mat-form-field>
 
-    <!-- Ciudad -->
+    <!-- Teléfono -->
     <mat-form-field appearance="outline">
-      <mat-label>Ciudad</mat-label>
-      <input matInput [(ngModel)]="ciudad" name="ciudad" placeholder="Ej: Bogotá" required />
+      <mat-label>Teléfono</mat-label>
+      <input matInput [(ngModel)]="telefono" name="telefono" placeholder="Ej: 300 123 4567" required />
     </mat-form-field>
 
     <!-- Estado -->
     <mat-form-field appearance="outline">
       <mat-label>Estado</mat-label>
       <mat-select [(ngModel)]="estado" name="estado">
-        <mat-option value="ACTIVA">Activa</mat-option>
-        <mat-option value="INACTIVA">Inactiva</mat-option>
-        <mat-option value="MANTENIMIENTO">Mantenimiento</mat-option>
+        <mat-option value="Activo">Activa</mat-option>
+        <mat-option value="Inactivo">Inactiva</mat-option>
+        <mat-option value="Mantenimiento">Mantenimiento</mat-option>
       </mat-select>
     </mat-form-field>
 

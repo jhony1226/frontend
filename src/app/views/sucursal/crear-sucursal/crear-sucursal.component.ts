@@ -6,6 +6,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSelectModule } from '@angular/material/select';
+import { SucursalService, Sucursal } from '../../../services/sucursal.service';
 
 @Component({
   selector: 'app-crear-sucursal',
@@ -24,42 +25,43 @@ import { MatSelectModule } from '@angular/material/select';
 export class CrearSucursalComponent {
   nombre: string = '';
   direccion: string = '';
-  ciudad: string = '';
-  estado: string = 'ACTIVA';
+  telefono: string = '';
+  estado: string = 'Activo';
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private sucursalService: SucursalService) {}
 
   crear() {
-    if (!this.nombre || !this.direccion || !this.ciudad) {
+    if (!this.nombre || !this.direccion) {
       window.alert('Completa todos los campos obligatorios.');
       return;
     }
 
-    const nuevaSucursal = {
-      id: Date.now(),
+    const nuevaSucursal: Sucursal = {
+      sucursal_id: 0, // El backend generará el ID
       nombre: this.nombre,
       direccion: this.direccion,
-      ciudad: this.ciudad,
+      telefono: this.telefono,
       estado: this.estado,
-      createdAt: new Date().toLocaleDateString(),
+      fecha_creacion: new Date().toISOString(),
     };
 
-    // Guardar en localStorage
-    const sucursalesGuardadas = JSON.parse(
-      localStorage.getItem('sucursales') || '[]'
-    );
-    sucursalesGuardadas.push(nuevaSucursal);
-    localStorage.setItem('sucursales', JSON.stringify(sucursalesGuardadas));
-
-    window.alert('¡Sucursal creada exitosamente!');
-    this.cancelar();
+    this.sucursalService.createSucursal(nuevaSucursal).subscribe({
+      next: () => {
+        window.alert('¡Sucursal creada exitosamente!');
+        this.cancelar();
+      },
+      error: (error) => {
+        console.error('Error al crear sucursal:', error);
+        window.alert('Ocurrió un error al crear la sucursal.');
+      }
+    });
   }
 
   cancelar() {
     this.nombre = '';
     this.direccion = '';
-    this.ciudad = '';
-    this.estado = 'ACTIVA';
+    this.telefono = '';
+    this.estado = 'Activo';
     this.router.navigate(['/sucursal/list-sucursal']);
   }
 }

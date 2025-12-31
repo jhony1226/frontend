@@ -7,6 +7,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSelectModule } from '@angular/material/select';
 import { MatCardModule } from '@angular/material/card';
+import { SucursalService, Sucursal } from '../../../services/sucursal.service';
 
 @Component({
   selector: 'app-edit-sucursal',
@@ -27,10 +28,10 @@ export class EditSucursalComponent implements OnInit {
   id: number | null = null;
   nombre: string = '';
   direccion: string = '';
-  ciudad: string = '';
-  estado: string = 'ACTIVA';
+  telefono: string = '';
+  estado: string = 'Activo';
 
-  constructor(private router: Router, private route: ActivatedRoute) {}
+  constructor(private router: Router, private route: ActivatedRoute, private sucursalService: SucursalService) {}
 
   ngOnInit() {
     this.route.queryParams.subscribe((params) => {
@@ -42,24 +43,31 @@ export class EditSucursalComponent implements OnInit {
   }
 
   cargarSucursal(id: number) {
-    const sucursalesGuardadas = JSON.parse(
-      localStorage.getItem('sucursales') || '[]'
-    );
-    const sucursal = sucursalesGuardadas.find((s: any) => s.id === id);
-
-    if (sucursal) {
-      this.nombre = sucursal.nombre;
-      this.direccion = sucursal.direccion;
-      this.ciudad = sucursal.ciudad;
-      this.estado = sucursal.estado;
-    } else {
-      window.alert('Sucursal no encontrada');
-      this.router.navigate(['/sucursal']);
-    }
+    this.sucursalService.getSucursales().subscribe({
+      next: (sucursales) => {
+        const sucursal = sucursales.find((s) => s.sucursal_id === id);
+        if (sucursal) {
+          this.nombre = sucursal.nombre;
+          this.direccion = sucursal.direccion;
+          this.telefono = sucursal.telefono || '';
+          
+          // Normalizar estado para coincidir con las opciones del select
+          const estadoLower = sucursal.estado ? sucursal.estado.toLowerCase() : 'activo';
+          if (estadoLower.includes('act')) this.estado = 'Activo';
+          else if (estadoLower.includes('ina')) this.estado = 'Inactivo';
+          else if (estadoLower.includes('man')) this.estado = 'Mantenimiento';
+          else this.estado = sucursal.estado;
+        } else {
+          window.alert('Sucursal no encontrada');
+          this.router.navigate(['/sucursal/list-sucursal']);
+        }
+      },
+      error: (error) => console.error('Error al cargar sucursal:', error),
+    });
   }
 
   guardar() {
-    if (!this.nombre || !this.direccion || !this.ciudad) {
+    if (!this.nombre || !this.direccion) {
       window.alert('Completa todos los campos obligatorios.');
       return;
     }
@@ -69,24 +77,23 @@ export class EditSucursalComponent implements OnInit {
       return;
     }
 
-    const sucursalesGuardadas = JSON.parse(
-      localStorage.getItem('sucursales') || '[]'
-    );
-    const index = sucursalesGuardadas.findIndex((s: any) => s.id === this.id);
+    const sucursalActualizada: Partial<Sucursal> = {
+      nombre: this.nombre,
+      direccion: this.direccion,
+      telefono: this.telefono,
+      estado: this.estado,
+    };
 
-    if (index !== -1) {
-      sucursalesGuardadas[index] = {
-        ...sucursalesGuardadas[index],
-        nombre: this.nombre,
-        direccion: this.direccion,
-        ciudad: this.ciudad,
-        estado: this.estado,
-        updatedAt: new Date().toLocaleDateString(),
-      };
-      localStorage.setItem('sucursales', JSON.stringify(sucursalesGuardadas));
-      window.alert('¡Sucursal actualizada exitosamente!');
-      this.router.navigate(['/sucursal/list-sucursal']);
-    }
+    this.sucursalService.editSucursal(this.id, sucursalActualizada).subscribe({
+      next: () => {
+        window.alert('¡Sucursal actualizada exitosamente!');
+        this.router.navigate(['/sucursal/list-sucursal']);
+      },
+      error: (error) => {
+        console.error('Error al actualizar:', error);
+        window.alert('Error al actualizar la sucursal');
+      },
+    });
   }
 
   cancelar() {

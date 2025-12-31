@@ -8,6 +8,7 @@ import {
   withRouterConfig,
   withViewTransitions
 } from '@angular/router';
+import { provideHttpClient, withFetch } from '@angular/common/http';
 
 import { DropdownModule, SidebarModule } from '@coreui/angular';
 import { IconSetService } from '@coreui/icons-angular';
@@ -27,6 +28,7 @@ export const appConfig: ApplicationConfig = {
       withViewTransitions(),
       withHashLocation()
     ),
+    provideHttpClient(withFetch()), // <--- Agrega esto si no lo tienes
     importProvidersFrom(SidebarModule, DropdownModule),
     IconSetService,
     provideAnimationsAsync()

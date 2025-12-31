@@ -9,13 +9,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Router, RouterModule } from '@angular/router';
-
-export interface Sucursal {
-  id: number;
-  nombre: string;
-  direccion: string;
-  estado: string;
-}
+import { SucursalService, Sucursal } from '../../../services/sucursal.service';
 
 @Component({
   selector: 'app-list-sucursal',
@@ -35,18 +29,31 @@ export interface Sucursal {
   styleUrls: ['./list-sucursal.component.scss'],
 })
 export class ListSucursalComponent implements OnInit {
-  displayedColumns: string[] = ['nombre', 'direccion', 'estado', 'actions'];
+  displayedColumns: string[] = ['nombre', 'direccion', 'telefono', 'fecha_creacion', 'estado', 'actions'];
   dataSource = new MatTableDataSource<Sucursal>([]);
 
   isMobile = false;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
-
-  constructor(private responsive: BreakpointObserver, private router: Router) {}
+  message: string = '';
+  constructor(private responsive: BreakpointObserver, private router: Router, private sucursalService: SucursalService) {}
 
   ngOnInit(): void {
     this.detectMobile();
     this.loadSucursales();
+
+    // Configuración personalizada del buscador (filterPredicate)
+    this.dataSource.filterPredicate = (data: Sucursal, filter: string) => {
+      // Concatenamos solo los campos que queremos que sean buscables
+      const dataStr = (
+        data.nombre +
+        data.direccion +
+        (data.telefono || '') + // Manejo seguro de nulos
+        data.estado
+      ).toLowerCase();
+      
+      return dataStr.indexOf(filter) !== -1;
+    };
   }
 
   detectMobile() {
@@ -69,100 +76,48 @@ export class ListSucursalComponent implements OnInit {
   }
 
   loadSucursales() {
-    const sucursales: Sucursal[] = [
-      {
-        id: 1,
-        nombre: 'Sucursal Centro',
-        direccion: 'Cra 10 #20-30',
-        estado: 'Activa',
+    this.sucursalService.getSucursales().subscribe({
+      next: (data) => {
+        this.dataSource.data = data;
+        if (this.dataSource.paginator) {
+          this.dataSource.paginator.firstPage();
+        }
       },
-      {
-        id: 2,
-        nombre: 'Sucursal Norte',
-        direccion: 'Av 7 #110-15',
-        estado: 'Inactiva',
-      },
-      {
-        id: 3,
-        nombre: 'Sucursal Sur',
-        direccion: 'Cll 5 #45-10',
-        estado: 'Activa',
-      },
-      {
-        id: 4,
-        nombre: 'Sucursal Occidente',
-        direccion: 'Cra 80 #30-20',
-        estado: 'Activa',
-      },
-      {
-        id: 5,
-        nombre: 'Sucursal Oriente',
-        direccion: 'Av. Las Palmas',
-        estado: 'Activa',
-      },
-      {
-        id: 6,
-        nombre: 'Sucursal Poblado',
-        direccion: 'Cra 43A #1-50',
-        estado: 'Activa',
-      },
-      {
-        id: 7,
-        nombre: 'Sucursal Envigado',
-        direccion: 'Cll 38 Sur #40',
-        estado: 'Inactiva',
-      },
-      {
-        id: 8,
-        nombre: 'Sucursal Bello',
-        direccion: 'Autopista Norte',
-        estado: 'Activa',
-      },
-      {
-        id: 9,
-        nombre: 'Sucursal Itagüí',
-        direccion: 'Cra 50 #50-50',
-        estado: 'Inactiva',
-      },
-      {
-        id: 10,
-        nombre: 'Sucursal Sabaneta',
-        direccion: 'Av. El Poblado',
-        estado: 'Activa',
-      },
-      {
-        id: 11,
-        nombre: 'Sucursal La Estrella',
-        direccion: 'Cll 77 Sur',
-        estado: 'Activa',
-      },
-    ];
-
-    // Si hay sucursales en localStorage, las priorizamos
-    const guardadas = JSON.parse(localStorage.getItem('sucursales') || 'null');
-    if (Array.isArray(guardadas) && guardadas.length > 0) {
-      this.dataSource.data = guardadas;
-    } else {
-      localStorage.setItem('sucursales', JSON.stringify(sucursales));
-      this.dataSource.data = sucursales;
-    }
+      error: (error) => {
+        console.error('Error al cargar sucursales:', error);
+      }
+    });
   }
 
   newSucursal() {
     this.router.navigate(['/sucursal/crear-sucursal']);
   }
-
+ 
   editSucursal(row: Sucursal) {
     this.router.navigate(['/sucursal/edit-sucursal'], {
-      queryParams: { id: row.id },
+      queryParams: { id: row.sucursal_id },
     });
   }
 
   deleteSucursal(row: Sucursal) {
+    if (!row.sucursal_id) {
+      window.alert('Error: La sucursal no tiene un ID válido para eliminar.');
+      return;
+    }
+
     if (confirm(`¿Estás seguro de eliminar ${row.nombre}?`)) {
-      const current = this.dataSource.data.filter((s) => s.id !== row.id);
-      localStorage.setItem('sucursales', JSON.stringify(current));
-      this.dataSource.data = current;
+      this.sucursalService.deleteSucursal(row.sucursal_id).subscribe({
+        next: () => {
+          window.alert('Sucursal eliminada exitosamente');
+          this.loadSucursales(); // Recargamos la lista desde la API
+        },
+        error: (error) => {
+          console.error('Error al eliminar:', error);
+          // Extraemos el mensaje exacto que envía el backend (si existe)
+          const msg = error.error?.error || error.error?.message || (typeof error.error === 'string' ? error.error : 'No se pudo eliminar la sucursal. Verifique que no tenga datos asociados.');
+          window.alert(`Error: ${msg}`);
+        },
+      });
     }
   }
 }
