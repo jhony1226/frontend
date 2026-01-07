@@ -12,7 +12,10 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatCardModule } from '@angular/material/card';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import Swal from 'sweetalert2';
-
+import { ActivatedRoute } from '@angular/router';
+import { RutasService } from '../../../services/rutas.service';
+import { AuthMockService } from '../../../services/AuthMockService';
+import { CobroService } from '../../../services/cobro.service';
 @Component({
   selector: 'app-list-cobro',
   templateUrl: './list-cobro.component.html',
@@ -29,7 +32,7 @@ import Swal from 'sweetalert2';
     MatIconModule,
     MatSortModule,
     MatSelectModule,
-    MatCardModule,
+    MatCardModule
   ],
 })
 export class ListCobroComponent implements OnInit {
@@ -47,82 +50,63 @@ export class ListCobroComponent implements OnInit {
   cobroData: any;
   message: string = '';
   isMobile = false;
+  rutaId: string | null = null;
+  isCobrosPorRuta = false;
+  nombreRuta: string = '';
+  canDelete = true; // Controla si se puede eliminar
 
-  constructor(private router: Router, private responsive: BreakpointObserver) {
+  constructor(
+    private router: Router,
+    private responsive: BreakpointObserver,
+    private route: ActivatedRoute,
+    private rutasService: RutasService,
+    private auth: AuthMockService,
+    private cobroService: CobroService
+  ) {
     this.cobroData = [];
     this.dataSource = new MatTableDataSource(this.cobroData);
   }
 
   ngOnInit(): void {
     this.detectMobile();
-    this.loadLocalData();
+
+    this.route.paramMap.subscribe(params => {
+      this.rutaId = params.get('rutaId');
+      this.isCobrosPorRuta = !!this.rutaId;
+
+      // Si es cobrador y viene desde list-ruta, deshabilitar eliminación
+      this.canDelete = !(this.isCobrosPorRuta && this.auth.isCobrador());
+
+      if (this.isCobrosPorRuta && this.rutaId) {
+        this.obtenerNombreRuta(this.rutaId);
+      }
+      this.loadCobros();
+    });
   }
 
-  loadLocalData() {
-    const data = [
-      {
-        _id: '1',
-        cliente: 'Juan Pérez',
-        prestamo: 'Préstamo Personal #101',
-        fecha_cobro: new Date('2025-01-15'),
-        monto_cobrado: 500000,
-        estado: 'Pagado',
-      },
-      {
-        _id: '2',
-        cliente: 'María López',
-        prestamo: 'Préstamo Hipotecario #102',
-        fecha_cobro: new Date('2025-01-20'),
-        monto_cobrado: 750000,
-        estado: 'Pendiente',
-      },
-      {
-        _id: '3',
-        cliente: 'Carlos Rodríguez',
-        prestamo: 'Préstamo Personal #103',
-        fecha_cobro: new Date('2025-01-10'),
-        monto_cobrado: 300000,
-        estado: 'Parcial',
-      },
-      {
-        _id: '4',
-        cliente: 'Ana Martínez',
-        prestamo: 'Préstamo Vehicular #104',
-        fecha_cobro: new Date('2025-01-25'),
-        monto_cobrado: 1200000,
-        estado: 'Pagado',
-      },
-      {
-        _id: '5',
-        cliente: 'Luis García',
-        prestamo: 'Préstamo Personal #105',
-        fecha_cobro: new Date('2025-01-05'),
-        monto_cobrado: 250000,
-        estado: 'Anulado',
-      },
-      {
-        _id: '6',
-        cliente: 'Sofía Hernández',
-        prestamo: 'Préstamo Hipotecario #106',
-        fecha_cobro: new Date('2025-01-18'),
-        monto_cobrado: 900000,
-        estado: 'Pendiente',
-      },
-      {
-        _id: '7',
-        cliente: 'Pedro Sánchez',
-        prestamo: 'Préstamo Vehicular #107',
-        fecha_cobro: new Date('2025-01-22'),
-        monto_cobrado: 600000,
-        estado: 'Parcial',
-      },
-    ];
+  loadCobros() {
+    this.cobroService.getCobros().subscribe({
+      next: (data) => {
+        const filteredData = this.isCobrosPorRuta && this.rutaId
+          ? data.filter((c) => c.ruta_id == this.rutaId)
+          : data;
 
-    this.cobroData = data;
-    this.dataSource = new MatTableDataSource(this.cobroData);
+        this.cobroData = filteredData;
+        this.dataSource = new MatTableDataSource(this.cobroData);
+        this.dataSource.paginator = this.paginator;
+      },
+      error: (err) => {
+        console.error('Error al cargar cobros', err);
+      }
+    });
+  }
 
-    setTimeout(() => {
-      this.dataSource.paginator = this.paginator;
+  obtenerNombreRuta(id: string) {
+    this.rutasService.getRutas().subscribe((rutas: any[]) => {
+      const rutaEncontrada = rutas.find((r) => r.ruta_id == id);
+      if (rutaEncontrada) {
+        this.nombreRuta = rutaEncontrada.nombre_ruta;
+      }
     });
   }
 
@@ -205,5 +189,21 @@ export class ListCobroComponent implements OnInit {
     });
     return res;
   };
-}
 
+  getEditQueryParams(item: any): any {
+    const params: any = { id: item._id };
+    if (this.isCobrosPorRuta && this.rutaId) {
+      params.rutaId = this.rutaId;
+    }
+    return params;
+  }
+
+  getEditRoute(item: any): string[] {
+    // Si viene desde list-ruta y el usuario NO es admin (es cobrador), usar edit-cobro
+    if (this.isCobrosPorRuta && !this.auth.isAdmin()) {
+      return ['/cobro/edit-cobro'];
+    }
+    // Si es admin, usar crear-cobro (edición completa)
+    return ['/cobro/crear-cobro'];
+  }
+}

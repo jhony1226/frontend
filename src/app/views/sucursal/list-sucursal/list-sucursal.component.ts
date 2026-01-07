@@ -10,6 +10,9 @@ import { MatCardModule } from '@angular/material/card';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Router, RouterModule } from '@angular/router';
 import { SucursalService, Sucursal } from '../../../services/sucursal.service';
+import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { ConfirmDialogComponent } from '../../shared/confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-list-sucursal',
@@ -36,7 +39,14 @@ export class ListSucursalComponent implements OnInit {
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   message: string = '';
-  constructor(private responsive: BreakpointObserver, private router: Router, private sucursalService: SucursalService) {}
+  
+  constructor(
+    private responsive: BreakpointObserver, 
+    private router: Router, 
+    private sucursalService: SucursalService,
+    private dialog: MatDialog,
+    private snackBar: MatSnackBar
+  ) {}
 
   ngOnInit(): void {
     this.detectMobile();
@@ -101,23 +111,63 @@ export class ListSucursalComponent implements OnInit {
 
   deleteSucursal(row: Sucursal) {
     if (!row.sucursal_id) {
-      window.alert('Error: La sucursal no tiene un ID válido para eliminar.');
+      this.snackBar.open(
+        'Error: La sucursal no tiene un ID válido para eliminar',
+        'Cerrar',
+        { duration: 3000 }
+      );
       return;
     }
 
-    if (confirm(`¿Estás seguro de eliminar ${row.nombre}?`)) {
-      this.sucursalService.deleteSucursal(row.sucursal_id).subscribe({
-        next: () => {
-          window.alert('Sucursal eliminada exitosamente');
-          this.loadSucursales(); // Recargamos la lista desde la API
-        },
-        error: (error) => {
-          console.error('Error al eliminar:', error);
-          // Extraemos el mensaje exacto que envía el backend (si existe)
-          const msg = error.error?.error || error.error?.message || (typeof error.error === 'string' ? error.error : 'No se pudo eliminar la sucursal. Verifique que no tenga datos asociados.');
-          window.alert(`Error: ${msg}`);
-        },
-      });
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: '420px',
+      data: {
+        title: 'Eliminar sucursal',
+        message: `
+          ¿Está seguro de eliminar la sucursal
+          <b>${row.nombre}</b>?
+          <br><br>
+          Esta acción no se puede deshacer.
+        `,
+        confirmText: 'Eliminar',
+        cancelText: 'Cancelar',
+        color: 'warn',
+        icon: 'delete',
+        type: 'warning'
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(confirmado => {
+      if (confirmado) {
+        this.eliminarSucursalConfirmada(row);
+      }
+    });
+  }
+
+  private eliminarSucursalConfirmada(row: Sucursal): void {
+    if (!row.sucursal_id) {
+      return;
     }
+
+    this.sucursalService.deleteSucursal(row.sucursal_id).subscribe({
+      next: () => {
+        this.snackBar.open(
+          'Sucursal eliminada exitosamente',
+          'Cerrar',
+          { duration: 3000 }
+        );
+        this.loadSucursales(); // Recargamos la lista desde la API
+      },
+      error: (error) => {
+        console.error('Error al eliminar:', error);
+        // Extraemos el mensaje exacto que envía el backend (si existe)
+        const msg = error.error?.error || error.error?.message || (typeof error.error === 'string' ? error.error : 'No se pudo eliminar la sucursal. Verifique que no tenga datos asociados.');
+        this.snackBar.open(
+          `Error: ${msg}`,
+          'Cerrar',
+          { duration: 4000 }
+        );
+      },
+    });
   }
 }

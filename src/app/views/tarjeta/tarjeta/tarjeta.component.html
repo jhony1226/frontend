@@ -1,0 +1,72 @@
+<div class="container cobro-container">
+  
+  <div class="header-blue">
+    <p>Cliente: <strong>{{cliente.nombre}}</strong></p>
+    <p>Préstamo: <strong>{{cliente.prestamoId}}</strong></p>
+    <p>Ruta: <strong>{{cliente.ruta}}</strong></p>
+  </div>
+
+  <mat-card class="resumen-card">
+    <div class="resumen-header">Resumen del Cobro</div>
+    <div class="resumen-body">
+      <div class="row"><span>Cuota sugerida:</span> <strong>{{resumen.cuotaDelDia | currency}}</strong></div>
+      <div class="row"><span>Total Marcado:</span> <strong>{{resumen.pagadoHoy | currency}}</strong></div>
+      <hr>
+      <div class="row"><span>Saldo del Préstamo:</span> <strong>{{resumen.saldoTotalPrestamo | currency}}</strong></div>
+    </div>
+  </mat-card>
+
+  <mat-card class="list-card">
+    <div class="card-title-internal">Plan de Pagos (30 Días)</div>
+    
+    <div class="scroll-container">
+      <table mat-table [dataSource]="planPagos" class="full-width-table">
+        
+        <ng-container matColumnDef="num">
+          <th mat-header-cell *matHeaderCellDef> # </th>
+          <td mat-cell *matCellDef="let p"> {{p.num}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="fecha">
+  <th mat-header-cell *matHeaderCellDef> Fecha </th>
+  <td mat-cell *matCellDef="let p"> {{p.fecha}} </td>
+</ng-container>
+
+<ng-container matColumnDef="abonar">
+  <th mat-header-cell *matHeaderCellDef> Abonar </th>
+  <td mat-cell *matCellDef="let p" [class.texto-verde]="p.abonar > 0"> 
+    {{p.abonar | currency:'USD':'symbol':'1.0-0'}} 
+  </td>
+</ng-container>
+
+        <ng-container matColumnDef="seleccion">
+          <th mat-header-cell *matHeaderCellDef> Pago </th>
+          <td mat-cell *matCellDef="let p">
+            <mat-checkbox 
+              color="primary" 
+              [(ngModel)]="p.completado"
+              (change)="actualizarDistribucion()">
+            </mat-checkbox>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+    </div>
+  </mat-card>
+
+  <mat-card class="payment-card mt-3">
+    <div class="p-3">
+      <mat-form-field appearance="outline" class="w-100">
+        <mat-label>Monto Recibido</mat-label>
+        <input matInput type="number" [(ngModel)]="montoRecibido" (input)="actualizarDistribucion()">
+        <span matPrefix>$&nbsp;</span>
+      </mat-form-field>
+      
+      <button mat-raised-button color="primary" class="w-100 btn-big">
+        <mat-icon>save</mat-icon> GUARDAR COBRO
+      </button>
+    </div>
+  </mat-card>
+</div>

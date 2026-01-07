@@ -3,7 +3,7 @@ import { Routes } from '@angular/router';
 export const routes: Routes = [
   {
     path: '',
-    redirectTo: 'dashboard',
+    redirectTo: 'sucursal',
     pathMatch: 'full',
   },
   {
@@ -17,7 +17,7 @@ export const routes: Routes = [
       {
         path: 'dashboard',
         loadChildren: () =>
-          import('./views/dashboard/routes').then((m) => m.routes),
+          import('./views/sucursal/routes').then((m) => m.routes),
       },
       {
         path: 'theme',
@@ -95,6 +95,11 @@ export const routes: Routes = [
         path: 'gasto',
         loadChildren: () =>
           import('./views/gasto/routes').then((m) => m.routes),
+      },
+      {
+        path: 'tarjeta',
+        loadChildren: () =>
+          import('./views/tarjeta/routes').then((m) => m.routes),
       },
     ],
   },

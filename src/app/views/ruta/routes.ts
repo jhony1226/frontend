@@ -3,15 +3,40 @@ import { Routes } from '@angular/router';
 export const routes: Routes = [
   {
     path: '',
-    data: { title: 'Ruta' },
+    data: {
+      title: 'Rutas',
+    },
     children: [
       {
         path: '',
+        redirectTo: 'list-ruta',
+        pathMatch: 'full',
+      },
+      {
+          path: 'rutas',
+          loadComponent: () =>
+            import('./list-ruta/list-ruta.component')
+              .then(m => m.ListRutaComponent),
+          data: { mode: 'admin' }
+        },
+
+        // COBRADOR
+        {
+          path: 'mis-rutas',
+          loadComponent: () =>
+            import('./list-ruta/list-ruta.component')
+              .then(m => m.ListRutaComponent),
+          data: { mode: 'cobrador' }
+        },
+      {
+        path: 'list-ruta',
         loadComponent: () =>
           import('./list-ruta/list-ruta.component').then(
             (m) => m.ListRutaComponent
           ),
-        data: { title: 'Gestión de Rutas' },
+        data: {
+          title: 'Lista de Rutas',
+        },
       },
       {
         path: 'crear-ruta',
@@ -19,7 +44,9 @@ export const routes: Routes = [
           import('./crear-ruta/crear-ruta.component').then(
             (m) => m.CrearRutaComponent
           ),
-        data: { title: 'Crear Ruta' },
+        data: {
+          title: 'Crear Ruta',
+        },
       },
       {
         path: 'edit-ruta/:id',
@@ -27,7 +54,9 @@ export const routes: Routes = [
           import('./edit-ruta/edit-ruta.component').then(
             (m) => m.EditRutaComponent
           ),
-        data: { title: 'Editar Ruta' },
+        data: {
+          title: 'Editar Ruta',
+        },
       },
     ],
   },

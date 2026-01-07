@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
+
 
 // Define una interfaz para tipar tus datos (opcional pero recomendado)
 export interface Sucursal {
@@ -17,7 +19,8 @@ export interface Sucursal {
 })
 export class SucursalService {
   // URL base de tu API
-  private apiUrl = 'https://appgdc.onrender.com/api/sucursal';
+
+  private apiUrl = `${environment.apiUrl}/sucursal`;
 
   constructor(private http: HttpClient) { }
 

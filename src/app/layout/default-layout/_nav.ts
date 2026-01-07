@@ -2,7 +2,7 @@ import { INavData } from '@coreui/angular';
 
 export const navItems: INavData[] = [
   {
-    name: 'Homes',
+    name: 'Home',
     title: true,
   },
   {
@@ -43,10 +43,10 @@ export const navItems: INavData[] = [
   {
     name: 'Rutas',
     url: '/ruta',
-    iconComponent: { name: 'cil-notes' },
+    iconComponent: { name: 'cil-puzzle' },
     children: [
       {
-        name: 'Gestión de Rutas',
+        name: 'List Ruta',
         url: '/ruta/list-ruta',
         icon: 'nav-icon-bullet',
       },
@@ -105,6 +105,12 @@ export const navItems: INavData[] = [
       {
         name: 'Crear Cobro',
         url: '/cobro/crear-cobro',
+        icon: 'nav-icon-bullet',
+      },
+
+       {
+        name: 'tarjeta',
+        url: '/tarjeta',
         icon: 'nav-icon-bullet',
       },
       

@@ -4,7 +4,7 @@ import { ReactiveFormsModule,
      FormBuilder,
      FormGroup,
      Validators } from '@angular/forms';
-import { Router, RouterModule } from '@angular/router';
+import { Router, RouterModule, ActivatedRoute } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -12,6 +12,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
+import { AuthMockService } from '../../../services/AuthMockService';
 
 @Component({
   selector: 'app-crear-cobro',
@@ -36,8 +37,17 @@ export class CrearCobroComponent implements OnInit {
   // Listas para los selectores (deberían cargarse desde un servicio)
   clientes: any[] = []; 
   prestamos: any[] = [];
+  isEditMode = false;
+  isLimitedMode = false; // Modo limitado: solo valor y estado para cobradores desde list-ruta
+  cobroId: string | null = null;
+  rutaId: string | null = null;
 
-  constructor(private fb: FormBuilder, private router: Router) {
+  constructor(
+    private fb: FormBuilder, 
+    private router: Router,
+    private route: ActivatedRoute,
+    private auth: AuthMockService
+  ) {
     this.cobroForm = this.fb.group({
       cliente_id: ['', Validators.required],
       prestamo_id: ['', Validators.required],
@@ -48,6 +58,43 @@ export class CrearCobroComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.route.queryParams.subscribe(params => {
+      this.cobroId = params['id'] || null;
+      this.rutaId = params['rutaId'] || null;
+      this.isEditMode = !!this.cobroId;
+      
+      // Si es cobrador y viene desde list-ruta (tiene rutaId), activar modo limitado
+      this.isLimitedMode = this.isEditMode && !!this.rutaId && this.auth.isCobrador();
+      
+      if (this.isLimitedMode) {
+        // En modo limitado, solo valor y estado son editables
+        this.cobroForm.get('cliente_id')?.disable();
+        this.cobroForm.get('prestamo_id')?.disable();
+        this.cobroForm.get('fecha_cobro')?.disable();
+        // En modo limitado, el estado solo puede ser "Pagado"
+        this.cobroForm.get('estado')?.setValue('Pagado');
+      }
+      
+      if (this.isEditMode) {
+        this.loadCobroData();
+      } else {
+        this.cargarDatosIniciales();
+      }
+    });
+  }
+
+  loadCobroData() {
+    // TODO: Cargar datos del cobro desde el servicio
+    // Por ahora, datos de ejemplo
+    const cobroEjemplo = {
+      cliente_id: 1,
+      prestamo_id: 101,
+      fecha_cobro: new Date('2025-01-15'),
+      monto_cobrado: 500000,
+      estado: 'Pendiente'
+    };
+    
+    this.cobroForm.patchValue(cobroEjemplo);
     this.cargarDatosIniciales();
   }
 
@@ -79,6 +126,10 @@ export class CrearCobroComponent implements OnInit {
   }
 
   cancelar() {
-    this.router.navigate(['/cobro/list-cobro']);
+    if (this.rutaId) {
+      this.router.navigate(['/cobro/ruta', this.rutaId, 'cobros']);
+    } else {
+      this.router.navigate(['/cobro/list-cobro']);
+    }
   }
 }

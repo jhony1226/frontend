@@ -9,7 +9,7 @@ export const routes: Routes = [
     children: [
       {
         path: '',
-        redirectTo: 'list-sucursal',
+        redirectTo: 'cambio-sucursal',
         pathMatch: 'full',
       },
       {

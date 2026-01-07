@@ -5,7 +5,6 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
 import {
   AvatarComponent,
   BadgeComponent,
-  BreadcrumbRouterComponent,
   ColorModeService,
   ContainerComponent,
   DropdownComponent,
@@ -27,7 +26,25 @@ import { IconDirective } from '@coreui/icons-angular';
 @Component({
   selector: 'app-default-header',
   templateUrl: './default-header.component.html',
-  imports: [ContainerComponent, HeaderTogglerDirective, SidebarToggleDirective, IconDirective, HeaderNavComponent, NavItemComponent, NavLinkDirective, RouterLink, RouterLinkActive, NgTemplateOutlet, BreadcrumbRouterComponent, DropdownComponent, DropdownToggleDirective, AvatarComponent, DropdownMenuDirective, DropdownHeaderDirective, DropdownItemDirective, BadgeComponent, DropdownDividerDirective]
+  standalone: true,
+  imports: [ContainerComponent, 
+    HeaderTogglerDirective, 
+    SidebarToggleDirective, 
+    IconDirective, 
+    HeaderNavComponent,
+     NavItemComponent,
+      NavLinkDirective, 
+      RouterLink,
+      RouterLinkActive,
+      NgTemplateOutlet,
+      DropdownComponent, 
+      DropdownToggleDirective, 
+      AvatarComponent, 
+      DropdownMenuDirective,
+      DropdownHeaderDirective, 
+      DropdownItemDirective, 
+      BadgeComponent, 
+      DropdownDividerDirective]
 })
 export class DefaultHeaderComponent extends HeaderComponent {
 

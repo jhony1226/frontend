@@ -8,63 +8,105 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSelectModule } from '@angular/material/select';
 import { MatIconModule } from '@angular/material/icon';
-
+import { Rutas, RutasService } from '../../../services/rutas.service';
+import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { ConfirmDialogComponent } from '../../shared/confirm-dialog/confirm-dialog.component';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 @Component({
   selector: 'app-crear-ruta',
   standalone: true,
   imports: [
-    CommonModule,
-    FormsModule,
-    MatCardModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatButtonModule,
-    MatSelectModule,
-    MatIconModule,
+     CommonModule,
+  FormsModule,
+  MatCardModule,
+  MatFormFieldModule,
+  MatInputModule,
+  MatButtonModule,
+  MatSelectModule,
+  MatIconModule,
+  MatDialogModule,
+  MatSnackBarModule
   ],
   templateUrl: './crear-ruta.component.html',
   styleUrls: ['./crear-ruta.component.scss'],
 })
 export class CrearRutaComponent {
-  nombre: string = '';
-  direccion: string = '';
-  zona: string = '';
-  estado: string = 'ACTIVO';
+  ruta: Rutas = {
+    sucursal_id: 1, // Asignar un valor por defecto o recuperarlo si es necesario
+    nombre_ruta: '',
+    descripcion: '',
+    zona: '',
+    estado: 'ACTIVO',
+  };
 
-  constructor(private router: Router) {}
+  constructor(
+    private dialog: MatDialog,
+    private snackBar: MatSnackBar,
+    private router: Router,
+    private rutasService: RutasService) {}
 
-  crear() {
-    // Validación mínima
-    if (!this.nombre || !this.direccion || !this.zona) {
-      window.alert('Completa todos los campos obligatorios.');
-      return;
-    }
+  crear(): void {
 
-    // Guardar en localStorage como demo
-    const nuevaRuta = {
-      id: Date.now(),
-      nombre: this.nombre,
-      direccion: this.direccion,
-      zona: this.zona,
-      estado: this.estado,
-      createdAt: new Date().toLocaleDateString(),
-    };
-    // Guardar en localStorage
-    const rutasGuardadas = JSON.parse(
-      localStorage.getItem('rutas') || '[]'
+  // Validación mínima
+  if (!this.ruta.nombre_ruta) {
+    this.snackBar.open(
+      'El nombre de la ruta es obligatorio',
+      'Cerrar',
+      { duration: 3000 }
     );
-    rutasGuardadas.push(nuevaRuta);
-    localStorage.setItem('rutas', JSON.stringify(rutasGuardadas));
-
-    window.alert('¡Ruta creada exitosamente!');
-    this.cancelar();
+    return;
   }
+
+  const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+    width: '420px',
+    data: {
+      title: 'Crear ruta',
+      message: `
+        ¿Está seguro de que desea crear la ruta
+        <b>${this.ruta.nombre_ruta}</b>?
+      `,
+      confirmText: 'Crear',
+      cancelText: 'Cancelar',
+      color: 'primary',
+      icon: 'add',
+      type: 'info'
+    }
+  });
+
+  dialogRef.afterClosed().subscribe(confirmado => {
+    if (confirmado) {
+      this.crearRutaConfirmada();
+    }
+  });
+}
+
+private crearRutaConfirmada(): void {
+  this.rutasService.createRutas(this.ruta).subscribe({
+    next: () => {
+      this.snackBar.open(
+        'Ruta creada exitosamente',
+        'Cerrar',
+        { duration: 3000 }
+      );
+      this.router.navigate(['/ruta/list-ruta']);
+    },
+    error: (err) => {
+      console.error('Error al crear la ruta:', err);
+      this.snackBar.open(
+        'Ocurrió un error al crear la ruta',
+        'Cerrar',
+        { duration: 4000 }
+      );
+    }
+  });
+}
 
   cancelar() {
-    this.nombre = '';
-    this.direccion = '';
-    this.zona = '';
-    this.estado = 'ACTIVO';
-    this.router.navigate(['/ruta']);
+    // Navegar a la lista de rutas
+    this.router.navigate(['/ruta/list-ruta']);
   }
+
+   
 }

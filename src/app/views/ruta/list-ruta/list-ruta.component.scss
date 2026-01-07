@@ -45,19 +45,30 @@
   white-space: nowrap;
 }
 
+.clickable-row { cursor: pointer; }
+
 /* =========================================
    FILTROS
    ========================================= */
 .filters {
-  display: flex;
-  gap: 15px;
-  margin-bottom: 20px;
-  flex-wrap: wrap;
+    display: flex;
+    gap: 16px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    align-items: flex-start; /* Alinea los elementos al inicio */
+    width: 100%;
+}
+
+.filters .search-field {
+  flex: 2 1 300px; /* flex-grow, flex-shrink, flex-basis */
+}
+
+.filters .status-filter {
+  flex: 1 1 180px; /* flex-grow, flex-shrink, flex-basis */
 }
 
 .filters mat-form-field {
-  flex: 1;
-  min-width: 200px;
+  width: 100%;
 }
 
 /* Iconos de acciones en la tabla */
@@ -80,6 +91,14 @@ mat-icon.edit {
 
 mat-icon.delete {
   color: #c62828;
+}
+
+mat-icon.deactivate {
+  color: #f57c00; /* Naranja para advertencia */
+}
+
+mat-icon.activate {
+  color: #388e3c; /* Verde para activación */
 }
 
 /* =========================================
@@ -107,6 +126,10 @@ td.mat-cell {
   border-bottom: 1px solid #e0e0e0;
   color: #333;
   font-size: 14px;
+}
+
+tr.mat-row {
+  cursor: pointer;
 }
 
 /* Efecto Hover en las filas */
@@ -183,6 +206,7 @@ tr.mat-row:hover {
 }
 
 .mobile-card {
+  cursor: pointer;
   padding: 16px;
   border-radius: 10px;
   background: white;
@@ -229,6 +253,10 @@ tr.mat-row:hover {
   display: flex;
   justify-content: flex-end;
   gap: 8px;
+}
+
+.activate-btn {
+  color: #388e3c;
 }
   
 

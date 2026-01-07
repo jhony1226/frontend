@@ -10,8 +10,8 @@
       <mat-label>Seleccionar sucursal</mat-label>
       <mat-select [(ngModel)]="selectedId" name="sucursal" required>
         <mat-option value="">-- Seleccione --</mat-option>
-        <mat-option *ngFor="let s of sucursales" [value]="s.id">
-          {{ s.name }}
+        <mat-option *ngFor="let s of sucursales" [value]="s.sucursal_id">
+          {{ s.nombre }}
         </mat-option>
       </mat-select>
     </mat-form-field>

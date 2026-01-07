@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
@@ -6,6 +6,11 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { FormsModule } from '@angular/forms';
+import { SucursalService, Sucursal } from '../../../services/sucursal.service';
+import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { ConfirmDialogComponent } from '../../shared/confirm-dialog/confirm-dialog.component';
+ 
 
 @Component({
   selector: 'app-cambio-sucursal',
@@ -22,28 +27,81 @@ import { FormsModule } from '@angular/forms';
     FormsModule,
   ],
 })
-export class CambioSucursalComponent {
-  sucursales = [
-    { id: 's1', name: 'Sucursal A' },
-    { id: 's2', name: 'Sucursal B' },
-    { id: 's3', name: 'Sucursal C' },
-  ];
+export class CambioSucursalComponent implements OnInit {
+  sucursales: Sucursal[] = [];
 
-  selectedId: string | null = null;
+  selectedId: number | null = null;
 
-  constructor(public router: Router) {
-    this.selectedId = localStorage.getItem('sucursalId');
+  constructor(
+    public router: Router,
+    private sucursalService: SucursalService,
+    private dialog: MatDialog,
+    private snackBar: MatSnackBar
+  ) {
+    const id = localStorage.getItem('sucursalId');
+    this.selectedId = id ? Number(id) : null;
+  }
+
+  ngOnInit(): void {
+    this.getSucursales();
+  }
+
+  getSucursales() {
+    this.sucursalService.getSucursales().subscribe((data: Sucursal[]) => {
+      this.sucursales = data;
+    });
   }
 
   changeSucursal() {
+    if (!this.selectedId) {
+      this.snackBar.open(
+        'Por favor seleccione una sucursal antes de cambiar',
+        'Cerrar',
+        { duration: 3000 }
+      );
+      return;
+    }
+
+    const selected = this.sucursales.find(
+      (s) => s.sucursal_id === this.selectedId
+    );
+
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: '420px',
+      data: {
+        title: 'Cambiar de sucursal',
+        message: `
+          ¿Desea cambiar a la sucursal
+          <b>${selected?.nombre || 'seleccionada'}</b>?
+        `,
+        confirmText: 'Cambiar',
+        cancelText: 'Cancelar',
+        color: 'primary',
+        icon: 'swap_horiz',
+        type: 'info'
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(confirmado => {
+      if (confirmado) {
+        this.cambiarSucursalConfirmada(selected);
+      }
+    });
+  }
+
+  private cambiarSucursalConfirmada(selected: Sucursal | undefined): void {
     if (this.selectedId) {
-      localStorage.setItem('sucursalId', this.selectedId);
-      const selected = this.sucursales.find((s) => s.id === this.selectedId);
-      localStorage.setItem('sucursalName', selected ? selected.name : '');
-      // navigate back to list
-      this.router.navigate(['/sucursal/list-sucursal']);
-    } else {
-      window.alert('Seleccione una sucursal antes de cambiar.');
+      localStorage.setItem('sucursalId', String(this.selectedId));
+      localStorage.setItem('sucursalName', selected ? selected.nombre : '');
+      
+      this.snackBar.open(
+        `Sucursal cambiada a: ${selected?.nombre || 'seleccionada'}`,
+        'Cerrar',
+        { duration: 3000 }
+      );
+      
+      // navigate to list-rutas
+      this.router.navigate(['/ruta/list-ruta']);
     }
   }
 }
