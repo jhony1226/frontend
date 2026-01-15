@@ -17,6 +17,34 @@
 }
 
 /* =========================================
+   ESTADOS
+   ========================================= */
+.estado-badge {
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 12px;
+  display: inline-block;
+  text-align: center;
+  min-width: 80px;
+}
+
+.estado-pagado {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.estado-pendiente {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+.estado-parcial {
+  background-color: #d1ecf1;
+  color: #0c5460;
+}
+
+/* =========================================
    HEADER
    ========================================= */
 .header {

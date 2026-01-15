@@ -46,7 +46,7 @@ export const navItems: INavData[] = [
     iconComponent: { name: 'cil-puzzle' },
     children: [
       {
-        name: 'List Ruta',
+        name: 'Gestión de Rutas',
         url: '/ruta/list-ruta',
         icon: 'nav-icon-bullet',
       },
@@ -103,16 +103,12 @@ export const navItems: INavData[] = [
         icon: 'nav-icon-bullet',
       },
       {
-        name: 'Crear Cobro',
+        name: 'Registro Cobro',
         url: '/cobro/crear-cobro',
         icon: 'nav-icon-bullet',
       },
 
-       {
-        name: 'tarjeta',
-        url: '/tarjeta',
-        icon: 'nav-icon-bullet',
-      },
+        
       
     ],
   },
@@ -140,26 +136,36 @@ export const navItems: INavData[] = [
   },
   {
     name: 'Usuarios',
-    url: '/login',
-    iconComponent: { name: 'cil-star' },
+    url: '/usuario',
+    iconComponent: { name: 'cil-people' },
     children: [
       {
-        name: 'Login',
-        url: '/login',
+        name: 'Listado de Usuarios',
+        url: '/usuario/list',
         icon: 'nav-icon-bullet',
       },
       {
-        name: 'Register',
-        url: '/register',
+        name: 'Crear Usuario',
+        url: '/usuario/crear',
         icon: 'nav-icon-bullet',
       },
     ],
   },
-
   {
-    name: 'Sesión',
-    url: 'https://coreui.io/angular/docs/',
-    iconComponent: { name: 'cil-description' },
-    attributes: { target: '_blank' },
+    name: 'Autenticación',
+    url: '/login',
+    iconComponent: { name: 'cil-lock-locked' },
+    children: [
+      {
+        name: 'Iniciar Sesión',
+        url: '/login',
+        icon: 'nav-icon-bullet',
+      },
+      {
+        name: 'Registro',
+        url: '/register',
+        icon: 'nav-icon-bullet',
+      },
+    ],
   },
 ];

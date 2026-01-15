@@ -8,10 +8,12 @@ export interface Rutas {
   sucursal_id: number;
   nombre_ruta: string;
   descripcion?: string;
+  cobrador?: string;
   zona?: string;
   fecha_creacion?: Date;
   estado?: string;
-  created_at?: Date; 
+  created_at?: Date;
+
 }
 @Injectable({
   providedIn: 'root'
@@ -42,6 +44,16 @@ export class RutasService {
     deleteRutas(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/deleteRuta/${id}`);
   }
+  
+  asignarCobrador(payload: {
+  ruta_id: number;
+  cobrador_id: number;
+}): Observable<void> {
+  return this.http.post<void>(
+    `${this.apiUrl}/asignar-ruta`,
+    payload
+  );
+}
 
 
 }

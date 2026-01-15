@@ -1,6 +1,7 @@
-import { NgTemplateOutlet } from '@angular/common';
+import { NgTemplateOutlet, NgIf } from '@angular/common';
 import { Component, computed, inject, input } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
+import { AuthService } from '../../../services/auth.service';
 
 import {
   AvatarComponent,
@@ -27,7 +28,9 @@ import { IconDirective } from '@coreui/icons-angular';
   selector: 'app-default-header',
   templateUrl: './default-header.component.html',
   standalone: true,
-  imports: [ContainerComponent, 
+  imports: [
+    NgIf,
+    ContainerComponent, 
     HeaderTogglerDirective, 
     SidebarToggleDirective, 
     IconDirective, 
@@ -36,7 +39,6 @@ import { IconDirective } from '@coreui/icons-angular';
       NavLinkDirective, 
       RouterLink,
       RouterLinkActive,
-      NgTemplateOutlet,
       DropdownComponent, 
       DropdownToggleDirective, 
       AvatarComponent, 
@@ -50,6 +52,7 @@ export class DefaultHeaderComponent extends HeaderComponent {
 
   readonly #colorModeService = inject(ColorModeService);
   readonly colorMode = this.#colorModeService.colorMode;
+  private authService = inject(AuthService);
 
   readonly colorModes = [
     { name: 'light', text: 'Light', icon: 'cilSun' },
@@ -62,11 +65,38 @@ export class DefaultHeaderComponent extends HeaderComponent {
     return this.colorModes.find(mode => mode.name === currentMode)?.icon ?? 'cilSun';
   });
 
+  // Contador de notificaciones
+  notificationCount = 0;
+
   constructor() {
     super();
+    this.loadNotifications();
   }
 
   sidebarId = input('sidebar1');
+
+  // Método para cargar notificaciones
+  loadNotifications(): void {
+    // Aquí puedes hacer una llamada a tu API para obtener las notificaciones
+    // Por ahora, simulamos con datos de ejemplo
+    this.notificationCount = this.newMessages.length;
+    
+    // Ejemplo de cómo sería con un servicio:
+    // this.notificationService.getUnreadCount().subscribe(count => {
+    //   this.notificationCount = count;
+    // });
+  }
+
+  // Método para ver notificaciones
+  viewNotifications(): void {
+    // Navegar a la vista de notificaciones o abrir modal
+    console.log('Ver notificaciones');
+  }
+
+  // Método para cerrar sesión
+  onLogout(): void {
+    this.authService.logout();
+  }
 
   public newMessages = [
     {

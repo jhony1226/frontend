@@ -5,7 +5,7 @@ export type RolUsuario = 'admin' | 'cobrador';
 @Injectable({ providedIn: 'root' })
 export class AuthMockService {
 
-  private rol: RolUsuario = 'cobrador'; // cambiar aquí para probar
+  private rol: RolUsuario = 'admin'; // cambiar aquí para probar
 
   getRol(): RolUsuario {
     return this.rol;

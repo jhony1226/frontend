@@ -8,7 +8,10 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSelectModule } from '@angular/material/select';
 import { MatIconModule } from '@angular/material/icon';
+import { MatDividerModule } from '@angular/material/divider';
+import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 import { Rutas, RutasService } from '../../../services/rutas.service';
+import { Usuario, UsuarioService } from '../../../services/usuario.service';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ConfirmDialogComponent } from '../../shared/confirm-dialog/confirm-dialog.component';
@@ -24,12 +27,14 @@ import { ConfirmDialogComponent } from '../../shared/confirm-dialog/confirm-dial
     MatButtonModule,
     MatSelectModule,
     MatIconModule,
+    MatDividerModule,
+    NgxMatSelectSearchModule,
   ],
   templateUrl: './edit-ruta.component.html',
   styleUrls: ['./edit-ruta.component.scss'],
 })
 export class EditRutaComponent implements OnInit {
-  ruta: Rutas = {
+    ruta: Rutas = {
     sucursal_id: 1, // Asignar un valor por defecto o recuperarlo si es necesario
     nombre_ruta: '',
     descripcion: '',
@@ -37,22 +42,59 @@ export class EditRutaComponent implements OnInit {
     estado: 'ACTIVO',
   };
   id: string | null = '';
+  cobradores: Usuario[] = [];
+  cobradoresFiltrados: Usuario[] = [];
+  cobradorSeleccionadoId: string | number = '';
+  filtroCobrador: string = '';
 
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private rutaService: RutasService,   
-  private dialog: MatDialog,
-  private snackBar: MatSnackBar
+    private rutaService: RutasService,
+    private usuarioService: UsuarioService,
+    private dialog: MatDialog,
+    private snackBar: MatSnackBar
   ) {}
 
   ngOnInit() {
     this.id = this.route.snapshot.paramMap.get('id');
+    this.cargarCobradores();
     if (this.id) {
       this.cargarRuta(this.id);
     } else {
       console.error('No se proporcionó ID de ruta para editar.');
       this.router.navigate(['/ruta/list-ruta']);
+    }
+  }
+
+  cargarCobradores(): void {
+    this.usuarioService.getUsuarios().subscribe({
+      next: (usuarios: Usuario[]) => {
+        // Filtrar solo usuarios con tipo_usuario = 2 (cobradores)
+        this.cobradores = usuarios.filter(u => u.tipo_usuario === 2);
+        this.cobradoresFiltrados = [...this.cobradores];
+      },
+      error: (err) => {
+        console.error('Error al cargar cobradores:', err);
+        this.snackBar.open(
+          'No se pudieron cargar los cobradores',
+          'Cerrar',
+          { duration: 3000 }
+        );
+      }
+    });
+  }
+
+  filtrarCobradores(): void {
+    const filtro = this.filtroCobrador.toLowerCase().trim();
+    if (!filtro) {
+      this.cobradoresFiltrados = [...this.cobradores];
+    } else {
+      this.cobradoresFiltrados = this.cobradores.filter(c =>
+        c.nombres.toLowerCase().includes(filtro) ||
+        c.apellidos.toLowerCase().includes(filtro) ||
+        (c.dni && c.dni.includes(filtro))
+      );
     }
   }
 
@@ -131,14 +173,20 @@ private actualizarRutaConfirmada(): void {
     return;
   }
 
+  // Primero actualizar los datos de la ruta
   this.rutaService.editRutas(this.ruta.ruta_id, this.ruta).subscribe({
     next: () => {
-      this.snackBar.open(
-        'Ruta actualizada exitosamente',
-        'Cerrar',
-        { duration: 3000 }
-      );
-      this.router.navigate(['/ruta/list-ruta']);
+      // Si hay un cobrador seleccionado, asignarlo
+      if (this.cobradorSeleccionadoId && this.cobradorSeleccionadoId !== '') {
+        this.asignarCobradorARuta();
+      } else {
+        this.snackBar.open(
+          'Ruta actualizada exitosamente',
+          'Cerrar',
+          { duration: 3000 }
+        );
+        this.router.navigate(['/ruta/list-ruta']);
+      }
     },
     error: (err) => {
       console.error('Error al actualizar la ruta:', err);
@@ -147,6 +195,39 @@ private actualizarRutaConfirmada(): void {
         'Cerrar',
         { duration: 4000 }
       );
+    }
+  });
+}
+
+private asignarCobradorARuta(): void {
+  if (!this.ruta.ruta_id || !this.cobradorSeleccionadoId) {
+    return;
+  }
+
+  const cobradorId = typeof this.cobradorSeleccionadoId === 'string' 
+    ? parseInt(this.cobradorSeleccionadoId) 
+    : this.cobradorSeleccionadoId;
+
+  this.rutaService.asignarCobrador({
+    ruta_id: this.ruta.ruta_id,
+    cobrador_id: cobradorId
+  }).subscribe({
+    next: () => {
+      this.snackBar.open(
+        'Ruta actualizada y cobrador asignado exitosamente',
+        'Cerrar',
+        { duration: 3000 }
+      );
+      this.router.navigate(['/ruta/list-ruta']);
+    },
+    error: (err) => {
+      console.error('Error al asignar cobrador:', err);
+      this.snackBar.open(
+        'Ruta actualizada, pero hubo un error al asignar el cobrador',
+        'Cerrar',
+        { duration: 4000 }
+      );
+      this.router.navigate(['/ruta/list-ruta']);
     }
   });
 }

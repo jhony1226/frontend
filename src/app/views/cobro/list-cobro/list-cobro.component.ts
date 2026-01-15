@@ -37,8 +37,9 @@ import { CobroService } from '../../../services/cobro.service';
 })
 export class ListCobroComponent implements OnInit {
   displayedColumns: string[] = [
-    'cliente',
-    'prestamo',
+    'idprestamo',
+    'nombrecliente',
+    'cobrador',
     'fecha_cobro',
     'monto_cobrado',
     'estado',
@@ -88,7 +89,7 @@ export class ListCobroComponent implements OnInit {
     this.cobroService.getCobros().subscribe({
       next: (data) => {
         const filteredData = this.isCobrosPorRuta && this.rutaId
-          ? data.filter((c) => c.ruta_id == this.rutaId)
+          ? data.filter((c) => c.ruta_id == Number(this.rutaId))
           : data;
 
         this.cobroData = filteredData;

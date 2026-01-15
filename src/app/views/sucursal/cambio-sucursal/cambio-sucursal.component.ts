@@ -7,6 +7,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { FormsModule } from '@angular/forms';
 import { SucursalService, Sucursal } from '../../../services/sucursal.service';
+import { SucursalContextService } from '../../../services/sucursal-context.service';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ConfirmDialogComponent } from '../../shared/confirm-dialog/confirm-dialog.component';
@@ -35,11 +36,13 @@ export class CambioSucursalComponent implements OnInit {
   constructor(
     public router: Router,
     private sucursalService: SucursalService,
+    private sucursalContextService: SucursalContextService,
     private dialog: MatDialog,
     private snackBar: MatSnackBar
   ) {
-    const id = localStorage.getItem('sucursalId');
-    this.selectedId = id ? Number(id) : null;
+    // Obtener sucursal del contexto
+    const sucursalActual = this.sucursalContextService.getSucursalActual();
+    this.selectedId = sucursalActual ? sucursalActual.id : null;
   }
 
   ngOnInit(): void {
@@ -69,12 +72,12 @@ export class CambioSucursalComponent implements OnInit {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       width: '420px',
       data: {
-        title: 'Cambiar de sucursal',
+        title: 'Seleccionar sucursal',
         message: `
-          ¿Desea cambiar a la sucursal
+          ¿Desea Seleccionar la sucursal
           <b>${selected?.nombre || 'seleccionada'}</b>?
         `,
-        confirmText: 'Cambiar',
+        confirmText: 'Guardar',
         cancelText: 'Cancelar',
         color: 'primary',
         icon: 'swap_horiz',
@@ -90,12 +93,20 @@ export class CambioSucursalComponent implements OnInit {
   }
 
   private cambiarSucursalConfirmada(selected: Sucursal | undefined): void {
-    if (this.selectedId) {
+    if (this.selectedId && selected) {
+      // Guardar sucursal en el contexto
+      this.sucursalContextService.setSucursalActual({
+        id: this.selectedId,
+        nombre: selected.nombre,
+        direccion: selected.direccion
+      });
+      
+      // Mantener compatibilidad con código existente
       localStorage.setItem('sucursalId', String(this.selectedId));
-      localStorage.setItem('sucursalName', selected ? selected.nombre : '');
+      localStorage.setItem('sucursalName', selected.nombre);
       
       this.snackBar.open(
-        `Sucursal cambiada a: ${selected?.nombre || 'seleccionada'}`,
+        `Sucursal cambiada a: ${selected.nombre}`,
         'Cerrar',
         { duration: 3000 }
       );

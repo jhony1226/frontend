@@ -16,6 +16,14 @@
       <input matInput (keyup)="applyFilter($event)" placeholder="Ej. Juan Pérez..." #input>
       <mat-icon matSuffix>search</mat-icon>
     </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Filtrar por Ruta</mat-label>
+      <mat-select [formControl]="rutaFilter">
+        <mat-option value="">Todas las rutas</mat-option>
+        <mat-option *ngFor="let ruta of rutas" [value]="ruta">Ruta {{ ruta }}</mat-option>
+      </mat-select>
+    </mat-form-field>
   </div>
 
   <div *ngIf="!isMobile" class="desktop-table">
@@ -40,6 +48,11 @@
       <ng-container matColumnDef="telefono">
         <th mat-header-cell *matHeaderCellDef>Teléfono</th>
         <td mat-cell *matCellDef="let row">{{ row.telefono }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="ruta">
+        <th mat-header-cell *matHeaderCellDef>Ruta</th>
+        <td mat-cell *matCellDef="let row">{{ row.rutaId }}</td>
       </ng-container>
 
     <ng-container matColumnDef="estado">
@@ -75,6 +88,7 @@
         <p><strong>Identificación:</strong> {{ row.identificacion }}</p>
         <p><strong>Teléfono:</strong> {{ row.telefono }}</p>
         <p><strong>Dirección:</strong> {{ row.direccion }}</p>
+        <p><strong>Ruta:</strong> {{ row.rutaId }}</p>
         <p><strong>Estado:</strong> {{ row.estado }}</p>
       </mat-card-content>
 
@@ -92,5 +106,74 @@
       No se encontraron resultados.
     </div>
   </div>
+
+  <!-- SECCIÓN DE CLIENTES CON PRÉSTAMOS -->
+  <mat-card class="list-card" style="margin-top: 20px;">
+    <mat-card-header>
+      <mat-card-title>Clientes con Préstamos</mat-card-title>
+    </mat-card-header>
+    
+    <div *ngIf="!isMobile" class="desktop-table">
+      <table mat-table [dataSource]="dataSourceConPrestamo" class="mat-elevation-z8">
+        
+        <ng-container matColumnDef="nombrecliente">
+          <th mat-header-cell *matHeaderCellDef>Nombre Cliente</th>
+          <td mat-cell *matCellDef="let row">{{ row.nombrecliente }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="idprestamo">
+          <th mat-header-cell *matHeaderCellDef>ID Préstamo</th>
+          <td mat-cell *matCellDef="let row">{{ row.idprestamo }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="direccioncliente">
+          <th mat-header-cell *matHeaderCellDef>Dirección</th>
+          <td mat-cell *matCellDef="let row">{{ row.direccioncliente }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="telefonocliente">
+          <th mat-header-cell *matHeaderCellDef>Teléfono</th>
+          <td mat-cell *matCellDef="let row">{{ row.telefonocliente }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="monto_prestamo">
+          <th mat-header-cell *matHeaderCellDef>Monto Préstamo</th>
+          <td mat-cell *matCellDef="let row">{{ row.monto_prestamo | currency }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="saldo_pendiente">
+          <th mat-header-cell *matHeaderCellDef>Saldo Pendiente</th>
+          <td mat-cell *matCellDef="let row">{{ row.saldo_pendiente | currency }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="estado_prestamo">
+          <th mat-header-cell *matHeaderCellDef>Estado</th>
+          <td mat-cell *matCellDef="let row">
+            <span class="badge" [ngClass]="row.estado_prestamo?.toLowerCase()">
+              {{ row.estado_prestamo }}
+            </span>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumnsConPrestamo"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumnsConPrestamo;"></tr>
+      </table>
+    </div>
+
+    <!-- Vista móvil para clientes con préstamos -->
+    <div *ngIf="isMobile" class="mobile-list">
+      <mat-card class="mobile-card" *ngFor="let row of dataSourceConPrestamo.connect() | async">
+        <mat-card-title>{{ row.nombrecliente }}</mat-card-title>
+        <mat-card-content>
+          <p><strong>ID Préstamo:</strong> {{ row.idprestamo }}</p>
+          <p><strong>Dirección:</strong> {{ row.direccioncliente }}</p>
+          <p><strong>Teléfono:</strong> {{ row.telefonocliente }}</p>
+          <p><strong>Monto Préstamo:</strong> {{ row.monto_prestamo | currency }}</p>
+          <p><strong>Saldo Pendiente:</strong> {{ row.saldo_pendiente | currency }}</p>
+          <p><strong>Estado:</strong> {{ row.estado_prestamo }}</p>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </mat-card>
 
 </div>

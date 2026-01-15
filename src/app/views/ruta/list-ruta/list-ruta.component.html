@@ -24,7 +24,7 @@
         <input
           matInput
           (keyup)="applyFilters()"
-          placeholder="Nombre, descripción, zona…"
+          placeholder="Nombre, cobrador, zona…"
           [(ngModel)]="searchKey" />
         <button mat-icon-button matSuffix *ngIf="searchKey" (click)="clearSearch()">
           <mat-icon>close</mat-icon>
@@ -52,9 +52,14 @@
           <td mat-cell *matCellDef="let item">{{ item.nombre_ruta }}</td>
         </ng-container>
 
-        <ng-container matColumnDef="descripcion">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Descripción</th>
-          <td mat-cell *matCellDef="let item">{{ item.descripcion }}</td>
+        <ng-container matColumnDef="cobrador">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Cobrador</th>
+          <td mat-cell *matCellDef="let item">
+            <span class="cobrador-cell">
+              <mat-icon>person</mat-icon>
+              <span>{{ item.cobrador || 'sin asignar' }}</span>
+            </span>
+          </td>
         </ng-container>
 
         <ng-container matColumnDef="zona">
@@ -126,7 +131,12 @@
       <mat-card-title>{{ item.nombre_ruta }}</mat-card-title>
 
       <mat-card-content>
-        <p><strong>Descripción:</strong><span>{{ item.descripcion }}</span></p>
+        <p><strong>Cobrador:</strong>
+          <span class="cobrador-cell">
+            <mat-icon>person</mat-icon>
+            <span>{{ item.cobrador || 'sin asignar' }}</span>
+          </span>
+        </p>
         <p><strong>Zona:</strong><span>{{ item.zona }}</span></p>
         <p><strong>Estado:</strong><span>{{ item.estado }}</span></p>
         <p><strong>Creado:</strong><span>{{ item.created_at | date:'dd/MM/yyyy' }}</span></p>

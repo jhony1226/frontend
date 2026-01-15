@@ -1,15 +1,17 @@
 import { Routes } from '@angular/router';
+import { authGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
   {
     path: '',
-    redirectTo: 'sucursal',
+    redirectTo: 'dashboard',
     pathMatch: 'full',
   },
   {
     path: '',
     loadComponent: () =>
       import('./layout').then((m) => m.DefaultLayoutComponent),
+    canActivate: [authGuard], // Proteger todas las rutas hijas
     data: {
       title: 'Home',
     },
@@ -95,6 +97,11 @@ export const routes: Routes = [
         path: 'gasto',
         loadChildren: () =>
           import('./views/gasto/routes').then((m) => m.routes),
+      },
+      {
+        path: 'usuario',
+        loadChildren: () =>
+          import('./views/usuario/routes').then((m) => m.routes),
       },
       {
         path: 'tarjeta',

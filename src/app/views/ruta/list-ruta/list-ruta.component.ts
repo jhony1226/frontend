@@ -40,7 +40,7 @@ import { AuthMockService } from '../../../services/AuthMockService';
 export class ListRutaComponent implements OnInit, AfterViewInit {
   displayedColumns: string[] = [ // Corregido para que coincida con la interfaz Rutas
     'nombre_ruta',
-    'descripcion',
+    'cobrador',
     'zona',
     'estado',
     'created_at',
@@ -87,8 +87,8 @@ export class ListRutaComponent implements OnInit, AfterViewInit {
   }
   configurarColumnas() {
   this.displayedColumns = this.isAdmin
-    ? ['nombre_ruta', 'descripcion', 'zona', 'estado', 'created_at', 'acciones']
-    : ['nombre_ruta', 'descripcion', 'zona', 'estado'];
+    ? ['nombre_ruta', 'cobrador', 'zona', 'estado', 'created_at', 'acciones']
+    : ['nombre_ruta', 'cobrador', 'zona', 'estado'];
 }
 
   ngAfterViewInit() {
@@ -107,7 +107,7 @@ export class ListRutaComponent implements OnInit, AfterViewInit {
 
       return (
         data.nombre_ruta.toLowerCase().includes(searchTerm) ||
-        (data.descripcion || '').toLowerCase().includes(searchTerm) ||
+        (data.cobrador || '').toLowerCase().includes(searchTerm) ||
         (data.zona || '').toLowerCase().includes(searchTerm)
       );
     };

@@ -7,8 +7,11 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
+import { MatSelectModule } from '@angular/material/select';
+import { ReactiveFormsModule, FormControl } from '@angular/forms';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Router, RouterModule } from '@angular/router';
+import { ClienteService } from '../../../services/cliente.service';
 
 export interface Cliente {
   id: number;
@@ -20,6 +23,17 @@ export interface Cliente {
   estado: string;
   rutaId: number;
   createdAt: string;
+}
+
+export interface ClienteConPrestamo {
+  nombrecliente: string;
+  idprestamo: string;
+  direccioncliente: string;
+  telefonocliente: string;
+  cliente_id: number;
+  monto_prestamo: number;
+  saldo_pendiente: number;
+  estado_prestamo: string;
 }
 
 @Component({
@@ -34,24 +48,38 @@ export interface Cliente {
     MatButtonModule,
     MatIconModule,
     MatCardModule,
+    MatSelectModule,
+    ReactiveFormsModule,
     RouterModule,
   ],
   templateUrl: './list-cliente.component.html',
   styleUrls: ['./list-cliente.component.scss'],
 })
 export class ListClienteComponent implements OnInit {
-  displayedColumns: string[] = ['nombre', 'apellido', 'identificacion', 'telefono', 'estado', 'actions'];
+  displayedColumns: string[] = ['nombre', 'apellido', 'identificacion', 'telefono', 'ruta', 'estado', 'actions'];
   dataSource = new MatTableDataSource<Cliente>([]);
+  allClientes: Cliente[] = [];
+  rutaFilter = new FormControl('');
+  rutas: number[] = [];
+
+  // Para mostrar clientes con pr\u00e9stamos
+  displayedColumnsConPrestamo: string[] = ['nombrecliente', 'idprestamo', 'direccioncliente', 'telefonocliente', 'monto_prestamo', 'saldo_pendiente', 'estado_prestamo'];
+  dataSourceConPrestamo = new MatTableDataSource<ClienteConPrestamo>([]);
 
   isMobile = false;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  constructor(private responsive: BreakpointObserver, private router: Router) {}
+  constructor(
+    private responsive: BreakpointObserver, 
+    private router: Router,
+    private clienteService: ClienteService
+  ) {}
 
   ngOnInit(): void {
     this.detectMobile();
-    this.loadClientes();
+    this.loadClientes(); 
+    this.setupRutaFilter();
   }
 
   detectMobile() {
@@ -68,6 +96,25 @@ export class ListClienteComponent implements OnInit {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
 
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
+  }
+
+  setupRutaFilter() {
+    this.rutaFilter.valueChanges.subscribe((rutaId) => {
+      this.filterByRuta(rutaId);
+    });
+  }
+
+  filterByRuta(rutaId: string | null) {
+    if (!rutaId || rutaId === '') {
+      this.dataSource.data = this.allClientes;
+    } else {
+      this.dataSource.data = this.allClientes.filter(
+        (cliente) => cliente.rutaId === Number(rutaId)
+      );
+    }
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
@@ -135,12 +182,19 @@ export class ListClienteComponent implements OnInit {
     // Si hay clientes en localStorage, las priorizamos
     const guardados = JSON.parse(localStorage.getItem('clientes') || 'null');
     if (Array.isArray(guardados) && guardados.length > 0) {
+      this.allClientes = guardados;
       this.dataSource.data = guardados;
     } else {
       localStorage.setItem('clientes', JSON.stringify(clientes));
+      this.allClientes = clientes;
       this.dataSource.data = clientes;
     }
+
+    // Extraer rutas únicas
+    this.rutas = [...new Set(this.allClientes.map(c => c.rutaId))].sort((a, b) => a - b);
   }
+
+  
 
   newCliente() {
     this.router.navigate(['/cliente/crear-cliente']);

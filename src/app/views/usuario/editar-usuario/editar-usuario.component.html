@@ -1,0 +1,112 @@
+<div class="container">
+  <div class="header">
+    <h2>Editar Usuario</h2>
+    
+    <button mat-raised-button routerLink="/usuario/list">
+      <mat-icon>arrow_back</mat-icon> Volver
+    </button>
+  </div>
+
+  <mat-card class="form-card">
+    <mat-card-content>
+      <form [formGroup]="usuarioForm" (ngSubmit)="onSubmit()">
+        
+        <div class="form-row">
+          <!-- Nombres -->
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Nombres</mat-label>
+            <input matInput formControlName="nombres" placeholder="Ingrese nombres">
+            <mat-icon matPrefix>person</mat-icon>
+            <mat-error *ngIf="nombres?.hasError('required')">
+              Los nombres son requeridos
+            </mat-error>
+            <mat-error *ngIf="nombres?.hasError('minlength')">
+              Mínimo 2 caracteres
+            </mat-error>
+          </mat-form-field>
+
+          <!-- Apellidos -->
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Apellidos</mat-label>
+            <input matInput formControlName="apellidos" placeholder="Ingrese apellidos">
+            <mat-icon matPrefix>person</mat-icon>
+            <mat-error *ngIf="apellidos?.hasError('required')">
+              Los apellidos son requeridos
+            </mat-error>
+            <mat-error *ngIf="apellidos?.hasError('minlength')">
+              Mínimo 2 caracteres
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <!-- Teléfono -->
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Teléfono</mat-label>
+            <input matInput formControlName="telefono" placeholder="Ingrese teléfono">
+            <mat-icon matPrefix>phone</mat-icon>
+            <mat-error *ngIf="telefono?.hasError('pattern')">
+              Teléfono inválido (7-15 dígitos)
+            </mat-error>
+          </mat-form-field>
+
+          <!-- Email -->
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Email</mat-label>
+            <input matInput formControlName="email" type="email" placeholder="correo@ejemplo.com">
+            <mat-icon matPrefix>email</mat-icon>
+            <mat-error *ngIf="email?.hasError('required')">
+              El email es requerido
+            </mat-error>
+            <mat-error *ngIf="email?.hasError('email')">
+              Email inválido
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <!-- Tipo de Usuario -->
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Rol</mat-label>
+            <mat-select formControlName="tipo_usuario">
+              <mat-option *ngFor="let tipo of tiposUsuario" [value]="tipo.id">
+                {{ tipo.nombre }}
+              </mat-option>
+            </mat-select>
+            <mat-icon matPrefix>badge</mat-icon>
+            <mat-error *ngIf="tipo_usuario?.hasError('required')">
+              El rol es requerido
+            </mat-error>
+          </mat-form-field>
+
+          <!-- Estado -->
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Estado</mat-label>
+            <mat-select formControlName="estado">
+              <mat-option *ngFor="let est of estados" [value]="est.value">
+                {{ est.label }}
+              </mat-option>
+            </mat-select>
+            <mat-icon matPrefix>check_circle</mat-icon>
+            <mat-error *ngIf="estado?.hasError('required')">
+              El estado es requerido
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <!-- Botones de acción -->
+        <div class="button-row">
+          <button mat-raised-button type="button" (click)="onCancel()">
+            <mat-icon>cancel</mat-icon>
+            Cancelar
+          </button>
+          <button mat-raised-button color="primary" type="submit" [disabled]="loading">
+            <mat-icon>save</mat-icon>
+            {{ loading ? 'Actualizando...' : 'Actualizar' }}
+          </button>
+        </div>
+
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>

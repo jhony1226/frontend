@@ -4,33 +4,126 @@
       <c-col lg="7" md="9" xl="6">
         <c-card class="mx-4">
           <c-card-body class="p-4">
-            <form cForm>
-              <h1>Register</h1>
-              <p class="text-body-secondary">Create your account</p>
+            <form cForm [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+              <h1>Registro</h1>
+              <p class="text-body-secondary">Crea tu cuenta</p>
+              
+              <!-- Mensajes -->
+              <div *ngIf="errorMessage" class="alert alert-danger" role="alert">
+                {{ errorMessage }}
+              </div>
+              <div *ngIf="successMessage" class="alert alert-success" role="alert">
+                {{ successMessage }}
+              </div>
+
+              <!-- Nombre -->
               <c-input-group class="mb-3">
                 <span cInputGroupText>
                   <svg cIcon name="cilUser"></svg>
                 </span>
-                <input autoComplete="name" cFormControl placeholder="Username" />
+                <input 
+                  autoComplete="name" 
+                  cFormControl 
+                  placeholder="Nombre completo" 
+                  formControlName="nombre"
+                />
+                <c-form-feedback 
+                  *ngIf="nombre?.invalid && (nombre?.dirty || nombre?.touched)" 
+                  [valid]="false">
+                  <span *ngIf="nombre?.errors?.['required']">El nombre es requerido</span>
+                  <span *ngIf="nombre?.errors?.['minlength']">Mínimo 3 caracteres</span>
+                </c-form-feedback>
               </c-input-group>
+
+              <!-- Email -->
               <c-input-group class="mb-3">
                 <span cInputGroupText>&#64;</span>
-                <input autoComplete="email" cFormControl placeholder="Email" />
+                <input 
+                  autoComplete="email" 
+                  cFormControl 
+                  placeholder="Email" 
+                  type="email"
+                  formControlName="email"
+                />
+                <c-form-feedback 
+                  *ngIf="email?.invalid && (email?.dirty || email?.touched)" 
+                  [valid]="false">
+                  <span *ngIf="email?.errors?.['required']">El email es requerido</span>
+                  <span *ngIf="email?.errors?.['email']">Email inválido</span>
+                </c-form-feedback>
               </c-input-group>
+
+              <!-- Tipo de Usuario -->
+              <c-input-group class="mb-3">
+                <span cInputGroupText>
+                  <svg cIcon name="cilPeople"></svg>
+                </span>
+                <select 
+                  cFormControl 
+                  cSelect
+                  formControlName="tipoUsuarioId">
+                  <option value="1">Administrador</option>
+                  <option value="2">Cobrador</option>
+                </select>
+              </c-input-group>
+
+              <!-- Password -->
               <c-input-group class="mb-3">
                 <span cInputGroupText>
                   <svg cIcon name="cilLockLocked"></svg>
                 </span>
-                <input autoComplete="new-password" cFormControl placeholder="Password" type="password" />
+                <input 
+                  autoComplete="new-password" 
+                  cFormControl 
+                  placeholder="Contraseña" 
+                  type="password" 
+                  formControlName="password"
+                />
+                <c-form-feedback 
+                  *ngIf="password?.invalid && (password?.dirty || password?.touched)" 
+                  [valid]="false">
+                  <span *ngIf="password?.errors?.['required']">La contraseña es requerida</span>
+                  <span *ngIf="password?.errors?.['minlength']">Mínimo 6 caracteres</span>
+                </c-form-feedback>
               </c-input-group>
+
+              <!-- Confirm Password -->
               <c-input-group class="mb-4">
                 <span cInputGroupText>
                   <svg cIcon name="cilLockLocked"></svg>
                 </span>
-                <input autoComplete="new-password" cFormControl placeholder="Repeat password" type="password" />
+                <input 
+                  autoComplete="new-password" 
+                  cFormControl 
+                  placeholder="Repetir contraseña" 
+                  type="password" 
+                  formControlName="confirmPassword"
+                />
+                <c-form-feedback 
+                  *ngIf="(confirmPassword?.invalid || registerForm.errors?.['passwordMismatch']) && (confirmPassword?.dirty || confirmPassword?.touched)" 
+                  [valid]="false">
+                  <span *ngIf="confirmPassword?.errors?.['required']">Confirma tu contraseña</span>
+                  <span *ngIf="registerForm.errors?.['passwordMismatch']">Las contraseñas no coinciden</span>
+                </c-form-feedback>
               </c-input-group>
-              <div class="d-grid">
-                <button cButton color="success">Create Account</button>
+
+              <div class="d-grid gap-2">
+                <button 
+                  cButton 
+                  color="success" 
+                  type="submit"
+                  [disabled]="loading">
+                  <span *ngIf="!loading">Crear Cuenta</span>
+                  <span *ngIf="loading">Creando cuenta...</span>
+                </button>
+                
+                <button 
+                  cButton 
+                  color="link" 
+                  type="button"
+                  routerLink="/login">
+                  ¿Ya tienes cuenta? Inicia sesión
+                </button>
               </div>
             </form>
           </c-card-body>

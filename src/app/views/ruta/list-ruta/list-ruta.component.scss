@@ -94,11 +94,32 @@ mat-icon.delete {
 }
 
 mat-icon.deactivate {
-  color: #f57c00; /* Naranja para advertencia */
+  color: #388e3c; /* Verde cuando está activo */
 }
 
 mat-icon.activate {
-  color: #388e3c; /* Verde para activación */
+  color: #fbc02d; /* Amarillo cuando está inactivo */
+}
+
+/* =========================================
+   COBRADOR CELL (Icono + Texto)
+   ========================================= */
+.cobrador-cell {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  
+  mat-icon {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+    margin-right: 0;
+    color: #757575;
+  }
+  
+  span {
+    color: #424242;
+  }
 }
 
 /* =========================================

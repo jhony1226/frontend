@@ -1,135 +1,97 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule,
-     FormBuilder,
-     FormGroup,
-     Validators } from '@angular/forms';
-import { Router, RouterModule, ActivatedRoute } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
+import { MatButtonModule } from '@angular/material/button';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { MatIconModule } from '@angular/material/icon';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { MatSortModule } from '@angular/material/sort';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { MatSelectModule } from '@angular/material/select';
-import { MatButtonModule } from '@angular/material/button';
-import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatNativeDateModule } from '@angular/material/core';
-import { AuthMockService } from '../../../services/AuthMockService';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { Cliente, ClienteService } from '../../../services/cliente.service';
 
 @Component({
   selector: 'app-crear-cobro',
   standalone: true,
   imports: [
     CommonModule,
-    ReactiveFormsModule,
     RouterModule,
     MatCardModule,
+    MatButtonModule,
+    MatTableModule,
+    MatIconModule,
+    MatDividerModule,
+    MatTooltipModule,
+    MatPaginatorModule,
+    MatSortModule,
     MatFormFieldModule,
     MatInputModule,
-    MatSelectModule,
-    MatButtonModule,
-    MatDatepickerModule,
-    MatNativeDateModule,
   ],
   templateUrl: './crear-cobro.component.html',
   styleUrls: ['./crear-cobro.component.scss']
 })
 export class CrearCobroComponent implements OnInit {
-  cobroForm: FormGroup;
-  // Listas para los selectores (deberían cargarse desde un servicio)
-  clientes: any[] = []; 
-  prestamos: any[] = [];
-  isEditMode = false;
-  isLimitedMode = false; // Modo limitado: solo valor y estado para cobradores desde list-ruta
-  cobroId: string | null = null;
-  rutaId: string | null = null;
+  displayedColumns: string[] = ['nombrecliente', 'direccioncliente', 'telefonocliente', 'acciones'];
+  dataSource: MatTableDataSource<Cliente>;
+  isMobile = false;
+  rutaId: number = 1;
+
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   constructor(
-    private fb: FormBuilder, 
     private router: Router,
-    private route: ActivatedRoute,
-    private auth: AuthMockService
+    private clienteService: ClienteService,
+    private responsive: BreakpointObserver
   ) {
-    this.cobroForm = this.fb.group({
-      cliente_id: ['', Validators.required],
-      prestamo_id: ['', Validators.required],
-      fecha_cobro: [new Date(), Validators.required],
-      monto_cobrado: [null, [Validators.required, Validators.min(0.01)]],
-      estado: ['Pendiente', Validators.required]
-    });
+    this.dataSource = new MatTableDataSource<Cliente>([]);
   }
 
+ 
   ngOnInit(): void {
-    this.route.queryParams.subscribe(params => {
-      this.cobroId = params['id'] || null;
-      this.rutaId = params['rutaId'] || null;
-      this.isEditMode = !!this.cobroId;
-      
-      // Si es cobrador y viene desde list-ruta (tiene rutaId), activar modo limitado
-      this.isLimitedMode = this.isEditMode && !!this.rutaId && this.auth.isCobrador();
-      
-      if (this.isLimitedMode) {
-        // En modo limitado, solo valor y estado son editables
-        this.cobroForm.get('cliente_id')?.disable();
-        this.cobroForm.get('prestamo_id')?.disable();
-        this.cobroForm.get('fecha_cobro')?.disable();
-        // En modo limitado, el estado solo puede ser "Pagado"
-        this.cobroForm.get('estado')?.setValue('Pagado');
-      }
-      
-      if (this.isEditMode) {
-        this.loadCobroData();
-      } else {
-        this.cargarDatosIniciales();
+    this.detectMobile();
+    this.cargarClientes();
+  }
+
+  detectMobile() {
+    this.responsive.observe([Breakpoints.Handset]).subscribe((result) => {
+      this.isMobile = result.matches;
+    });
+  }
+
+  cargarClientes(): void {
+    this.clienteService.getClientesByRuta(this.rutaId).subscribe({
+      next: (data) => {
+        this.dataSource.data = data;
+        this.dataSource.paginator = this.paginator;
+      },
+      error: (err) => {
+        console.error('Error al cargar clientes:', err);
       }
     });
   }
 
-  loadCobroData() {
-    // TODO: Cargar datos del cobro desde el servicio
-    // Por ahora, datos de ejemplo
-    const cobroEjemplo = {
-      cliente_id: 1,
-      prestamo_id: 101,
-      fecha_cobro: new Date('2025-01-15'),
-      monto_cobrado: 500000,
-      estado: 'Pendiente'
-    };
-    
-    this.cobroForm.patchValue(cobroEjemplo);
-    this.cargarDatosIniciales();
-  }
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
 
-  cargarDatosIniciales() {
-    // TODO: Reemplazar con llamadas reales a tus servicios de Cliente y Préstamo
-    this.clientes = [
-      { id: 1, nombre: 'Juan Pérez' },
-      { id: 2, nombre: 'María López' }
-    ];
-    
-    // Idealmente, los préstamos se filtrarían al seleccionar un cliente
-    this.prestamos = [
-      { id: 101, descripcion: 'Préstamo Personal #101' },
-      { id: 102, descripcion: 'Préstamo Hipotecario #102' }
-    ];
-  }
-
-  onSubmit() {
-    if (this.cobroForm.valid) {
-      console.log('Datos del cobro:', this.cobroForm.value);
-      // Aquí iría la llamada al servicio:
-      // const cobroData = this.cobroForm.value;
-      // this.cobroService.createCobro(cobroData).subscribe(...)
-      window.alert('¡Cobro creado exitosamente!');
-      this.cancelar();
-    } else {
-      this.cobroForm.markAllAsTouched();
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
     }
   }
 
+  verDetalles(cliente: Cliente): void {
+    // Navegar a la vista de préstamos del cliente
+    console.log('Navegando a préstamos del cliente:', cliente.cliente_id);
+    this.router.navigateByUrl(`/cobro/prestamos-cliente/${cliente.cliente_id}`).catch(err => {
+      console.error('Error en navegación:', err);
+    });
+  }
+ 
   cancelar() {
-    if (this.rutaId) {
-      this.router.navigate(['/cobro/ruta', this.rutaId, 'cobros']);
-    } else {
-      this.router.navigate(['/cobro/list-cobro']);
-    }
+    this.router.navigate(['/cobro/list-cobro']);
   }
 }

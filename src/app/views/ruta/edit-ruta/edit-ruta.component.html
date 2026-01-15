@@ -11,12 +11,6 @@
       <input matInput [(ngModel)]="ruta.nombre_ruta" name="nombre_ruta" placeholder="Ej: Ruta Centro" required />
     </mat-form-field>
 
-    <!-- Descripción -->
-    <mat-form-field appearance="outline">
-      <mat-label>Descripción</mat-label>
-      <input matInput [(ngModel)]="ruta.descripcion" name="descripcion" placeholder="Ej: Zona céntrica de la ciudad" />
-    </mat-form-field>
-
     <!-- Zona -->
     <mat-form-field appearance="outline">
       <mat-label>Zona</mat-label>
@@ -31,6 +25,32 @@
         <mat-option value="INACTIVO">Inactivo</mat-option>
       </mat-select>
     </mat-form-field>
+
+    
+<mat-form-field appearance="outline">
+  <mat-label>Cobrador</mat-label>
+  <mat-select [(ngModel)]="cobradorSeleccionadoId" name="cobrador_id">
+    
+    <mat-option>
+      <ngx-mat-select-search 
+        [(ngModel)]="filtroCobrador"
+        (ngModelChange)="filtrarCobradores()"
+        placeholderLabel="Buscar cobrador..."
+        noEntriesFoundLabel="No se encontraron cobradores"
+        ngDefaultControl>
+      </ngx-mat-select-search>
+    </mat-option>
+    
+    <mat-option value="">Sin asignar</mat-option>
+    <mat-option
+      *ngFor="let cobrador of cobradoresFiltrados"
+      [value]="cobrador.usuario_id">
+      {{ cobrador.nombres }} {{ cobrador.apellidos }}
+    </mat-option>
+  </mat-select>
+</mat-form-field>
+ 
+  
 
     <!-- Acciones -->
     <div class="actions">
