@@ -86,20 +86,38 @@ export class ListCobroComponent implements OnInit {
   }
 
   loadCobros() {
-    this.cobroService.getCobros().subscribe({
-      next: (data) => {
-        const filteredData = this.isCobrosPorRuta && this.rutaId
-          ? data.filter((c) => c.ruta_id == Number(this.rutaId))
-          : data;
-
-        this.cobroData = filteredData;
-        this.dataSource = new MatTableDataSource(this.cobroData);
-        this.dataSource.paginator = this.paginator;
-      },
-      error: (err) => {
-        console.error('Error al cargar cobros', err);
-      }
-    });
+    if (this.isCobrosPorRuta && this.rutaId) {
+      // Cargar cobros por ruta específica
+      this.cobroService.getCobrosByRutaId(this.rutaId).subscribe({
+        next: (data) => {
+          console.log('Cobros cargados para ruta:', this.rutaId, data);
+          // Mapear los datos del backend al formato esperado por el componente
+          this.cobroData = data.map(cobro => ({
+            ...cobro,
+            idprestamo: cobro.prestamo_id,
+            nombrecliente: cobro.cliente_nombre
+          }));
+          this.dataSource = new MatTableDataSource(this.cobroData);
+          this.dataSource.paginator = this.paginator;
+        },
+        error: (err) => {
+          console.error('Error al cargar cobros por ruta', err);
+        }
+      });
+    } else {
+      // Cargar todos los cobros
+      this.cobroService.getCobros().subscribe({
+        next: (data) => {
+          console.log('Todos los cobros cargados:', data);
+          this.cobroData = data;
+          this.dataSource = new MatTableDataSource(this.cobroData);
+          this.dataSource.paginator = this.paginator;
+        },
+        error: (err) => {
+          console.error('Error al cargar cobros', err);
+        }
+      });
+    }
   }
 
   obtenerNombreRuta(id: string) {
@@ -192,7 +210,7 @@ export class ListCobroComponent implements OnInit {
   };
 
   getEditQueryParams(item: any): any {
-    const params: any = { id: item._id };
+    const params: any = { id: item.cobro_id };
     if (this.isCobrosPorRuta && this.rutaId) {
       params.rutaId = this.rutaId;
     }
@@ -200,11 +218,6 @@ export class ListCobroComponent implements OnInit {
   }
 
   getEditRoute(item: any): string[] {
-    // Si viene desde list-ruta y el usuario NO es admin (es cobrador), usar edit-cobro
-    if (this.isCobrosPorRuta && !this.auth.isAdmin()) {
-      return ['/cobro/edit-cobro'];
-    }
-    // Si es admin, usar crear-cobro (edición completa)
-    return ['/cobro/crear-cobro'];
+    return ['/cobro/edit-cobro'];
   }
 }

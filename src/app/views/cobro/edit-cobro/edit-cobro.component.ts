@@ -44,8 +44,12 @@ export class EditCobroComponent implements OnInit {
     private dialog: MatDialog
   ) {
     this.cobroForm = this.fb.group({
-      monto_cobrado: [null, [Validators.required, Validators.min(0.01)]],
-      estado: ['Pagado', Validators.required]
+      prestamo_id: [{ value: null, disabled: true }],
+      usuario_id: [{ value: null, disabled: true }],
+      cliente_nombre: [{ value: '', disabled: true }],
+      fecha_cobro: [{ value: '', disabled: true }],
+      monto_cobrado: [{ value: null, disabled: true }],
+      estado: ['pendiente', Validators.required]
     });
   }
 
@@ -64,7 +68,15 @@ export class EditCobroComponent implements OnInit {
     if (this.cobroId) {
       this.cobroService.getCobro(this.cobroId).subscribe({
         next: (data) => {
-          this.cobroForm.patchValue(data);
+          this.cobroForm.patchValue({
+            prestamo_id: data.prestamo_id,
+            usuario_id: data.usuario_id,
+            cliente_nombre: data.cliente_nombre,
+            fecha_cobro: data.fecha_cobro,
+            monto_cobrado: data.monto_cobrado,
+            estado: data.estado
+          });
+          console.log('Datos del cobro cargados:', data);
         },
         error: (err) => console.error('Error al cargar el cobro', err)
       });
@@ -100,7 +112,14 @@ export class EditCobroComponent implements OnInit {
 private actualizarCobro() {
   if (!this.cobroId) return;
 
-  const cobroData = this.cobroForm.value;
+  // Enviar todos los campos que requiere el backend
+  const cobroData = {
+    prestamo_id: this.cobroForm.get('prestamo_id')?.value,
+    usuario_id: this.cobroForm.get('usuario_id')?.value,
+    fecha_cobro: this.cobroForm.get('fecha_cobro')?.value,
+    monto_cobrado: this.cobroForm.get('monto_cobrado')?.value,
+    estado: this.cobroForm.get('estado')?.value
+  };
 
   this.cobroService.editCobro(this.cobroId, cobroData).subscribe({
     next: () => {
@@ -115,7 +134,12 @@ private actualizarCobro() {
           type: 'success'
         }
       }).afterClosed().subscribe(() => {
-        this.cancelar();
+        // Navegar directamente después de guardar exitosamente
+        if (this.rutaId) {
+          this.router.navigate(['/cobro/ruta', this.rutaId, 'cobros']);
+        } else {
+          this.router.navigate(['/cobro/list-cobro']);
+        }
       });
     },
     error: (err) => {
@@ -152,7 +176,7 @@ private actualizarCobro() {
   dialogRef.afterClosed().subscribe(confirmado => {
     if (confirmado) {
       if (this.rutaId) {
-        this.router.navigate(['/list-cobro', this.rutaId]);
+        this.router.navigate(['/cobro/ruta', this.rutaId, 'cobros']);
       } else {
         this.router.navigate(['/cobro/list-cobro']);
       }

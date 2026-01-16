@@ -9,7 +9,7 @@ export const routes: Routes = [
     children: [
       {
         path: '',
-        redirectTo: 'cambio-sucursal',
+        redirectTo: 'list-sucursal',
         pathMatch: 'full',
       },
       {
@@ -20,16 +20,6 @@ export const routes: Routes = [
           ),
         data: {
           title: 'Lista de Sucursales',
-        },
-      },
-      {
-        path: 'cambio-sucursal',
-        loadComponent: () =>
-          import('./cambio-sucursal/cambio-sucursal.component').then(
-            (m) => m.CambioSucursalComponent
-          ),
-        data: {
-          title: 'Cambio de Sucursal',
         },
       },
       {

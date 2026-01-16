@@ -3,8 +3,13 @@ import { Routes } from "@angular/router";
 export const routes: Routes = [
     {
         path: '',
-        redirectTo: 'list-cobro',
+        redirectTo: 'seleccionar-ruta',
         pathMatch: 'full'
+    },
+    {
+        path: 'seleccionar-ruta',
+        loadComponent: () => import('./seleccionar-ruta-cobros/seleccionar-ruta-cobros.component').then(m => m.SeleccionarRutaCobrosComponent),
+        data: { title: 'Seleccionar Ruta para Cobros' }
     },
     {
         path: 'list-cobro',

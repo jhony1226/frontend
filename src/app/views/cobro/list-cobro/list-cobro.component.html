@@ -64,8 +64,7 @@
             class="estado-badge"
             [ngClass]="{
               'estado-pagado': item.estado?.toUpperCase() === 'PAGADO',
-              'estado-pendiente': item.estado?.toUpperCase() === 'PENDIENTE',
-              'estado-parcial': item.estado?.toUpperCase() === 'PARCIAL'
+              'estado-pendiente': item.estado?.toUpperCase() === 'PENDIENTE' 
             }">
             {{ item.estado | uppercase }}
           </span>

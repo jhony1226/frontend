@@ -29,4 +29,27 @@ mat-card-title {
   color: #0d47a1;
 }
 
+/* Mejorar apariencia de campos deshabilitados */
+::ng-deep .mat-mdc-form-field.mat-form-field-disabled {
+  opacity: 1 !important;
+}
+
+::ng-deep .mat-mdc-form-field.mat-form-field-disabled .mat-mdc-input-element:disabled {
+  color: #424242 !important;
+  -webkit-text-fill-color: #424242 !important;
+  opacity: 1 !important;
+}
+
+::ng-deep .mat-mdc-form-field.mat-form-field-disabled .mat-mdc-form-field-label {
+  color: #616161 !important;
+}
+
+::ng-deep .mat-mdc-form-field.mat-form-field-disabled .mdc-text-field--disabled {
+  background-color: #f5f5f5 !important;
+}
+
+::ng-deep .mat-mdc-form-field.mat-form-field-disabled .mdc-line-ripple::before {
+  border-bottom-color: #e0e0e0 !important;
+}
+
 

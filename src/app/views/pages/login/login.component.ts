@@ -59,7 +59,7 @@ export class LoginComponent implements OnInit {
   ngOnInit(): void {
     // Si ya está autenticado, redirigir
     if (this.authService.isAuthenticated()) {
-      this.router.navigate(['/sucursal/cambio-sucursal']);
+      this.router.navigate(['/cambio-sucursal']);
       return;
     }
 
@@ -69,7 +69,7 @@ export class LoginComponent implements OnInit {
     });
 
     // Obtener URL de retorno
-    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/sucursal/cambio-sucursal';
+    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/cambio-sucursal';
   }
 
   onSubmit(): void {

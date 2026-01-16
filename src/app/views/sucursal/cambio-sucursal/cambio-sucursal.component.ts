@@ -111,7 +111,7 @@ export class CambioSucursalComponent implements OnInit {
         { duration: 3000 }
       );
       
-      // navigate to list-rutas
+      // Navegar a lista de rutas
       this.router.navigate(['/ruta/list-ruta']);
     }
   }

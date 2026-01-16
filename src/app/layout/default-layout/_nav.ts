@@ -6,19 +6,35 @@ export const navItems: INavData[] = [
     title: true,
   },
   {
+    name: 'Cambio de Sucursal',
+    url: '/cambio-sucursal',
+    iconComponent: { name: 'cil-settings' },
+  },
+  {
+    name: 'Rutas',
+    url: '/ruta',
+    iconComponent: { name: 'cil-puzzle' },
+    children: [
+      {
+        name: 'Gestión de Rutas',
+        url: '/ruta/list-ruta',
+        icon: 'nav-icon-bullet',
+      },
+      {
+        name: 'Crear Ruta',
+        url: '/ruta/crear-ruta',
+        icon: 'nav-icon-bullet',
+      },
+    ],
+  },
+  {
     name: 'Sucursales',
     url: '/sucursal',
-    iconComponent: { name: 'cil-puzzle' },
+    iconComponent: { name: 'cil-home' },
     children: [
       {
         name: 'List Sucursal',
         url: '/sucursal/list-sucursal',
-        icon: 'nav-icon-bullet',
-      },
-
-      {
-        name: 'Cambio de Sucursal',
-        url: '/sucursal/cambio-sucursal',
         icon: 'nav-icon-bullet',
       },
     ],
@@ -36,23 +52,6 @@ export const navItems: INavData[] = [
       {
         name: 'Aportes',
         url: '/periodo/list-periodo',
-        icon: 'nav-icon-bullet',
-      },
-    ],
-  },
-  {
-    name: 'Rutas',
-    url: '/ruta',
-    iconComponent: { name: 'cil-puzzle' },
-    children: [
-      {
-        name: 'Gestión de Rutas',
-        url: '/ruta/list-ruta',
-        icon: 'nav-icon-bullet',
-      },
-      {
-        name: 'Crear Ruta',
-        url: '/ruta/crear-ruta',
         icon: 'nav-icon-bullet',
       },
     ],
@@ -99,7 +98,7 @@ export const navItems: INavData[] = [
     children: [
       {
         name: 'Gestión de Cobros',
-        url: '/cobro/list-cobro',
+        url: '/cobro/seleccionar-ruta',
         icon: 'nav-icon-bullet',
       },
       {

@@ -15,6 +15,7 @@ export interface Cobro {
   cobro_id?: number;
   prestamo_id: number;
   usuario_id: number;
+  cliente_nombre: string;
   fecha_cobro: string;
   monto_cobrado: number;
   estado: string;
@@ -40,7 +41,7 @@ export class CobroService {
   }
 
   getCobro(id: number | string): Observable<Cobro> {
-    return this.http.get<Cobro>(`${this.apiUrl}/getCobro/${id}`);
+    return this.http.get<Cobro>(`${this.apiUrl}/getCobroById/${id}`);
   }
 
   editCobro(id: number | string, cobro: Partial<Cobro>): Observable<Cobro> {
@@ -56,5 +57,8 @@ export class CobroService {
     console.log('CobroService - URL completa:', url);
     console.log('CobroService - Datos a enviar:', cobro);
     return this.http.post<Cobro>(url, cobro);
+  }
+  getCobrosByRutaId(rutaId: number | string): Observable<Cobro[]> {
+    return this.http.get<Cobro[]>(`${this.apiUrl}/getCobrosByRutaid/${rutaId}`);
   }
 }

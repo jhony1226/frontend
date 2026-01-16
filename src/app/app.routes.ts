@@ -1,21 +1,37 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './guards/auth.guard';
+import { sucursalGuard } from './guards/sucursal.guard';
 
 export const routes: Routes = [
   {
     path: '',
-    redirectTo: 'dashboard',
+    redirectTo: 'cambio-sucursal',
     pathMatch: 'full',
+  },
+  {
+    path: 'cambio-sucursal',
+    loadComponent: () =>
+      import('./views/sucursal/cambio-sucursal/cambio-sucursal.component').then(
+        (m) => m.CambioSucursalComponent
+      ),
+    canActivate: [authGuard],
+    data: {
+      title: 'Selección de Sucursal',
+    },
   },
   {
     path: '',
     loadComponent: () =>
       import('./layout').then((m) => m.DefaultLayoutComponent),
-    canActivate: [authGuard], // Proteger todas las rutas hijas
+    canActivate: [authGuard, sucursalGuard], // Proteger todas las rutas hijas
     data: {
       title: 'Home',
     },
     children: [
+      {
+        path: 'ruta',
+        loadChildren: () => import('./views/ruta/routes').then((m) => m.routes),
+      },
       {
         path: 'dashboard',
         loadChildren: () =>
@@ -69,10 +85,6 @@ export const routes: Routes = [
         path: 'periodo',
         loadChildren: () =>
           import('./views/periodo/routes').then((m) => m.routes),
-      },
-      {
-        path: 'ruta',
-        loadChildren: () => import('./views/ruta/routes').then((m) => m.routes),
       },
       {
         path: 'cliente',

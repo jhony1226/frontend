@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterLink, RouterOutlet } from '@angular/router';
 import { NgScrollbar } from 'ngx-scrollbar';
 
@@ -17,6 +17,7 @@ import {
 
 import { DefaultFooterComponent, DefaultHeaderComponent } from './';
 import { navItems } from './_nav';
+import { AuthMockService } from '../../services/AuthMockService';
 
 function isOverflown(element: HTMLElement) {
   return (
@@ -48,5 +49,33 @@ function isOverflown(element: HTMLElement) {
   ]
 })
 export class DefaultLayoutComponent {
-  public navItems = [...navItems];
+  private authMockService = inject(AuthMockService);
+  public navItems = this.getFilteredNavItems();
+
+  private getFilteredNavItems() {
+    if (this.authMockService.isCobrador()) {
+      // Cobradores ven cambio de sucursal y registro de cobro
+      return [
+        {
+          name: 'Cambio de Sucursal',
+          url: '/cambio-sucursal',
+          iconComponent: { name: 'cil-settings' },
+        },
+        {
+          name: 'Cobros',
+          url: '/cobro',
+          iconComponent: { name: 'cil-bell' },
+          children: [
+            {
+              name: 'Registro Cobro',
+              url: '/cobro/crear-cobro',
+              icon: 'nav-icon-bullet',
+            }
+          ]
+        }
+      ];
+    }
+    // Admin ve todo el menú
+    return [...navItems];
+  }
 }
