@@ -1,0 +1,75 @@
+<mat-card class="client-card">
+  <mat-card-title>
+    Crear Nuevo Cliente
+  </mat-card-title>
+
+  <form class="client-form" (ngSubmit)="crear()">
+
+    <!-- Fila 1 -->
+    <div class="form-row">
+      <mat-form-field appearance="outline">
+        <mat-label>Nombre</mat-label>
+        <input matInput [(ngModel)]="nombre" name="nombre" placeholder="Ej: Juan" required />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Apellido</mat-label>
+        <input matInput [(ngModel)]="apellido" name="apellido" placeholder="Ej: Pérez" required />
+      </mat-form-field>
+    </div>
+
+    <!-- Fila 2 -->
+    <div class="form-row">
+      <mat-form-field appearance="outline">
+        <mat-label>Identificación</mat-label>
+        <input matInput [(ngModel)]="identificacion" name="identificacion" placeholder="Ej: 123456789" required />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Teléfono</mat-label>
+        <input matInput [(ngModel)]="telefono" name="telefono" placeholder="Ej: 555-1234" required />
+      </mat-form-field>
+    </div>
+
+    <!-- Fila 3 -->
+    <div class="form-row">
+      <mat-form-field appearance="outline">
+        <mat-label>Dirección</mat-label>
+        <input matInput [(ngModel)]="direccion" name="direccion" placeholder="Ej: Calle Principal 123" required />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Ruta</mat-label>
+        <mat-select [(ngModel)]="rutaId" name="rutaId" required>
+          <mat-option *ngFor="let ruta of rutas" [value]="ruta.id">
+            {{ ruta.nombre }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <!-- Fila 4 -->
+    <div class="form-row">
+      <mat-form-field appearance="outline">
+        <mat-label>Estado</mat-label>
+        <mat-select [(ngModel)]="estado" name="estado">
+          <mat-option value="ACTIVO">Activo</mat-option>
+          <mat-option value="INACTIVO">Inactivo</mat-option>
+          <mat-option value="SUSPENDIDO">Suspendido</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <!-- Acciones -->
+    <div class="actions">
+      <button mat-raised-button color="primary" type="submit">
+        Crear Cliente
+      </button>
+
+      <button mat-stroked-button color="warn" type="button" (click)="cancelar()">
+        Cancelar
+      </button>
+    </div>
+
+  </form>
+</mat-card>

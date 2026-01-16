@@ -1,0 +1,48 @@
+<mat-card class="sucursal-card">
+  <mat-card-title>
+    Editar Sucursal
+  </mat-card-title>
+
+  <form (ngSubmit)="guardar()" class="sucursal-form">
+
+    <!-- Nombre -->
+    <mat-form-field appearance="outline">
+      <mat-label>Nombre de la Sucursal</mat-label>
+      <input matInput [(ngModel)]="nombre" name="nombre" placeholder="Ej: Sucursal Centro" required />
+    </mat-form-field>
+
+    <!-- Dirección -->
+    <mat-form-field appearance="outline">
+      <mat-label>Dirección</mat-label>
+      <input matInput [(ngModel)]="direccion" name="direccion" placeholder="Ej: Cra 10 #20-30" required />
+    </mat-form-field>
+
+    <!-- Teléfono -->
+    <mat-form-field appearance="outline">
+      <mat-label>Teléfono</mat-label>
+      <input matInput [(ngModel)]="telefono" name="telefono" placeholder="Ej: 300 123 4567" required />
+    </mat-form-field>
+
+    <!-- Estado -->
+    <mat-form-field appearance="outline">
+      <mat-label>Estado</mat-label>
+      <mat-select [(ngModel)]="estado" name="estado">
+        <mat-option value="Activo">Activa</mat-option>
+        <mat-option value="Inactivo">Inactiva</mat-option>
+        <mat-option value="Mantenimiento">Mantenimiento</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <!-- Acciones -->
+    <div class="actions">
+      <button mat-raised-button color="primary" type="submit">
+        Guardar Cambios
+      </button>
+
+      <button mat-stroked-button color="warn" type="button" (click)="cancelar()">
+        Cancelar
+      </button>
+    </div>
+
+  </form>
+</mat-card>

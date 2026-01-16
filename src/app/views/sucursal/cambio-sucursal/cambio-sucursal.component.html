@@ -1,0 +1,27 @@
+<mat-card class="change-card">
+  <mat-card-title>
+    Seleccion de Sucursal
+  </mat-card-title>
+
+  <form class="change-form">
+
+    <!-- Sucursal -->
+    <mat-form-field appearance="outline">
+      <mat-label>Seleccionar sucursal</mat-label>
+      <mat-select [(ngModel)]="selectedId" name="sucursal" required>
+        <mat-option value="">-- Seleccione --</mat-option>
+        <mat-option *ngFor="let s of sucursales" [value]="s.sucursal_id">
+          {{ s.nombre }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <!-- Acciones -->
+    <div class="actions">
+      <button mat-raised-button color="primary" type="button" (click)="changeSucursal()">
+        Guardar
+      </button>
+    </div>
+
+  </form>
+</mat-card>

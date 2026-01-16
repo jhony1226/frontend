@@ -1,0 +1,71 @@
+<mat-card class="period-card">
+  <mat-card-title>
+    Crear Nuevo Gasto
+  </mat-card-title>
+
+  <form class="period-form">
+
+    <!-- Cliente -->
+    <mat-form-field appearance="outline">
+      <mat-label>Cliente</mat-label>
+      <mat-select [(ngModel)]="cliente_id" name="cliente_id" required>
+        <mat-option value="">Seleccione un cliente</mat-option>
+        <mat-option *ngFor="let cliente of clientes" [value]="cliente.id">
+          {{ cliente.nombre }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <!-- Ruta -->
+    <mat-form-field appearance="outline">
+      <mat-label>Ruta</mat-label>
+      <mat-select [(ngModel)]="ruta_id" name="ruta_id" required>
+        <mat-option value="">Seleccione una ruta</mat-option>
+        <mat-option *ngFor="let ruta of rutas" [value]="ruta.id">
+          {{ ruta.nombre }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <!-- Concepto -->
+    <mat-form-field appearance="outline">
+      <mat-label>Concepto</mat-label>
+      <input matInput [(ngModel)]="concepto" name="concepto" placeholder="Ej: Combustible" required />
+    </mat-form-field>
+
+    <!-- Fecha -->
+    <mat-form-field appearance="outline">
+      <mat-label>Fecha</mat-label>
+      <input matInput [matDatepicker]="picker" [(ngModel)]="fecha" name="fecha" required />
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+
+    <!-- Valor -->
+    <mat-form-field appearance="outline">
+      <mat-label>Valor</mat-label>
+      <input matInput type="number" [(ngModel)]="valor" name="valor" placeholder="Ingrese el valor" required />
+    </mat-form-field>
+
+    <!-- Descripción -->
+    <mat-form-field appearance="outline">
+      <mat-label>Descripción</mat-label>
+      <textarea matInput [(ngModel)]="descripcion" name="descripcion" placeholder="Descripción detallada del gasto" rows="3"></textarea>
+    </mat-form-field>
+
+    <!-- Acciones -->
+    <div class="actions">
+      <button mat-raised-button color="primary" type="button" (click)="crear()">
+        Crear Gasto
+      </button>
+
+      <button mat-stroked-button color="warn" type="button" (click)="cancelar()">
+        Cancelar
+      </button>
+    </div>
+
+  </form>
+</mat-card>
+
+
+

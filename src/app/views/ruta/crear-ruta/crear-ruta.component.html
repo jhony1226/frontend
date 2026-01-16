@@ -1,0 +1,48 @@
+<mat-card class="route-card">
+  <mat-card-title>
+    Crear Nueva Ruta
+  </mat-card-title>
+
+  <form class="route-form" (ngSubmit)="crear()">
+
+    <!-- Nombre -->
+    <mat-form-field appearance="outline">
+      <mat-label>Nombre de la Ruta</mat-label>
+      <input matInput [(ngModel)]="ruta.nombre_ruta" name="nombre_ruta" placeholder="Ej: Ruta Centro" required />
+    </mat-form-field>
+
+    <!-- Descripción -->
+    <mat-form-field appearance="outline">
+      <mat-label>Descripción</mat-label>
+      <input matInput [(ngModel)]="ruta.descripcion" name="descripcion" placeholder="Ej: Zona céntrica" />
+    </mat-form-field>
+
+    <!-- Zona -->
+    <mat-form-field appearance="outline">
+      <mat-label>Zona</mat-label>
+      <input matInput [(ngModel)]="ruta.zona" name="zona" placeholder="Ej: Zona Norte" required />
+    </mat-form-field>
+
+    <!-- Estado -->
+    <mat-form-field appearance="outline">
+      <mat-label>Estado</mat-label>
+      <mat-select [(ngModel)]="ruta.estado" name="estado">
+        <mat-option value="ACTIVO">Activo</mat-option>
+        <mat-option value="INACTIVO">Inactivo</mat-option>
+        <mat-option value="SUSPENDIDO">Suspendido</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <!-- Acciones -->
+    <div class="actions">
+      <button mat-raised-button color="primary" type="submit">
+        Crear Ruta
+      </button>
+
+      <button mat-stroked-button color="warn" type="button" (click)="cancelar()">
+        Cancelar
+      </button>
+    </div>
+
+  </form>
+</mat-card>

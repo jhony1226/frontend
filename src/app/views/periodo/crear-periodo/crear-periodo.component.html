@@ -1,0 +1,59 @@
+<mat-card class="period-card">
+  <mat-card-title>
+    Crear Nuevo Período
+  </mat-card-title>
+
+  <form class="period-form">
+
+    <!-- Nombre -->
+    <mat-form-field appearance="outline">
+      <mat-label>Nombre</mat-label>
+      <input matInput [(ngModel)]="nombre" name="nombre" placeholder="Nombre del periodo" required />
+    </mat-form-field>
+
+    <!-- Valor -->
+    <mat-form-field appearance="outline">
+      <mat-label>Valor</mat-label>
+      <input matInput type="number" [(ngModel)]="valor" name="valor" placeholder="Ingrese el valor" required />
+    </mat-form-field>
+
+    <!-- Fechas -->
+    <div class="grid">
+      <mat-form-field appearance="outline">
+        <mat-label>Fecha inicio</mat-label>
+        <input matInput [matDatepicker]="pickerInicio" [(ngModel)]="fechaInicio" name="fechaInicio" required />
+        <mat-datepicker-toggle matSuffix [for]="pickerInicio"></mat-datepicker-toggle>
+        <mat-datepicker #pickerInicio></mat-datepicker>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Fecha fin</mat-label>
+        <input matInput [matDatepicker]="pickerFin" [(ngModel)]="fechaFin" name="fechaFin" required />
+        <mat-datepicker-toggle matSuffix [for]="pickerFin"></mat-datepicker-toggle>
+        <mat-datepicker #pickerFin></mat-datepicker>
+      </mat-form-field>
+    </div>
+
+    <!-- Estado -->
+    <mat-form-field appearance="outline">
+      <mat-label>Estado</mat-label>
+      <mat-select [(ngModel)]="estado" name="estado">
+        <mat-option value="ACTIVO">Activo</mat-option>
+        <mat-option value="CERRADO">Cerrado</mat-option>
+        <mat-option value="VENCIDO">Vencido</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <!-- Acciones -->
+    <div class="actions">
+      <button mat-raised-button color="primary" type="button" (click)="crear()">
+        Crear Período
+      </button>
+
+      <button mat-stroked-button color="warn" type="button" (click)="cancelar()">
+        Cancelar
+      </button>
+    </div>
+
+  </form>
+</mat-card>
