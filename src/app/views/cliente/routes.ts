@@ -26,6 +26,14 @@ export const routes: Routes = [
           ),
         data: { title: 'Crear Cliente' },
       },
+      {
+        path: 'edit-cliente',
+        loadComponent: () =>
+          import('./crear-cliente/crear-cliente.component').then(
+            (m) => m.CrearClienteComponent
+          ),
+        data: { title: 'Editar Cliente' },
+      },
     ],
   },
 ];

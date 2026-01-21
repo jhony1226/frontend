@@ -272,18 +272,31 @@ tr.mat-row:hover {
     padding: 10px;
   }
 
+  /* Improve header layout for mobile */
   .header {
-    flex-direction: column;
-    align-items: stretch;
+    /* Keep flex-direction row (default) to align back button and title */
+    align-items: center;
   }
 
   .header h2 {
-    font-size: 20px;
-    margin-bottom: 10px;
+    font-size: 18px;
+    margin-bottom: 0;
+    /* Title takes available space next to back arrow */
   }
 
-  .header button {
+  /* Make back button normal size, not stretched */
+  .header button[mat-icon-button] {
+    width: 40px !important;
+    height: 40px !important;
+    margin-right: 4px;
+    min-width: unset;
+  }
+
+  /* Force "New Cobro" button to new line and full width */
+  .header button[mat-raised-button] {
     width: 100%;
+    margin-top: 10px;
+    flex-basis: 100%; 
   }
 
   .filters {

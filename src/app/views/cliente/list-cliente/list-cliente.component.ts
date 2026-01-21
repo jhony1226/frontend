@@ -10,20 +10,8 @@ import { MatCardModule } from '@angular/material/card';
 import { MatSelectModule } from '@angular/material/select';
 import { ReactiveFormsModule, FormControl } from '@angular/forms';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { Router, RouterModule } from '@angular/router';
-import { ClienteService } from '../../../services/cliente.service';
-
-export interface Cliente {
-  id: number;
-  nombre: string;
-  apellido: string;
-  identificacion: string;
-  telefono: string;
-  direccion: string;
-  estado: string;
-  rutaId: number;
-  createdAt: string;
-}
+import { Router, RouterModule, ActivatedRoute } from '@angular/router';
+import { ClienteService, Cliente } from '../../../services/cliente.service';
 
 export interface ClienteConPrestamo {
   nombrecliente: string;
@@ -61,6 +49,7 @@ export class ListClienteComponent implements OnInit {
   allClientes: Cliente[] = [];
   rutaFilter = new FormControl('');
   rutas: number[] = [];
+  mode: string = 'normal'; // 'normal' o 'selectForLoan'
 
   // Para mostrar clientes con pr\u00e9stamos
   displayedColumnsConPrestamo: string[] = ['nombrecliente', 'idprestamo', 'direccioncliente', 'telefonocliente', 'monto_prestamo', 'saldo_pendiente', 'estado_prestamo'];
@@ -73,10 +62,19 @@ export class ListClienteComponent implements OnInit {
   constructor(
     private responsive: BreakpointObserver, 
     private router: Router,
-    private clienteService: ClienteService
+    private clienteService: ClienteService,
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
+    // Detectar modo desde route data
+    this.route.data.subscribe(data => {
+      this.mode = data['mode'] || 'normal';
+      if (this.mode === 'selectForLoan') {
+        this.displayedColumns = ['nombre', 'telefono', 'ruta', 'actions'];
+      }
+    });
+    
     this.detectMobile();
     this.loadClientes(); 
     this.setupRutaFilter();
@@ -112,7 +110,7 @@ export class ListClienteComponent implements OnInit {
       this.dataSource.data = this.allClientes;
     } else {
       this.dataSource.data = this.allClientes.filter(
-        (cliente) => cliente.rutaId === Number(rutaId)
+        (cliente) => cliente.id_ruta === Number(rutaId)
       );
     }
     if (this.dataSource.paginator) {
@@ -121,77 +119,18 @@ export class ListClienteComponent implements OnInit {
   }
 
   loadClientes() {
-    const clientes: Cliente[] = [
-      {
-        id: 1,
-        nombre: 'Juan',
-        apellido: 'Pérez',
-        identificacion: '123456789',
-        telefono: '555-1234',
-        direccion: 'Cra 10 #20-30',
-        estado: 'ACTIVO',
-        rutaId: 1,
-        createdAt: '2024-01-15',
+    this.clienteService.getClientes().subscribe({
+      next: (data) => {
+        this.allClientes = data;
+        this.dataSource.data = data;
+        // Extraer rutas únicas
+        this.rutas = [...new Set(this.allClientes.map(c => c.id_ruta))].sort((a, b) => a - b);
+        this.dataSource.paginator = this.paginator;
       },
-      {
-        id: 2,
-        nombre: 'María',
-        apellido: 'García',
-        identificacion: '987654321',
-        telefono: '555-5678',
-        direccion: 'Av 7 #110-15',
-        estado: 'ACTIVO',
-        rutaId: 2,
-        createdAt: '2024-01-20',
-      },
-      {
-        id: 3,
-        nombre: 'Carlos',
-        apellido: 'Rodríguez',
-        identificacion: '456789123',
-        telefono: '555-9012',
-        direccion: 'Cll 5 #45-10',
-        estado: 'INACTIVO',
-        rutaId: 1,
-        createdAt: '2024-01-25',
-      },
-      {
-        id: 4,
-        nombre: 'Ana',
-        apellido: 'Martínez',
-        identificacion: '789123456',
-        telefono: '555-3456',
-        direccion: 'Cra 80 #30-20',
-        estado: 'ACTIVO',
-        rutaId: 3,
-        createdAt: '2024-02-01',
-      },
-      {
-        id: 5,
-        nombre: 'Luis',
-        apellido: 'Hernández',
-        identificacion: '321654987',
-        telefono: '555-7890',
-        direccion: 'Av. Las Palmas',
-        estado: 'ACTIVO',
-        rutaId: 2,
-        createdAt: '2024-02-05',
-      },
-    ];
-
-    // Si hay clientes en localStorage, las priorizamos
-    const guardados = JSON.parse(localStorage.getItem('clientes') || 'null');
-    if (Array.isArray(guardados) && guardados.length > 0) {
-      this.allClientes = guardados;
-      this.dataSource.data = guardados;
-    } else {
-      localStorage.setItem('clientes', JSON.stringify(clientes));
-      this.allClientes = clientes;
-      this.dataSource.data = clientes;
-    }
-
-    // Extraer rutas únicas
-    this.rutas = [...new Set(this.allClientes.map(c => c.rutaId))].sort((a, b) => a - b);
+      error: (err) => {
+        console.error('Error al cargar clientes', err);
+      }
+    }); 
   }
 
   
@@ -202,15 +141,21 @@ export class ListClienteComponent implements OnInit {
 
   editCliente(row: Cliente) {
     this.router.navigate(['/cliente/edit-cliente'], {
-      queryParams: { id: row.id },
+      queryParams: { id: row.cliente_id },
     });
   }
 
   deleteCliente(row: Cliente) {
-    if (confirm(`¿Estás seguro de eliminar a ${row.nombre} ${row.apellido}?`)) {
-      const current = this.dataSource.data.filter((c) => c.id !== row.id);
-      localStorage.setItem('clientes', JSON.stringify(current));
-      this.dataSource.data = current;
+    if (confirm(`¿Estás seguro de eliminar a ${row.nombres} ${row.apellidos}?`)) {
+      // Implementar llamada al servicio para eliminar
+      console.log('Eliminar cliente', row.cliente_id);
     }
+  }
+
+  verPrestamosCliente(row: Cliente) {
+    // Navegar a list-prestamo pasando el cliente por queryParams
+    this.router.navigate(['/prestamo/list-prestamo'], {
+      queryParams: { cliente_id: row.cliente_id }
+    });
   }
 }

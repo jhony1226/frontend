@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, Location } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
@@ -62,10 +62,15 @@ export class ListCobroComponent implements OnInit {
     private route: ActivatedRoute,
     private rutasService: RutasService,
     private auth: AuthMockService,
-    private cobroService: CobroService
+    private cobroService: CobroService,
+    private location: Location
   ) {
     this.cobroData = [];
     this.dataSource = new MatTableDataSource(this.cobroData);
+  }
+
+  goBack(): void {
+    this.location.back();
   }
 
   ngOnInit(): void {

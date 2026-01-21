@@ -3,19 +3,27 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 
-
-export interface Prestamos{
-  id_prestamo: number;
-  nombre_cliente: string;
+export interface Prestamos {
+  prestamo_id: number;
+  cliente_id: number;        // Agregado: viene en el JSON
   periodo_id: number;
-  monto_prestamo: number;
-  fecha_desembolso?: Date;
-  estado_prestamo?: string;
-  saldo_pendiente?: number;
-  valor_intereses: number;
-  valor_cuota?: number;
-  fecha_fin_prestamo: string | null;
-  data: CobroDetalle[];
+  tipo_prestamo_id: number;   // Agregado: viene en el JSON  
+  // Nota: Los montos vienen como string "1000.00"
+  monto_prestamo: string | number; 
+  saldo_pendiente: string | number;
+  valor_intereses: string | number;
+  valor_cuota: string | number;
+
+  // Nota: Las fechas vienen como string ISO
+  fecha_desembolso: string | Date; 
+  fecha_fin_prestamo: string | Date | null;
+  created_at?: string;        // Agregado: viene en el JSON
+
+  estado_prestamo: string;
+  
+  // Este campo NO viene en el JSON que mostraste, 
+  // asegúrate de que el backend haga el JOIN para traerlo
+  nombre_cliente?: string; 
 }
 
 export interface PrestamoCliente {
@@ -60,5 +68,17 @@ export class PrestamoService {
 
   getPrestamoCobros(prestamo_id: number): Observable<PrestamoCobros> {
     return this.http.get<PrestamoCobros>(`${this.apiUrl}/prestamoCobros/${prestamo_id}`);
+  }
+
+  getPrestamoById (prestamo_id: number): Observable<Prestamos> {  
+    return this.http.get<Prestamos>(`${this.apiUrl}/getPrestamoById/${prestamo_id}`);
+  }
+
+  updatePrestamo(id: number, prestamo: Partial<Prestamos>): Observable<Prestamos> {
+    return this.http.put<Prestamos>(`${this.apiUrl}/updatePrestamo/${id}`, prestamo);
+  }
+
+  getPrestamoInfoById(prestamo_id: number): Observable<Prestamos> {
+    return this.http.get<Prestamos>(`${this.apiUrl}/getPrestamoInfoById/${prestamo_id}`);
   }
 }

@@ -1,0 +1,116 @@
+<div class="container" *ngIf="prestamo">
+  <div class="header">
+    <button mat-icon-button color="primary" (click)="goBack()" title="Volver">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <h2>Detalle del Préstamo #{{ prestamo.prestamo_id }}</h2>
+  </div>
+
+  <div class="content">
+    <mat-card class="info-card">
+      <mat-card-content>
+        <form class="info-grid">
+            
+            <!-- ID (Read only) -->
+            <mat-form-field appearance="outline">
+                <mat-label>ID Préstamo</mat-label>
+                <input matInput [(ngModel)]="prestamo.prestamo_id" name="prestamo_id" readonly>
+            </mat-form-field>
+
+            <!-- Nombre Cliente -->
+            <mat-form-field appearance="outline">
+                <mat-label>Nombre Cliente</mat-label>
+                <input matInput [(ngModel)]="prestamo.nombre_cliente" name="nombre_cliente">
+            </mat-form-field>
+
+            <!-- Cliente ID -->
+            <mat-form-field appearance="outline">
+                <mat-label>Cliente ID</mat-label>
+                <input matInput type="number" [(ngModel)]="prestamo.cliente_id" name="cliente_id">
+            </mat-form-field>
+
+             <!-- Periodo -->
+            <mat-form-field appearance="outline">
+                <mat-label>Periodo ID</mat-label>
+                <input matInput type="number" [(ngModel)]="prestamo.periodo_id" name="periodo_id">
+            </mat-form-field>
+
+            <!-- Tipo Préstamo ID -->
+            <mat-form-field appearance="outline">
+                <mat-label>Tipo Préstamo ID</mat-label>
+                <input matInput type="number" [(ngModel)]="prestamo.tipo_prestamo_id" name="tipo_prestamo_id">
+            </mat-form-field>
+
+            <!-- Monto -->
+            <mat-form-field appearance="outline">
+                <mat-label>Monto Préstamo</mat-label>
+                <input matInput type="number" [(ngModel)]="prestamo.monto_prestamo" name="monto_prestamo">
+            </mat-form-field>
+
+            <!-- Valor Cuota -->
+            <mat-form-field appearance="outline">
+                <mat-label>Valor Cuota</mat-label>
+                <input matInput type="number" [(ngModel)]="prestamo.valor_cuota" name="valor_cuota">
+            </mat-form-field>
+
+            <!-- Valor Intereses -->
+            <mat-form-field appearance="outline">
+                <mat-label>Valor Intereses</mat-label>
+                <input matInput type="number" [(ngModel)]="prestamo.valor_intereses" name="valor_intereses">
+            </mat-form-field>
+
+             <!-- Fecha Inicio / Desembolso -->
+            <mat-form-field appearance="outline">
+  <mat-label>Fecha Desembolso</mat-label>
+  <input 
+    matInput 
+    [matDatepicker]="picker" 
+    [(ngModel)]="prestamo.fecha_desembolso" 
+    name="fecha_desembolso"
+    placeholder="Seleccione una fecha"> 
+  
+  <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+  
+  <mat-datepicker #picker></mat-datepicker>
+</mat-form-field>
+            
+            <!-- Estado -->
+            <mat-form-field appearance="outline">
+                <mat-label>Estado</mat-label>
+                 <mat-select [(ngModel)]="prestamo.estado_prestamo" name="estado_prestamo">
+                    <mat-option value="Aprobado">Aprobado</mat-option>
+                    <mat-option value="Pendiente">Pendiente</mat-option>
+                    <mat-option value="Rechazado">Rechazado</mat-option>
+                    <mat-option value="Pagado">Pagado</mat-option>
+                 </mat-select>
+            </mat-form-field>
+            
+            <!-- Read Only derived fields -->
+             <mat-form-field appearance="outline">
+                <mat-label>Saldo Pendiente</mat-label>
+                <input matInput [value]="prestamo.saldo_pendiente" readonly name="saldo_pendiente">
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+                <mat-label>Fecha Fin</mat-label>
+                <input 
+                    matInput 
+                    [matDatepicker]="pickerFin" 
+                    [(ngModel)]="prestamo.fecha_fin_prestamo" 
+                    name="fecha_fin_prestamo"
+                    placeholder="Seleccione una fecha"> 
+                <mat-datepicker-toggle matIconSuffix [for]="pickerFin"></mat-datepicker-toggle>
+                <mat-datepicker #pickerFin></mat-datepicker>
+            </mat-form-field>
+
+
+            
+        </form>
+         <div class="actions">
+            <button mat-raised-button color="primary" (click)="guardar()">Guardar</button>
+            <button mat-button color="warn" (click)="goBack()">Cancelar</button>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

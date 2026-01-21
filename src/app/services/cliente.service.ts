@@ -4,14 +4,28 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 
-
 export interface Cliente{
+  cliente_id: number; 
+  sucursal_id:number
+  nombres: string;
+  apellidos:string
+  numero_identificacion: string;
+  telefono: string;
+  direccion: string;
+  fecha_registro: Date;
+  estado: string;
+  created_at: Date;
+  id_ruta: number;
+}
+ 
+ 
+
+export interface ClienteCobro{
   cliente_id: number;
   nombrecliente: string;
   direccioncliente: string;
   telefonocliente: string | null;
-   
-}
+   }
 
 
 @Injectable({
@@ -23,12 +37,27 @@ export class ClienteService {
 
     constructor(private http: HttpClient) { }
     
- 
-getClientesByRuta(rutaId: number): Observable<Cliente[]> {
-  return this.http.get<Cliente[]>(
+ //clinetes de una ruta
+getClientesByRuta(rutaId: number): Observable<ClienteCobro[]> {
+  return this.http.get<ClienteCobro[]>(
     `${this.apiUrl}/getClientesbyUser/${rutaId}`
   );
 }
-     
+
+getClientes(): Observable<Cliente[]> {
+  return this.http.get<Cliente[]>(`${this.apiUrl}/getClientes`);
+}
+
+getCliente(id: number): Observable<Cliente> {
+  return this.http.get<Cliente>(`${this.apiUrl}/getClienteById/${id}`);
+}
+
+createCliente(cliente: Partial<Cliente>): Observable<Cliente> {
+  return this.http.post<Cliente>(`${this.apiUrl}/createCliente`, cliente);
+}
+
+updateCliente(id: number, cliente: Partial<Cliente>): Observable<Cliente> {
+  return this.http.put<Cliente>(`${this.apiUrl}/updateCliente/${id}`, cliente);
+}
     
 }

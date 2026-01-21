@@ -1,9 +1,9 @@
 <mat-card class="client-card">
   <mat-card-title>
-    Crear Nuevo Cliente
+    {{ isEditMode ? 'Editar Cliente' : 'Crear Nuevo Cliente' }}
   </mat-card-title>
 
-  <form class="client-form" (ngSubmit)="crear()">
+  <form class="client-form" (ngSubmit)="guardar()">
 
     <!-- Fila 1 -->
     <div class="form-row">
@@ -63,7 +63,7 @@
     <!-- Acciones -->
     <div class="actions">
       <button mat-raised-button color="primary" type="submit">
-        Crear Cliente
+        {{ isEditMode ? 'Actualizar' : 'Crear' }} Cliente
       </button>
 
       <button mat-stroked-button color="warn" type="button" (click)="cancelar()">

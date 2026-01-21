@@ -33,12 +33,12 @@
     
     <mat-option>
       <ngx-mat-select-search 
-        [(ngModel)]="filtroCobrador"
-        (ngModelChange)="filtrarCobradores()"
-        placeholderLabel="Buscar cobrador..."
-        noEntriesFoundLabel="No se encontraron cobradores"
-        ngDefaultControl>
-      </ngx-mat-select-search>
+  [(ngModel)]="filtroCobrador"
+  (ngModelChange)="filtrarCobradores()"
+  [ngModelOptions]="{standalone: true}"  placeholderLabel="Buscar cobrador..."
+  noEntriesFoundLabel="No se encontraron cobradores"
+  ngDefaultControl>
+</ngx-mat-select-search>
     </mat-option>
     
     <mat-option value="">Sin asignar</mat-option>

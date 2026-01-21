@@ -15,6 +15,7 @@ import { Usuario, UsuarioService } from '../../../services/usuario.service';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ConfirmDialogComponent } from '../../shared/confirm-dialog/confirm-dialog.component';
+import { AsignarRutaService,RutaCobro } from '../../../services/asignarRuta.service';
 @Component({
   selector: 'app-edit-ruta',
   standalone: true,
@@ -53,7 +54,8 @@ export class EditRutaComponent implements OnInit {
     private rutaService: RutasService,
     private usuarioService: UsuarioService,
     private dialog: MatDialog,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private asignarRutaService:AsignarRutaService,
   ) {}
 
   ngOnInit() {
@@ -198,38 +200,47 @@ private actualizarRutaConfirmada(): void {
     }
   });
 }
-
 private asignarCobradorARuta(): void {
+  // 1. Validaciones de seguridad
   if (!this.ruta.ruta_id || !this.cobradorSeleccionadoId) {
     return;
   }
 
+  // 2. Preparar el ID del cobrador (asegurar que sea número)
   const cobradorId = typeof this.cobradorSeleccionadoId === 'string' 
     ? parseInt(this.cobradorSeleccionadoId) 
     : this.cobradorSeleccionadoId;
+    
+    console.log('--- OBJETO ENVIADO AL BACKEND ---');
+  console.table({ id_ruta: Number(this.ruta.ruta_id), usuario_id: cobradorId }); // console.table lo muestra mucho más ordenado
+  console.log('---------------------------------');
 
-  this.rutaService.asignarCobrador({
-    ruta_id: this.ruta.ruta_id,
-    cobrador_id: cobradorId
-  }).subscribe({
-    next: () => {
-      this.snackBar.open(
-        'Ruta actualizada y cobrador asignado exitosamente',
-        'Cerrar',
-        { duration: 3000 }
-      );
-      this.router.navigate(['/ruta/list-ruta']);
-    },
-    error: (err) => {
-      console.error('Error al asignar cobrador:', err);
-      this.snackBar.open(
-        'Ruta actualizada, pero hubo un error al asignar el cobrador',
-        'Cerrar',
-        { duration: 4000 }
-      );
-      this.router.navigate(['/ruta/list-ruta']);
-    }
-  });
+  // 3. Llamar al NUEVO servicio (AsignarRutaService)
+  // Nota: Usamos los nombres de campos que pide tu interfaz RutaCobro
+  this.asignarRutaService.asignaCobrador({
+    ruta_id: Number(this.ruta.ruta_id),
+    usuario_id: cobradorId
+    
+  })
+  .then(() => {
+    // ÉXITO - Se ejecuta si la promesa se resuelve
+
+    this.snackBar.open(
+      'Ruta actualizada y cobrador asignado exitosamente',
+      'Cerrar',
+      { duration: 3000 }
+    );
+    this.router.navigate(['/ruta/list-ruta']);
+  })
+  .catch((err: any) => { // Agregamos ": any" aquí
+  console.error('Error al asignar cobrador:', err);
+  this.snackBar.open(
+    'Ruta actualizada, pero hubo un error al asignar el cobrador',
+    'Cerrar',
+    { duration: 4000 }
+  );
+  this.router.navigate(['/ruta/list-ruta']);
+});
 }
 
   cancelar() {

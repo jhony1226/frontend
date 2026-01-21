@@ -22,11 +22,6 @@ export const routes: Routes = [
         data: { title: 'Crear Cobro' }
     },
     {
-        path: 'prestamos-cliente/:id',
-        loadComponent: () => import('./prestamos-cliente/prestamos-cliente.component').then(m => m.PrestamosClienteComponent),
-        data: { title: 'Préstamos del Cliente' }
-    },
-    {
         path: 'edit-cobro',
         loadComponent: () => import('./edit-cobro/edit-cobro.component').then(m => m.EditCobroComponent),
         data: { title: 'Editar Cobro' }

@@ -12,7 +12,7 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { Cliente, ClienteService } from '../../../services/cliente.service';
+import { Cliente, ClienteCobro, ClienteService } from '../../../services/cliente.service';
 
 @Component({
   selector: 'app-crear-cobro',
@@ -36,7 +36,7 @@ import { Cliente, ClienteService } from '../../../services/cliente.service';
 })
 export class CrearCobroComponent implements OnInit {
   displayedColumns: string[] = ['nombrecliente', 'direccioncliente', 'telefonocliente', 'acciones'];
-  dataSource: MatTableDataSource<Cliente>;
+  dataSource: MatTableDataSource<ClienteCobro>;
   isMobile = false;
   rutaId: number = 1;
 
@@ -47,7 +47,7 @@ export class CrearCobroComponent implements OnInit {
     private clienteService: ClienteService,
     private responsive: BreakpointObserver
   ) {
-    this.dataSource = new MatTableDataSource<Cliente>([]);
+    this.dataSource = new MatTableDataSource<ClienteCobro>([]);
   }
 
  
@@ -83,10 +83,10 @@ export class CrearCobroComponent implements OnInit {
     }
   }
 
-  verDetalles(cliente: Cliente): void {
+  verDetalles(cliente: ClienteCobro): void {
     // Navegar a la vista de préstamos del cliente
     console.log('Navegando a préstamos del cliente:', cliente.cliente_id);
-    this.router.navigateByUrl(`/cobro/prestamos-cliente/${cliente.cliente_id}`).catch(err => {
+    this.router.navigateByUrl(`/prestamo/prestamos-cliente/${cliente.cliente_id}`).catch(err => {
       console.error('Error en navegación:', err);
     });
   }

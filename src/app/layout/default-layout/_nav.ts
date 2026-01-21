@@ -10,24 +10,7 @@ export const navItems: INavData[] = [
     url: '/cambio-sucursal',
     iconComponent: { name: 'cil-settings' },
   },
-  {
-    name: 'Rutas',
-    url: '/ruta',
-    iconComponent: { name: 'cil-puzzle' },
-    children: [
-      {
-        name: 'Gestión de Rutas',
-        url: '/ruta/list-ruta',
-        icon: 'nav-icon-bullet',
-      },
-      {
-        name: 'Crear Ruta',
-        url: '/ruta/crear-ruta',
-        icon: 'nav-icon-bullet',
-      },
-    ],
-  },
-  {
+   {
     name: 'Sucursales',
     url: '/sucursal',
     iconComponent: { name: 'cil-home' },
@@ -38,41 +21,26 @@ export const navItems: INavData[] = [
         icon: 'nav-icon-bullet',
       },
     ],
-  },
+  }, 
+
   {
-    name: 'Periodo',
-    url: '/periodo',
-    iconComponent: { name: 'cil-cursor' },
-    children: [
-      {
-        name: 'Crear',
-        url: '/periodo/crear-periodo',
-        icon: 'nav-icon-bullet',
-      },
-      {
-        name: 'Aportes',
-        url: '/periodo/list-periodo',
-        icon: 'nav-icon-bullet',
-      },
-    ],
+      name: 'Rutas',
+      url: '/ruta',
+      iconComponent: { name: 'cil-puzzle' },
+      children: [
+        {
+          name: 'Gestión de Rutas',
+          url: '/ruta/list-ruta',
+          icon: 'nav-icon-bullet',
+        },
+        {
+          name: 'Crear Ruta',
+          url: '/ruta/crear-ruta',
+          icon: 'nav-icon-bullet',
+        },
+      ],
   },
-  {
-    name: 'Clientes',
-    url: '/cliente',
-    iconComponent: { name: 'cil-people' },
-    children: [
-      {
-        name: 'Gestión de Clientes',
-        url: '/cliente/list-cliente',
-        icon: 'nav-icon-bullet',
-      },
-      {
-        name: 'Crear Cliente',
-        url: '/cliente/crear-cliente',
-        icon: 'nav-icon-bullet',
-      },
-    ],
-  },
+ 
   {
     name: 'Préstamos',
     url: '/prestamo',
@@ -90,7 +58,7 @@ export const navItems: INavData[] = [
       },
     ],
   },
-    
+     
   {
     name: 'Cobros',
     url: '/cobro',
@@ -111,7 +79,43 @@ export const navItems: INavData[] = [
       
     ],
   },
-  
+/*
+  {
+    name: 'Periodo',
+    url: '/periodo',
+    iconComponent: { name: 'cil-cursor' },
+    children: [
+      {
+        name: 'Crear',
+        url: '/periodo/crear-periodo',
+        icon: 'nav-icon-bullet',
+      },
+      {
+        name: 'Aportes',
+        url: '/periodo/list-periodo',
+        icon: 'nav-icon-bullet',
+      },
+    ],
+  },
+*/
+  {
+    name: 'Clientes',
+    url: '/cliente',
+    iconComponent: { name: 'cil-people' },
+    children: [
+      {
+        name: 'Gestión de Clientes',
+        url: '/cliente/list-cliente',
+        icon: 'nav-icon-bullet',
+      },
+      {
+        name: 'Crear Cliente',
+        url: '/cliente/crear-cliente',
+        icon: 'nav-icon-bullet',
+      },
+    ],
+  },
+ /*  
   {
     name: 'Gastos',
     url: '/gasto',
@@ -129,6 +133,7 @@ export const navItems: INavData[] = [
       },
     ],
   },
+*/
   {
     title: true,
     name: 'Configuración',
@@ -150,6 +155,7 @@ export const navItems: INavData[] = [
       },
     ],
   },
+  /*
   {
     name: 'Autenticación',
     url: '/login',
@@ -167,4 +173,5 @@ export const navItems: INavData[] = [
       },
     ],
   },
+  */
 ];

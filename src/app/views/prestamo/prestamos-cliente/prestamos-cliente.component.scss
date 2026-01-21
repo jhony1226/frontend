@@ -1,0 +1,162 @@
+/* =========================================
+   CONTENEDOR PRINCIPAL
+   ========================================= */
+.container {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* =========================================
+   HEADER
+   ========================================= */
+.header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+
+  h2 {
+    margin: 0;
+    font-weight: 600;
+    flex: 1;
+  }
+}
+
+/* =========================================
+   FILTROS
+   ========================================= */
+.filters {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.filters mat-form-field {
+  flex: 1;
+  min-width: 200px;
+}
+
+/* =========================================
+   TABLA
+   ========================================= */
+.desktop-table {
+  display: block;
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th.mat-header-cell {
+  background-color: #f5f5f5;
+  color: #424242;
+  font-weight: 700;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 16px;
+}
+
+td.mat-cell {
+  padding: 14px 16px;
+  border-bottom: 1px solid #e0e0e0;
+  color: #333;
+  font-size: 14px;
+}
+
+tr.mat-row:hover {
+  background-color: #fafafa;
+}
+
+/* Iconos de acciones */
+mat-icon {
+  font-size: 20px;
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+mat-icon:hover {
+  transform: scale(1.1);
+}
+
+mat-icon.edit {
+  color: #1565c0;
+}
+
+/* =========================================
+   VISTA MÓVIL
+   ========================================= */
+.mobile-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding-bottom: 20px;
+}
+
+.mobile-card {
+  padding: 16px;
+  border-radius: 10px;
+  background: white;
+  border: 1px solid #e0e0e0;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  border-left: 5px solid #1565c0;
+}
+
+.mobile-card mat-card-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #1a237e;
+  margin-bottom: 8px;
+}
+
+.mobile-card mat-card-content p {
+  margin: 6px 0;
+  color: #616161;
+  font-size: 14px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.mobile-card mat-card-actions {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px dashed #e0e0e0;
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.no-results {
+  text-align: center;
+  padding: 40px 20px;
+  color: #666;
+  font-size: 16px;
+}
+
+/* =========================================
+   RESPONSIVE
+   ========================================= */
+@media (max-width: 768px) {
+  .container {
+    padding: 10px;
+  }
+
+  .header h2 {
+    font-size: 20px;
+  }
+
+  .filters {
+    flex-direction: column;
+  }
+
+  .filters mat-form-field {
+    width: 100%;
+    min-width: unset;
+  }
+}

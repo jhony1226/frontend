@@ -2,6 +2,9 @@
 
   <!-- ENCABEZADO -->
   <div class="header">
+    <button mat-icon-button color="primary" (click)="goBack()" title="Volver">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
    <h2>{{ isCobrosPorRuta ?  nombreRuta  : 'Lista de Cobros' }}</h2>
 
     <button

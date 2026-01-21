@@ -12,7 +12,6 @@
    ========================================= */
 .header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
   margin-bottom: 20px;
   flex-wrap: wrap;
@@ -26,10 +25,38 @@
   min-width: 200px;
 }
 
-.header button {
+.header button[mat-raised-button] {
   margin-top: 0;
   white-space: nowrap;
 }
+
+@media (max-width: 600px) {
+  .header {
+    /* Keep flex-direction row (default) to align back button and title */
+    align-items: center;
+  }
+
+  .header h2 {
+    font-size: 18px;
+    margin-bottom: 0;
+  }
+
+  /* Make back button normal size, not stretched */
+  .header button[mat-icon-button] {
+    width: 40px !important;
+    height: 40px !important;
+    margin-right: 4px;
+    min-width: unset;
+  }
+
+  /* Force "Nuevo Prestamo" button to new line and full width if needed */
+  .header button[mat-raised-button] {
+    width: 100%;
+    margin-top: 10px;
+    flex-basis: 100%; 
+  }
+}
+ 
 
 /* =========================================
    FILTROS
@@ -235,17 +262,24 @@ tr.mat-row:hover {
   }
 
   .header {
-    flex-direction: column;
-    align-items: stretch;
+    flex-direction: row;
+    align-items: center;
+    flex-wrap: wrap;
   }
 
   .header h2 {
     font-size: 20px;
-    margin-bottom: 10px;
+    margin-bottom: 0;
+    flex: 1;
   }
 
   .header button {
+    width: auto;
+  }
+
+  .header button[mat-raised-button] {
     width: 100%;
+    margin-top: 10px;
   }
 
   .filters {
