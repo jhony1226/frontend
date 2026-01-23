@@ -1,293 +1,205 @@
-/* =========================================
-   CONTENEDOR PRINCIPAL
-   ========================================= */
-.container {
-  padding: 20px;
-  max-width: 1200px;
-  margin: 0 auto;
+/* VARIABLES */
+$primary-blue: #226ab6;
+$text-dark: #1f2937;
+$text-muted: #64748b;
+$danger-red: #dc2626;
+$border-color: #e2e8f0;
+$bg-light: #f8fafc;
+
+.main-container {
+  padding: 32px;
+  background-color: #fcfcfc;
+  min-height: 100vh;
+  font-family: 'Inter', -apple-system, sans-serif;
 }
 
-/* =========================================
-   HEADER
-   ========================================= */
-.header {
+/* --- HEADER --- */
+.page-header {
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
-  flex-wrap: wrap;
-  gap: 10px;
-}
+  margin-bottom: 32px;
 
-.header h2 {
-  margin: 0;
-  font-weight: 600;
-  flex: 1;
-  min-width: 200px;
-}
-
-.header button[mat-raised-button] {
-  margin-top: 0;
-  white-space: nowrap;
-}
-
-@media (max-width: 600px) {
-  .header {
-    /* Keep flex-direction row (default) to align back button and title */
+  .title-section {
+    display: flex;
     align-items: center;
+    gap: 16px;
+
+    h1 {
+      margin: 0;
+      font-size: 24px;
+      font-weight: 800;
+      color: $text-dark;
+      letter-spacing: -0.025em;
+    }
+
+    .subtitle {
+      margin: 0;
+      color: $text-muted;
+      font-size: 14px;
+    }
+
+    .back-btn {
+      background: white;
+      border: 1px solid $border-color;
+      border-radius: 8px;
+    }
   }
 
-  .header h2 {
-    font-size: 18px;
-    margin-bottom: 0;
+  .add-btn {
+    background-color: $primary-blue !important;
+    color: white !important;
+    border-radius: 8px;
+    font-weight: 600;
+    padding: 8px 16px;
+    box-shadow: 0 4px 6px -1px rgba(0, 123, 255, 0.2);
   }
+}
 
-  /* Make back button normal size, not stretched */
-  .header button[mat-icon-button] {
-    width: 40px !important;
-    height: 40px !important;
-    margin-right: 4px;
-    min-width: unset;
-  }
+/* --- ACCIONES / BUSCADOR --- */
+.action-bar {
+  margin-bottom: 24px;
 
-  /* Force "Nuevo Prestamo" button to new line and full width if needed */
-  .header button[mat-raised-button] {
+  .search-field {
     width: 100%;
-    margin-top: 10px;
-    flex-basis: 100%; 
+    max-width: 400px;
+    
+    ::ng-deep .mat-mdc-text-field-wrapper {
+      background-color: white !important;
+      border-radius: 12px !important;
+    }
   }
 }
- 
 
-/* =========================================
-   FILTROS
-   ========================================= */
-.filters {
-  display: flex;
-  gap: 15px;
-  margin-bottom: 20px;
-  flex-wrap: wrap;
-}
-
-.filters mat-form-field {
-  flex: 1;
-  min-width: 200px;
-}
-
-/* Iconos de acciones en la tabla */
-mat-icon {
-  font-size: 20px;
-  width: 20px;
-  height: 20px;
-  cursor: pointer;
-  margin-right: 12px;
-  transition: transform 0.2s;
-}
-
-mat-icon:hover {
-  transform: scale(1.1);
-}
-
-mat-icon.edit {
-  color: #1565c0;
-}
-
-/* Azul */
-mat-icon.delete {
-  color: #c62828;
-}
-
-/* Rojo */
-
-/* =========================================
-   TABLA DE ESCRITORIO (Estilo "Periodo")
-   ========================================= */
-table {
-  width: 100%;
-  border-collapse: collapse;
-  /* Importante para bordes limpios */
-}
-
-/* Encabezado Gris (Igual que en Periodos) */
-th.mat-header-cell {
-  background-color: #f5f5f5;
-  color: #424242;
-  font-weight: 700;
-  font-size: 14px;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  padding: 16px;
-}
-
-/* Celdas del cuerpo */
-td.mat-cell {
-  padding: 14px 16px;
-  border-bottom: 1px solid #e0e0e0;
-  color: #333;
-  font-size: 14px;
-}
-
-/* Efecto Hover en las filas */
-tr.mat-row:hover {
-  background-color: #fafafa;
-}
-
-
- /* ---------- TABLE (Desktop) ---------- */
-.desktop-table {
-  display: block;
-  overflow-x: auto;
-}
-
-.desktop-table table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.desktop-table th,
-.desktop-table td {
-  padding: 12px;
-  text-align: left;
-  border-bottom: 1px solid #ddd;
-}
-
-.desktop-table th {
-  background-color: #f5f5f5;
-  font-weight: 600;
-}
-
-.desktop-table tr:hover {
-  background-color: #fafafa;
-}
-
-
-
-/* =========================================
-   BADGES DE ESTADO (Etiquetas de color)
-   ========================================= */
-.badge {
-  display: inline-block;
-  padding: 4px 10px;
+/* --- TABLA DESKTOP --- */
+.content-card {
+  /* FONDO Y SOMBRA */
+  background: #ffffff !important; // Fondo blanco puro para contraste
   border-radius: 12px;
-  font-size: 12px;
-  font-weight: 600;
-  text-transform: capitalize;
+  border: 1px solid #e2e8f0;    // Borde muy sutil
+  
+  /* SOMBRA PROFESIONAL (Elevación sutil) */
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 
+              0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
+  
+  margin-top: 10px;
+  overflow: hidden; // Mantiene los bordes redondeados en las esquinas
+  
+  table {
+    width: 100%;
+    background: transparent; // Para que use el blanco del contenedor
+  }
+
+  /* Ajuste de los encabezados para que no choquen con la sombra */
+  th.mat-header-cell {
+    background-color: #f8fafc; // Un gris muy tenue para diferenciar el header
+    border-bottom: 1px solid #edf2f7;
+    padding: 16px;
+  }
 }
 
-/* Estilos dinámicos según el texto */
-.badge.activo {
-  background-color: #e8f5e9;
-  color: #2e7d32;
-  border: 1px solid #c8e6c9;
+/* EFECTO HOVER PARA RESALTAR LA FILA AL PASAR EL MOUSE */
+.hover-row {
+  transition: background-color 0.2s ease;
+  &:hover {
+    background-color: #f1f5f9 !important;
+  }
 }
-
-.badge.inactivo {
-  background-color: #ffebee;
-  color: #c62828;
-  border: 1px solid #ffcdd2;
-}
-
-.badge.pagado {
-  background-color: #e3f2fd;
-  color: #1565c0;
-  border: 1px solid #bbdefb;
-}
-
-/* =========================================
-   VISTA MÓVIL (Tarjetas)
-   ========================================= */
-.mobile-list {
+/* --- VISTA MÓVIL --- */
+.mobile-grid {
   display: flex;
   flex-direction: column;
   gap: 16px;
-  padding-bottom: 20px;
+
+  .modern-mobile-card {
+    position: relative;
+    border-radius: 16px;
+    border: 1px solid $border-color;
+    padding: 0;
+    overflow: hidden;
+    background: white;
+
+    .card-accent {
+      position: absolute;
+      left: 0; top: 0; bottom: 0; width: 4px;
+      background: $primary-blue;
+      &.pagado { background: #10b981; }
+    }
+
+    .card-content { padding: 16px 16px 16px 20px; }
+
+    .card-header-mobile {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 12px;
+      .loan-number { font-weight: 800; color: $text-dark; }
+    }
+
+    .card-body-mobile {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 12px;
+
+      .data-item {
+        label { display: block; font-size: 10px; color: $text-muted; text-transform: uppercase; font-weight: 700; }
+        .value { font-weight: 700; color: $text-dark; &.highlight { color: $danger-red; } }
+      }
+    }
+
+    .card-footer-mobile {
+      border-top: 1px solid #f1f5f9;
+      padding-top: 12px;
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      color: $text-muted;
+    }
+  }
 }
 
-.mobile-card {
-  padding: 16px;
-  border-radius: 10px;
-  background: white;
-  border: 1px solid #e0e0e0;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+/* PAGINADOR */
+mat-paginator {
+  background: #f9fafb;
+  border-top: 1px solid $border-color;
+}
+td.mat-column-fecha_fin_prestamo {
+  display: table-cell !important; /* Asegura que se comporte como celda de tabla */
+  vertical-align: middle;
+}
+
+.date-wrapper {
   display: flex;
-  flex-direction: column;
-  position: relative;
-  overflow: hidden;
-  /* Para el borde lateral */
-}
-
-/* Borde lateral de color según estado (Truco visual) */
-.mobile-card.activo {
-  border-left: 5px solid #2e7d32;
-}
-
-.mobile-card.inactivo {
-  border-left: 5px solid #c62828;
-}
-
-.mobile-card.pagado {
-  border-left: 5px solid #1565c0;
-}
-
-.mobile-card mat-card-title {
-  font-size: 18px;
-  font-weight: 600;
-  color: #1a237e;
-  margin-bottom: 8px;
-}
-
-.mobile-card mat-card-content p {
-  margin: 6px 0;
-  color: #616161;
-  font-size: 14px;
-  display: flex;
-  justify-content: space-between;
-  /* Alinea etiqueta izq y valor der */
-}
-
-.mobile-card mat-card-actions {
-  margin-top: 12px;
-  padding-top: 12px;
-  border-top: 1px dashed #e0e0e0;
-  display: flex;
-  justify-content: flex-end;
+  align-items: center;
   gap: 8px;
+  
+  mat-icon {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+    color: $text-muted;
+  }
 }
 
-/* =========================================
-   RESPONSIVE
-   ========================================= */
-@media (max-width: 768px) {
-  .container {
-    padding: 10px;
-  }
+.detail-btn {
+  color: $primary-blue !important;
+  font-weight: 600 !important;
+  text-transform: none; // Evita que Angular lo ponga en mayúsculas
+  display: flex;
+  align-items: center;
+  gap: 4px;
 
-  .header {
-    flex-direction: row;
-    align-items: center;
-    flex-wrap: wrap;
-  }
-
-  .header h2 {
+  mat-icon {
     font-size: 20px;
-    margin-bottom: 0;
-    flex: 1;
+    width: 20px;
+    height: 20px;
   }
 
-  .header button {
-    width: auto;
+  .btn-text {
+    font-size: 13px;
   }
 
-  .header button[mat-raised-button] {
-    width: 100%;
-    margin-top: 10px;
-  }
-
-  .filters {
-    flex-direction: column;
-  }
-
-  .filters mat-form-field {
-    width: 100%;
-    min-width: unset;
+  &:hover {
+    background-color: rgba($primary-blue, 0.05) !important;
   }
 }

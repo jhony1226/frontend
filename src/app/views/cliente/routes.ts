@@ -27,10 +27,10 @@ export const routes: Routes = [
         data: { title: 'Crear Cliente' },
       },
       {
-        path: 'edit-cliente',
+        path: 'editar-cliente/:id',
         loadComponent: () =>
-          import('./crear-cliente/crear-cliente.component').then(
-            (m) => m.CrearClienteComponent
+          import('./edit-cliente/edit-cliente.component').then(
+            (m) => m.EditClienteComponent
           ),
         data: { title: 'Editar Cliente' },
       },

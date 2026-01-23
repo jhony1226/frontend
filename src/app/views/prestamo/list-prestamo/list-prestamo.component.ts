@@ -40,9 +40,11 @@ export interface Prestamo {
   styleUrls: ['./list-prestamo.component.scss'],
 })
 export class ListPrestamoComponent implements OnInit {
-  displayedColumns: string[] = ['cliente', 'periodo', 'valor', 'fecha', 'saldoPendiente', 'estado', 'actions'];
+displayedColumns: string[]  = ['prestamo_id', 'saldo_pendiente', 'valor_cuota', 'fecha_fin_prestamo', 'actions']; 
+  //displayedColumns: string[] = ['cliente', 'periodo', 'valor', 'fecha', 'saldoPendiente', 'estado', 'actions'];
   dataSource = new MatTableDataSource<any>([]);
   @Input() cliente_id!: number;
+  clienteNombre: string = '';
   isMobile = false;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -71,14 +73,16 @@ export class ListPrestamoComponent implements OnInit {
   }
 
   detectMobile() {
-    this.responsive.observe([Breakpoints.Handset]).subscribe((result) => {
-      this.isMobile = result.matches;
-      // Reasignamos el paginador si cambiamos de vista
-      if (!this.isMobile) {
-        setTimeout(() => (this.dataSource.paginator = this.paginator));
-      }
-    });
-  }
+  this.responsive.observe([Breakpoints.Handset, Breakpoints.TabletPortrait]).subscribe((result) => {
+    this.isMobile = result.matches;
+    // Esto asegura que al volver a Desktop, el paginador se reconecte
+    if (!this.isMobile) {
+      setTimeout(() => {
+        this.dataSource.paginator = this.paginator;
+      }, 0);
+    }
+  });
+}
 
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
@@ -91,12 +95,20 @@ export class ListPrestamoComponent implements OnInit {
 
   loadData() {
     if (this.cliente_id) {
+      // Cargar info del cliente para mostrar el nombre
+      this.clienteService.getCliente(this.cliente_id).subscribe({
+        next: (cliente) => {
+          this.clienteNombre = `${cliente.nombres} ${cliente.apellidos}`;
+        },
+        error: (err) => console.error('Error al obtener cliente:', err)
+      });
+
       // Cargar préstamos del cliente desde la API
       this.prestamoService.getPrestamosByCliente(this.cliente_id).subscribe({
         next: (prestamos) => {
           this.dataSource.data = prestamos;
           // Columnas específicas para la vista de préstamos de un cliente
-          this.displayedColumns = ['prestamo_id', 'saldo_pendiente', 'valor_cuota', 'fecha_fin_prestamo', 'actions']; 
+         
           if (this.dataSource.paginator) {
             this.dataSource.paginator.firstPage();
           }

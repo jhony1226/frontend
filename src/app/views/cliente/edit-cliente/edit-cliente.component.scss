@@ -1,4 +1,4 @@
-/* VARIABLES REUTILIZABLES */
+/* VARIABLES */
 $primary-blue: #2563eb;
 $text-dark: #1e293b;
 $text-muted: #64748b;
@@ -6,7 +6,7 @@ $border-color: #e2e8f0;
 $bg-app: #f8fafc;
 
 .main-container {
-  padding: 32px;
+  padding: 40px 20px;
   background-color: $bg-app;
   min-height: 100vh;
   display: flex;
@@ -32,12 +32,12 @@ $bg-app: #f8fafc;
       &:hover { background: #f1f5f9; }
     }
 
-    h1 { margin: 0; font-size: 24px; font-weight: 800; color: $text-dark; }
-    .subtitle { margin: 0; color: $text-muted; font-size: 14px; }
+    h1 { margin: 0; font-size: 24px; font-weight: 800; color: $text-dark; letter-spacing: -0.5px; }
+    .subtitle { margin: 4px 0 0 0; color: $text-muted; font-size: 14px; }
   }
 }
 
-/* CARD DEL FORMULARIO */
+/* CARD PRINCIPAL */
 .modern-form-card {
   width: 100%;
   max-width: 800px;
@@ -49,7 +49,7 @@ $bg-app: #f8fafc;
               0 4px 6px -2px rgba(0, 0, 0, 0.04) !important;
 }
 
-/* SECCIONES DEL FORMULARIO */
+/* SECCIONES */
 .form-section {
   margin-bottom: 32px;
 
@@ -61,8 +61,8 @@ $bg-app: #f8fafc;
     font-weight: 700;
     color: $primary-blue;
     margin-bottom: 20px;
-    border-bottom: 1px solid #f1f5f9;
     padding-bottom: 8px;
+    border-bottom: 2px solid #f1f5f9;
 
     mat-icon { font-size: 20px; width: 20px; height: 20px; }
   }
@@ -71,7 +71,7 @@ $bg-app: #f8fafc;
 .form-row {
   display: flex;
   gap: 20px;
-  margin-bottom: 8px;
+  margin-bottom: 12px;
 
   mat-form-field {
     flex: 1;
@@ -79,7 +79,9 @@ $bg-app: #f8fafc;
   }
 }
 
-/* ESTILOS DE LOS INPUTS */
+.full-width { flex: 0 0 100% !important; }
+
+/* OVERRIDE MATERIAL */
 ::ng-deep .mat-mdc-text-field-wrapper {
   background-color: #ffffff !important;
 }
@@ -88,7 +90,7 @@ $bg-app: #f8fafc;
   background-color: transparent !important;
 }
 
-/* ACCIONES (BOTONES) */
+/* ACCIONES */
 .form-actions {
   display: flex;
   justify-content: flex-end;
@@ -98,10 +100,9 @@ $bg-app: #f8fafc;
   border-top: 1px solid $border-color;
 
   button {
-    padding: 12px 24px;
+    padding: 10px 24px;
     border-radius: 10px;
     font-weight: 600;
-    font-size: 14px;
   }
 
   .cancel-btn {
@@ -114,17 +115,18 @@ $bg-app: #f8fafc;
     color: white !important;
     box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.2);
     
-    mat-icon { margin-right: 8px; }
+    mat-icon { margin-right: 8px; font-size: 20px; width: 20px; height: 20px; }
   }
 }
 
-/* RESPONSIVO */
+/* RESPONSIVE */
 @media (max-width: 768px) {
-  .main-container { padding: 16px; }
+  .main-container { padding: 20px 16px; }
   .modern-form-card { padding: 20px; }
   .form-row { flex-direction: column; gap: 0; }
+  
   .form-actions {
     flex-direction: column-reverse;
-    .submit-btn, .cancel-btn { width: 100%; }
+    button { width: 100%; }
   }
 }

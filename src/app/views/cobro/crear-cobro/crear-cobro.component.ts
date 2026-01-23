@@ -13,6 +13,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Cliente, ClienteCobro, ClienteService } from '../../../services/cliente.service';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-crear-cobro',
@@ -45,7 +46,8 @@ export class CrearCobroComponent implements OnInit {
   constructor(
     private router: Router,
     private clienteService: ClienteService,
-    private responsive: BreakpointObserver
+    private responsive: BreakpointObserver,
+    private authService: AuthService
   ) {
     this.dataSource = new MatTableDataSource<ClienteCobro>([]);
   }
@@ -63,15 +65,27 @@ export class CrearCobroComponent implements OnInit {
   }
 
   cargarClientes(): void {
-    this.clienteService.getClientesByRuta(this.rutaId).subscribe({
-      next: (data) => {
-        this.dataSource.data = data;
-        this.dataSource.paginator = this.paginator;
-      },
-      error: (err) => {
-        console.error('Error al cargar clientes:', err);
-      }
-    });
+
+    
+    const userId = this.authService.getCurrentUserValue()?.id;
+
+    console.log('--- Depuración cargarClientes ---');
+  console.log('ID del usuario logueado:', userId);
+  console.log('Tipo de dato del ID:', typeof userId);
+    if (userId) {
+      this.clienteService.getClientesByRuta(userId).subscribe({
+        next: (data) => {
+          this.dataSource.data = data;
+          this.dataSource.paginator = this.paginator;
+          
+        },
+        error: (err) => {
+          console.error('Error al cargar clientes:', err);
+        }
+      });
+    } else {
+      console.error('No usuario logueado');
+    }
   }
 
   applyFilter(event: Event) {

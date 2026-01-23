@@ -57,7 +57,11 @@ createCliente(cliente: Partial<Cliente>): Observable<Cliente> {
 }
 
 updateCliente(id: number, cliente: Partial<Cliente>): Observable<Cliente> {
-  return this.http.put<Cliente>(`${this.apiUrl}/updateCliente/${id}`, cliente);
+  // Creamos un nuevo objeto combinando los datos del cliente con el ID
+  const body = { ...cliente, cliente_id: id };
+  
+  // Eliminamos el /${id} de la URL
+  return this.http.put<Cliente>(`${this.apiUrl}/updateCliente`, body);
 }
     
 }

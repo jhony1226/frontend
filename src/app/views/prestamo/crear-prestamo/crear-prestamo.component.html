@@ -8,9 +8,15 @@
     <!-- Cliente -->
     <mat-form-field appearance="outline">
       <mat-label>Cliente</mat-label>
-      <mat-select [(ngModel)]="clienteSeleccionado" name="cliente" required>
-        <mat-option *ngFor="let cliente of clientes" [value]="cliente">
-          {{ cliente.nombre }} {{ cliente.apellido }}
+      <mat-select [(ngModel)]="clienteSeleccionado" name="cliente" required placeholder="Seleccione Cliente">
+        <mat-option>
+          <ngx-mat-select-search [formControl]="clienteFilterCtrl" 
+                                placeholderLabel="Buscar cliente (nombre, apellido, cédula)..."
+                                noEntriesFoundLabel="No se encontraron clientes">
+          </ngx-mat-select-search>
+        </mat-option>
+        <mat-option *ngFor="let cliente of filteredClientes | async" [value]="cliente">
+          {{ cliente.nombres }} {{ cliente.apellidos }} - {{ cliente.numero_identificacion }}
         </mat-option>
       </mat-select>
     </mat-form-field>

@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, FormControl } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -9,6 +9,11 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatCardModule } from '@angular/material/card';
+import { MatIconModule } from '@angular/material/icon';
+import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
+import { ClienteService, Cliente } from '../../../services/cliente.service';
+import { ReplaySubject, Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-crear-prestamo',
@@ -16,6 +21,7 @@ import { MatCardModule } from '@angular/material/card';
   imports: [
     CommonModule,
     FormsModule,
+    ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
@@ -23,36 +29,88 @@ import { MatCardModule } from '@angular/material/card';
     MatCardModule,
     MatDatepickerModule,
     MatNativeDateModule,
+    MatIconModule,
+    NgxMatSelectSearchModule
   ],
   templateUrl: './crear-prestamo.component.html',
   styleUrls: ['./crear-prestamo.component.scss'],
 })
-export class CrearPrestamoComponent implements OnInit {
-  clienteSeleccionado: any;
+export class CrearPrestamoComponent implements OnInit, OnDestroy {
+  clienteSeleccionado: Cliente | null = null;
   periodoSeleccionado: any;
   valor: number = 0;
   fecha: string = '';
   estado: string = 'ACTIVO';
   saldoPendiente: number = 0;
 
-  clientes: any[] = [];
+  clientes: Cliente[] = [];
   periodos: any[] = [];
   isEditing = false;
   editingId: number | null = null;
 
-  constructor(private router: Router, private route: ActivatedRoute) {}
+  public clienteFilterCtrl: FormControl<string | null> = new FormControl<string | null>('');
+  public filteredClientes: ReplaySubject<Cliente[]> = new ReplaySubject<Cliente[]>(1);
+  protected _onDestroy = new Subject<void>();
+
+  constructor(
+    private router: Router, 
+    private route: ActivatedRoute,
+    private clienteService: ClienteService
+  ) {}
 
   ngOnInit() {
-    this.clientes = JSON.parse(localStorage.getItem('clientes') || '[]');
+    this.cargarClientes();
     this.periodos = JSON.parse(localStorage.getItem('periodos') || '[]');
 
     this.route.queryParams.subscribe(params => {
       if (params['id']) {
+        // Lógica de edición
         this.isEditing = true;
-        this.editingId = +params['id'];
+        this.editingId = Number(params['id']);
         this.loadPrestamoForEdit(this.editingId);
       }
     });
+
+    this.clienteFilterCtrl.valueChanges
+      .pipe(takeUntil(this._onDestroy))
+      .subscribe(() => {
+        this.filterClientes();
+      });
+  }
+
+  cargarClientes() {
+    this.clienteService.getClientes().subscribe({
+      next: (data) => {
+        this.clientes = data;
+        this.filteredClientes.next(this.clientes.slice());
+      },
+      error: (err) => console.error('Error cargando clientes', err)
+    });
+  }
+
+  protected filterClientes() {
+    if (!this.clientes) {
+      return;
+    }
+    let search = this.clienteFilterCtrl.value;
+    if (!search) {
+      this.filteredClientes.next(this.clientes.slice());
+      return;
+    } else {
+      search = search.toLowerCase();
+    }
+    this.filteredClientes.next(
+      this.clientes.filter(cliente => 
+        cliente.nombres.toLowerCase().indexOf(search!) > -1 || 
+        cliente.apellidos.toLowerCase().indexOf(search!) > -1 ||
+        cliente.numero_identificacion.indexOf(search!) > -1
+      )
+    );
+  }
+
+  ngOnDestroy() {
+    this._onDestroy.next();
+    this._onDestroy.complete();
   }
 
   loadPrestamoForEdit(id: number) {

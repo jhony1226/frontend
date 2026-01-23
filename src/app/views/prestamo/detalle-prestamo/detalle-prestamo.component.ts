@@ -14,6 +14,8 @@ import { MatSelectModule } from '@angular/material/select';
 import { PrestamoService, Prestamos, CobroDetalle } from '../../../services/prestamo.service';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner'; // <--- AGREGAR ESTO
+ 
 
 @Component({
   selector: 'app-detalle-prestamo',
@@ -32,6 +34,7 @@ import { MatNativeDateModule } from '@angular/material/core';
     MatSelectModule,
     MatDatepickerModule,
     MatNativeDateModule,
+    MatProgressSpinnerModule,
   ],
   templateUrl: './detalle-prestamo.component.html',
   styleUrls: ['./detalle-prestamo.component.scss']

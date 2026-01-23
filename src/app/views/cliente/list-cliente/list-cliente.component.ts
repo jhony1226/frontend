@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
@@ -8,21 +8,12 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
 import { MatSelectModule } from '@angular/material/select';
+import { MatTooltipModule } from '@angular/material/tooltip'; // Importante para el diseño moderno
 import { ReactiveFormsModule, FormControl } from '@angular/forms';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Router, RouterModule, ActivatedRoute } from '@angular/router';
 import { ClienteService, Cliente } from '../../../services/cliente.service';
-
-export interface ClienteConPrestamo {
-  nombrecliente: string;
-  idprestamo: string;
-  direccioncliente: string;
-  telefonocliente: string;
-  cliente_id: number;
-  monto_prestamo: number;
-  saldo_pendiente: number;
-  estado_prestamo: string;
-}
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-list-cliente',
@@ -37,6 +28,7 @@ export interface ClienteConPrestamo {
     MatIconModule,
     MatCardModule,
     MatSelectModule,
+    MatTooltipModule,
     ReactiveFormsModule,
     RouterModule,
   ],
@@ -44,22 +36,19 @@ export interface ClienteConPrestamo {
   styleUrls: ['./list-cliente.component.scss'],
 })
 export class ListClienteComponent implements OnInit {
-  displayedColumns: string[] = ['nombre', 'apellido', 'identificacion', 'telefono', 'ruta', 'estado', 'actions'];
+  // Columnas base
+  displayedColumns: string[] = ['nombre', 'telefono', 'ruta', 'estado', 'actions'];
   dataSource = new MatTableDataSource<Cliente>([]);
   allClientes: Cliente[] = [];
   rutaFilter = new FormControl('');
   rutas: number[] = [];
-  mode: string = 'normal'; // 'normal' o 'selectForLoan'
-
-  // Para mostrar clientes con pr\u00e9stamos
-  displayedColumnsConPrestamo: string[] = ['nombrecliente', 'idprestamo', 'direccioncliente', 'telefonocliente', 'monto_prestamo', 'saldo_pendiente', 'estado_prestamo'];
-  dataSourceConPrestamo = new MatTableDataSource<ClienteConPrestamo>([]);
-
+  mode: string = 'normal'; 
   isMobile = false;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   constructor(
+    private location: Location,
     private responsive: BreakpointObserver, 
     private router: Router,
     private clienteService: ClienteService,
@@ -67,10 +56,11 @@ export class ListClienteComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // Detectar modo desde route data
+    // 1. Detectar modo y ajustar columnas
     this.route.data.subscribe(data => {
       this.mode = data['mode'] || 'normal';
       if (this.mode === 'selectForLoan') {
+        // En modo selección simplificamos la tabla
         this.displayedColumns = ['nombre', 'telefono', 'ruta', 'actions'];
       }
     });
@@ -83,10 +73,12 @@ export class ListClienteComponent implements OnInit {
   detectMobile() {
     this.responsive.observe([Breakpoints.Handset]).subscribe((result) => {
       this.isMobile = result.matches;
-      // Reasignamos el paginador si cambiamos de vista
-      if (!this.isMobile) {
-        setTimeout(() => (this.dataSource.paginator = this.paginator));
-      }
+      // Reasignar paginador con un pequeño delay para asegurar que la vista cargó
+      setTimeout(() => {
+        if (this.paginator) {
+          this.dataSource.paginator = this.paginator;
+        }
+      });
     });
   }
 
@@ -101,21 +93,17 @@ export class ListClienteComponent implements OnInit {
 
   setupRutaFilter() {
     this.rutaFilter.valueChanges.subscribe((rutaId) => {
-      this.filterByRuta(rutaId);
+      if (!rutaId) {
+        this.dataSource.data = this.allClientes;
+      } else {
+        this.dataSource.data = this.allClientes.filter(
+          (c) => c.id_ruta === Number(rutaId)
+        );
+      }
+      if (this.dataSource.paginator) {
+        this.dataSource.paginator.firstPage();
+      }
     });
-  }
-
-  filterByRuta(rutaId: string | null) {
-    if (!rutaId || rutaId === '') {
-      this.dataSource.data = this.allClientes;
-    } else {
-      this.dataSource.data = this.allClientes.filter(
-        (cliente) => cliente.id_ruta === Number(rutaId)
-      );
-    }
-    if (this.dataSource.paginator) {
-      this.dataSource.paginator.firstPage();
-    }
   }
 
   loadClientes() {
@@ -123,39 +111,43 @@ export class ListClienteComponent implements OnInit {
       next: (data) => {
         this.allClientes = data;
         this.dataSource.data = data;
-        // Extraer rutas únicas
+        // Obtener rutas únicas para el filtro
         this.rutas = [...new Set(this.allClientes.map(c => c.id_ruta))].sort((a, b) => a - b);
         this.dataSource.paginator = this.paginator;
       },
-      error: (err) => {
-        console.error('Error al cargar clientes', err);
-      }
+      error: (err) => console.error('Error al cargar clientes', err)
     }); 
   }
 
-  
+  // --- MÉTODOS DE NAVEGACIÓN ---
 
-  newCliente() {
-    this.router.navigate(['/cliente/crear-cliente']);
-  }
-
-  editCliente(row: Cliente) {
-    this.router.navigate(['/cliente/edit-cliente'], {
-      queryParams: { id: row.cliente_id },
-    });
-  }
+ // Función para Seleccionar o Ver detalles
+verPrestamosCliente(row: Cliente) {
+  if (this.mode === 'selectForLoan') {
+    /** * MÓDULO PRÉSTAMOS: **/
+     
+    this.router.navigate(['/prestamo/list-prestamo'], {
+      queryParams: { 
+        cliente_id: row.cliente_id        
+      }
+    }  );
+  } 
+}
 
   deleteCliente(row: Cliente) {
-    if (confirm(`¿Estás seguro de eliminar a ${row.nombres} ${row.apellidos}?`)) {
-      // Implementar llamada al servicio para eliminar
-      console.log('Eliminar cliente', row.cliente_id);
+    // Aquí podrías disparar un MatDialog para que el confirm sea más estético
+    if (confirm(`¿Estás seguro de eliminar a ${row.nombres}?`)) {
+      console.log('Eliminando...', row.cliente_id);
+      // Lógica de borrado aquí
     }
   }
-
-  verPrestamosCliente(row: Cliente) {
-    // Navegar a list-prestamo pasando el cliente por queryParams
-    this.router.navigate(['/prestamo/list-prestamo'], {
-      queryParams: { cliente_id: row.cliente_id }
-    });
+  goBack() {
+  if (this.mode === 'selectForLoan') {
+    // Si venía de crear un préstamo, regresa allá
+    this.router.navigate(['/prestamo/crear-prestamo']);
+  } else {
+    // Si es gestión normal, regresa a la página anterior (ej. Dashboard)
+    this.location.back();
   }
+}
 }

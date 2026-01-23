@@ -75,6 +75,11 @@ export class AuthService {
     private sucursalContextService: SucursalContextService
   ) {}
 
+  // Obtener valor actual del usuario (sin suscribirse)
+  getCurrentUserValue(): Usuario | null {
+    return this.currentUserSubject.value;
+  }
+
   // Obtener usuario del localStorage
   private getUserFromStorage(): Usuario | null {
     const userStr = localStorage.getItem('currentUser');

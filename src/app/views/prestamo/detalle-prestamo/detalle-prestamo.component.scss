@@ -1,128 +1,291 @@
+/* Contenedor Principal */
 .container {
-  padding: 20px;
-  max-width: 1200px;
+  padding: 24px;
+  max-width: 1300px;
   margin: 0 auto;
+  background-color: #f8fafc;
+  min-height: 100vh;
 }
 
-.header { 
+/* 1. Cabecera y Títulos */
+.header-section {
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  justify-content: flex-start;
-  gap: 10px;
-  margin-bottom: 20px;
+  margin-bottom: 2rem;
 
-  h2 {
-    margin: 0;
-    font-weight: 600;
-    font-size: 1.5rem;
-    text-align: left;
-    flex: 1;
-  }
-  
-  /* Ensure button doesn't shrink or stretch weirdly */
-  button {
-    min-width: unset;
+  .title-group {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    h1 { margin: 0; font-size: 1.8rem; font-weight: 800; color: #1e293b; }
+    .client-subtitle { color: #64748b; font-size: 1rem; }
   }
 }
 
-.content {
+/* Badges de Estado */
+.status-badge {
+  padding: 8px 18px;
+  border-radius: 20px;
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  letter-spacing: 0.5px;
+
+  &.aprobado { background: #dcfce7; color: #166534; }
+  &.pendiente { background: #fef9c3; color: #854d0e; }
+  &.pagado { background: #dbeafe; color: #1e40af; }
+  &.rechazado { background: #fee2e2; color: #991b1b; }
+}
+
+/* 2. Cuadrícula de KPIs */
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.kpi-card {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 16px;
   display: flex;
   flex-direction: column;
-  gap: 24px;
-}
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e2e8f0;
+  position: relative;
+  overflow: hidden;
 
-.info-card {
-  background: #ffffff;
-  border-radius: 16px;
-  padding: 1.5rem;
-  box-shadow:
-    0 12px 30px rgba(0, 0, 0, 0.12),
-    0 4px 12px rgba(0, 0, 0, 0.08);
-}
+  .label { font-size: 0.85rem; color: #64748b; font-weight: 600; margin-bottom: 0.5rem; }
+  .value { font-size: 1.6rem; font-weight: 800; color: #0f172a; }
+  
+  .icon-bg {
+    position: absolute;
+    right: -10px;
+    bottom: -10px;
+    font-size: 5rem;
+    opacity: 0.05;
+    color: #1e293b;
+  }
 
-.info-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 16px;
-
-  mat-form-field {
-    width: 100%;
+  &.highlight {
+    background: #092c66;
+    border: none;
+    .label { color: #94a3b8; }
+    .value { color: white; }
+    .icon-bg { color: white; opacity: 0.1; }
   }
 }
 
-.actions {
-  margin-top: 24px;
+/* 3. Layout de Contenido (Columnas) */
+.main-content-layout {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.modern-card {
+  background: white;
+  border-radius: 16px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+  
+  mat-card-header {
+    padding: 1rem 1.5rem;
+    mat-card-title { font-size: 1.1rem; font-weight: 700; color: #334155; }
+  }
+}
+
+/* Formulario Interno */
+.info-grid-modern {
+  display: grid;
+  grid-template-columns: 1fr 1fr; // Esto crea las dos columnas de la imagen
+  gap: 16px; // Espaciado entre campos
+  padding: 20px;
+
+  // Si quieres que el monto ocupe las dos columnas abajo
+  .full-width {
+    grid-column: span 2;
+  }
+}
+
+ 
+mat-form-field {
+  width: 100%;
+  
+  .mat-mdc-text-field-wrapper {
+    background-color: #fafafa !important;
+  }
+}
+
+.form-actions {
+  padding: 1rem 1.5rem;
   display: flex;
   justify-content: flex-end;
-  gap: 16px;
+  gap: 1rem;
+  border-top: 1px solid #f1f5f9;
 }
 
-.info-item {
+/* Información Técnica (Sidebar) */
+.tech-info {
+  padding: 1.5rem;
+  .info-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+    span { color: #64748b; }
+    strong { color: #1e293b; }
+  }
+}
+
+/* 4. Tabla de Historial */
+.history-section {
+  .spacer { flex: 1 1 auto; }
+  
+  .modern-table {
+    width: 100%;
+    
+    th.mat-mdc-header-cell {
+      background: #f8fafc;
+      font-weight: 700;
+      color: #475569;
+      text-transform: uppercase;
+      font-size: 0.75rem;
+    }
+    
+    td.mat-mdc-cell {
+      padding: 1rem 0;
+      color: #334155;
+    }
+  }
+}
+
+/* Badges de Pago en Tabla */
+.pay-badge {
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  &.aprobado, &.pagado { background: #f0fdf4; color: #166534; }
+}
+
+/* Cargando */
+.loading-container {
   display: flex;
   flex-direction: column;
-  gap: 4px;
-  
-  .label {
-    font-size: 14px;
-    color: #666;
-    font-weight: 500;
+  justify-content: center;
+  align-items: center;
+  height: 400px;
+  color: #64748b;
+  p { margin-top: 1rem; font-weight: 600; }
+}
+
+/* Responsividad */
+@media (max-width: 1024px) {
+  .main-content-layout { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 640px) {
+  .header-section { flex-direction: column; align-items: flex-start; gap: 1rem; }
+  .info-grid-modern { grid-template-columns: 1fr; }
+  .kpi-grid { grid-template-columns: 1fr; }
+}
+
+/* 1. Definir altura igual para ambas cajas */
+.fixed-height-card {
+  height: 450px; // Ajusta esta altura según prefieras
+  display: flex;
+  flex-direction: column;
+}
+
+/* 2. Contenedor de scroll para la tabla */
+.scroll-container {
+  flex: 1; // Toma todo el espacio restante de la tarjeta
+  overflow-y: auto; // Activa el scroll vertical
+  padding: 0 !important;
+
+  /* Estilizar la barra de scroll para que sea sutil */
+  &::-webkit-scrollbar {
+    width: 6px;
   }
-  
-  .value {
+  &::-webkit-scrollbar-thumb {
+    background: #e2e8f0;
+    border-radius: 10px;
+  }
+}
+
+/* 3. Tabla compacta y cabecera fija */
+.modern-table.compact {
+  width: 100%;
+
+  th.mat-mdc-header-cell {
+    background: white; // Fondo sólido para que no se transparente al hacer scroll
+    z-index: 100;
+    padding: 12px 8px;
+    font-size: 0.7rem;
+    color: #64748b;
+  }
+
+  td.mat-mdc-cell {
+    padding: 12px 8px;
+    border-bottom: 1px solid #f1f5f9;
+  }
+}
+
+/* Asegura que la cuadrícula del formulario se vea bien en la altura fija */
+.info-grid-modern {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  padding: 16px;
+}
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: 20px; // Forma de píldora
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-width: 1px;
+  border-style: solid;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+
+  mat-icon {
     font-size: 16px;
-    color: #333;
-    font-weight: 600;
+    width: 16px;
+    height: 16px;
   }
-  
-  .highlight {
-    color: #d32f2f; /* Rojo para deuda pendiente */
+ 
+
+  /* ESTADO: PAGADO (Verde) */
+  &.encurso{
+    background-color: #f0fdf4;
+    color: #16a34a;
+    border-color: #bbf7d0;
+    mat-icon { color: #16a34a; }
   }
+
+  /* ESTADO: PENDIENTE (Naranja/Amarillo) */
+  &.pendiente {
+    background-color: #fffbeb;
+    color: #d97706;
+    border-color: #fef3c7;
+    mat-icon { color: #d97706; }
+  }
+
+ 
 }
 
-@media (max-width: 600px) {
-  .container {
-    padding: 10px;
-  }
-  
-  .info-grid {
-    grid-template-columns: 1fr;
-    gap: 16px; 
-  }
-
-  .header h2 {
-    font-size: 18px;
-    flex: 1;
-    font-size: 1.5rem;
-    min-width: 200px;
-  }
-}
-
-/* Mejora visibilidad de campos deshabilitados */
-::ng-deep .mat-form-field-disabled .mat-input-element,
-::ng-deep .mat-mdc-form-field-disabled .mat-mdc-input-element {
-    color: rgba(0, 0, 0, 0.87) !important; 
-    -webkit-text-fill-color: rgba(0, 0, 0, 0.87) !important;
-    font-weight: bold !important;
-}
-
-/* Estilo para campos de solo lectura (readonly) */
-.readonly-field {
-  color: #2c3e50 !important; /* Un tono oscuro nítido */
-  font-weight: 600 !important;
-  cursor: default;
-}
-
-/* Opcional: Cambiar el fondo del contenedor para dar pista visual de bloqueo */
-::ng-deep .mat-mdc-form-field.mat-form-field-disabled,
-::ng-deep .mat-mdc-form-field:has(.readonly-field) {
-  .mat-mdc-text-field-wrapper {
-    background-color: #f8f9fa !important; /* Gris muy suave */
-  }
-}
-
-/* Tu selector ::ng-deep actual mejorado para mayor contraste */
-::ng-deep .mat-mdc-form-field-disabled .mat-mdc-input-element {
-    color: rgba(0, 0, 0, 0.9) !important; 
-    -webkit-text-fill-color: rgba(0, 0, 0, 0.9) !important;
-    font-weight: 700 !important;
+/* Animación de alerta para Mora */
+@keyframes pulse-red {
+  0% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.2); }
+  70% { box-shadow: 0 0 0 6px rgba(220, 38, 38, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0); }
 }

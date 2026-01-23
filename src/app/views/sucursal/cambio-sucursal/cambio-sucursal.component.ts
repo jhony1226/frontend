@@ -8,6 +8,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { FormsModule } from '@angular/forms';
 import { SucursalService, Sucursal } from '../../../services/sucursal.service';
 import { SucursalContextService } from '../../../services/sucursal-context.service';
+import { AuthService } from '../../../services/auth.service';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ConfirmDialogComponent } from '../../shared/confirm-dialog/confirm-dialog.component';
@@ -37,6 +38,7 @@ export class CambioSucursalComponent implements OnInit {
     public router: Router,
     private sucursalService: SucursalService,
     private sucursalContextService: SucursalContextService,
+    private authService: AuthService,
     private dialog: MatDialog,
     private snackBar: MatSnackBar
   ) {
@@ -111,8 +113,15 @@ export class CambioSucursalComponent implements OnInit {
         { duration: 3000 }
       );
       
-      // Navegar a lista de rutas
-      this.router.navigate(['/ruta/list-ruta']);
+      // Determine redirection based on user role
+      const user = this.authService.getCurrentUserValue();
+      const isCobrador = user?.tipoUsuarioId === 2; // Assuming 2 is Cobrador based on your mock data
+
+      if (isCobrador) {
+        this.router.navigate(['/cobro/crear-cobro']);
+      } else {
+        this.router.navigate(['/ruta/list-ruta']);
+      }
     }
   }
 }
