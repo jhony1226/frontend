@@ -9,6 +9,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTooltipModule } from '@angular/material/tooltip'; // Importante para el diseño moderno
+import { MatDividerModule } from '@angular/material/divider';
 import { ReactiveFormsModule, FormControl } from '@angular/forms';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Router, RouterModule, ActivatedRoute } from '@angular/router';
@@ -29,6 +30,7 @@ import { Location } from '@angular/common';
     MatCardModule,
     MatSelectModule,
     MatTooltipModule,
+    MatDividerModule,
     ReactiveFormsModule,
     RouterModule,
   ],
@@ -141,6 +143,7 @@ verPrestamosCliente(row: Cliente) {
       // Lógica de borrado aquí
     }
   }
+  /*
   goBack() {
   if (this.mode === 'selectForLoan') {
     // Si venía de crear un préstamo, regresa allá
@@ -149,5 +152,5 @@ verPrestamosCliente(row: Cliente) {
     // Si es gestión normal, regresa a la página anterior (ej. Dashboard)
     this.location.back();
   }
-}
+}*/
 }

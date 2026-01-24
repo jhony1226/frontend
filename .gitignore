@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-/backend/node_modules
-/frontend/node_modules
-=======
 # See https://docs.github.com/get-started/getting-started-with-git/ignoring-files for more about ignoring files.
 
 # Compiled output
@@ -48,4 +44,3 @@ testem.log
 # System files
 .DS_Store
 Thumbs.db
->>>>>>> bb030a660ec45d584572e7d8b12e19cf910bb527

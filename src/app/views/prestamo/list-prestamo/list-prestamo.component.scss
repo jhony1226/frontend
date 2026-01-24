@@ -1,58 +1,105 @@
-/* VARIABLES */
+/* --- VARIABLES --- */
 $primary-blue: #226ab6;
 $text-dark: #1f2937;
 $text-muted: #64748b;
 $danger-red: #dc2626;
 $border-color: #e2e8f0;
-$bg-light: #f8fafc;
+$bg-light: #fcfcfc;
 
+/* --- CONTENEDOR PRINCIPAL --- */
 .main-container {
   padding: 32px;
-  background-color: #fcfcfc;
+  background-color: $bg-light;
   min-height: 100vh;
   font-family: 'Inter', -apple-system, sans-serif;
+  overflow-x: hidden; // Evita scroll horizontal accidental
+
+  @media (max-width: 640px) {
+    padding: 16px; // Más espacio para el contenido en móvil
+  }
 }
 
-/* --- HEADER --- */
+/* --- HEADER (Título y Botón) --- */
 .page-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 32px;
+  margin-bottom: 24px;
+  gap: 16px;
+  width: 100%;
 
   .title-section {
     display: flex;
     align-items: center;
-    gap: 16px;
+    gap: 12px;
+    flex: 1;
+    min-width: 0; // PERMITE QUE EL TEXTO SE TRUNQUE
+
+    .back-btn {
+      flex-shrink: 0; // Evita que la flecha se aplaste
+      background: white;
+      border: 1px solid $border-color;
+      border-radius: 8px;
+    }
+
+    /* Contenedor del texto para control total */
+    div {
+      min-width: 0; 
+      flex: 1;
+    }
 
     h1 {
       margin: 0;
-      font-size: 24px;
+      font-size: 22px;
       font-weight: 800;
       color: $text-dark;
       letter-spacing: -0.025em;
+      
+      /* TRUNCADO ESTRICTO */
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: block;
     }
 
     .subtitle {
       margin: 0;
       color: $text-muted;
-      font-size: 14px;
-    }
-
-    .back-btn {
-      background: white;
-      border: 1px solid $border-color;
-      border-radius: 8px;
+      font-size: 13px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
   }
 
+  /* Botón Rectangular */
   .add-btn {
+    flex-shrink: 0; 
     background-color: $primary-blue !important;
     color: white !important;
-    border-radius: 8px;
+    height: 44px;
+    padding: 0 20px;
+    border-radius: 10px !important;
     font-weight: 600;
-    padding: 8px 16px;
-    box-shadow: 0 4px 6px -1px rgba(0, 123, 255, 0.2);
+    box-shadow: 0 4px 6px -1px rgba(34, 106, 182, 0.2);
+  }
+
+  /* RESPONSIVO HEADER */
+  @media (max-width: 640px) {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+
+    .title-section {
+      width: 100%;
+      h1 { font-size: 18px; } // Tamaño optimizado para móvil
+    }
+
+    .add-btn {
+      width: 100%; // Botón rectangular al 100% de ancho
+      justify-content: center;
+      order: 2;
+    }
   }
 }
 
@@ -64,6 +111,10 @@ $bg-light: #f8fafc;
     width: 100%;
     max-width: 400px;
     
+    @media (max-width: 640px) {
+      max-width: 100%;
+    }
+    
     ::ng-deep .mat-mdc-text-field-wrapper {
       background-color: white !important;
       border-radius: 12px !important;
@@ -71,41 +122,44 @@ $bg-light: #f8fafc;
   }
 }
 
-/* --- TABLA DESKTOP --- */
+/* --- TABLA DESKTOP (Mat-Table) --- */
 .content-card {
-  /* FONDO Y SOMBRA */
-  background: #ffffff !important; // Fondo blanco puro para contraste
+  background: #ffffff !important;
   border-radius: 12px;
-  border: 1px solid #e2e8f0;    // Borde muy sutil
-  
-  /* SOMBRA PROFESIONAL (Elevación sutil) */
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 
-              0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
-  
+  border: 1px solid $border-color;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1) !important;
   margin-top: 10px;
-  overflow: hidden; // Mantiene los bordes redondeados en las esquinas
+  overflow: hidden;
   
-  table {
-    width: 100%;
-    background: transparent; // Para que use el blanco del contenedor
-  }
+  table { width: 100%; background: transparent; }
 
-  /* Ajuste de los encabezados para que no choquen con la sombra */
   th.mat-header-cell {
-    background-color: #f8fafc; // Un gris muy tenue para diferenciar el header
+    background-color: #f8fafc;
     border-bottom: 1px solid #edf2f7;
     padding: 16px;
+    font-weight: 700;
+    color: $text-dark;
+  }
+
+  td.mat-cell { padding: 16px; }
+
+  .hover-row {
+    transition: background-color 0.2s ease;
+    cursor: pointer;
+    &:hover { background-color: #f1f5f9 !important; }
+  }
+
+  .id-badge {
+    background: #f1f5f9;
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    color: $primary-blue;
   }
 }
 
-/* EFECTO HOVER PARA RESALTAR LA FILA AL PASAR EL MOUSE */
-.hover-row {
-  transition: background-color 0.2s ease;
-  &:hover {
-    background-color: #f1f5f9 !important;
-  }
-}
-/* --- VISTA MÓVIL --- */
+/* --- VISTA MÓVIL (Cards) --- */
 .mobile-grid {
   display: flex;
   flex-direction: column;
@@ -118,11 +172,13 @@ $bg-light: #f8fafc;
     padding: 0;
     overflow: hidden;
     background: white;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
 
     .card-accent {
       position: absolute;
       left: 0; top: 0; bottom: 0; width: 4px;
       background: $primary-blue;
+      &.inactivo { background: #94a3b8; }
       &.pagado { background: #10b981; }
     }
 
@@ -152,54 +208,32 @@ $bg-light: #f8fafc;
       padding-top: 12px;
       display: flex;
       justify-content: space-between;
+      align-items: center;
       font-size: 12px;
       color: $text-muted;
     }
   }
 }
 
-/* PAGINADOR */
-mat-paginator {
-  background: #f9fafb;
-  border-top: 1px solid $border-color;
-}
-td.mat-column-fecha_fin_prestamo {
-  display: table-cell !important; /* Asegura que se comporte como celda de tabla */
-  vertical-align: middle;
-}
+/* --- OTROS ESTILOS --- */
+.text-danger { color: $danger-red; font-weight: 700; }
 
 .date-wrapper {
   display: flex;
   align-items: center;
   gap: 8px;
-  
-  mat-icon {
-    font-size: 18px;
-    width: 18px;
-    height: 18px;
-    color: $text-muted;
-  }
+  mat-icon { font-size: 18px; width: 18px; height: 18px; color: $text-muted; }
 }
 
 .detail-btn {
   color: $primary-blue !important;
   font-weight: 600 !important;
-  text-transform: none; // Evita que Angular lo ponga en mayúsculas
   display: flex;
   align-items: center;
   gap: 4px;
+}
 
-  mat-icon {
-    font-size: 20px;
-    width: 20px;
-    height: 20px;
-  }
-
-  .btn-text {
-    font-size: 13px;
-  }
-
-  &:hover {
-    background-color: rgba($primary-blue, 0.05) !important;
-  }
+mat-paginator {
+  background: #f9fafb;
+  border-top: 1px solid $border-color;
 }

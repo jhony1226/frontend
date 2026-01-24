@@ -1,13 +1,13 @@
 <div class="main-container">
   <header class="page-header">
     <div class="title-section">
-      <button mat-icon-button (click)="goBack()" class="back-btn" matTooltip="Regresar">
+     <!-- <button mat-icon-button (click)="goBack()" class="back-btn" matTooltip="Regresar">
       <mat-icon>arrow_back</mat-icon>
-    </button>
+    </button> -->
       <div>
         <h1>{{ mode === 'selectForLoan' ? 'Seleccione un Cliente' : 'Gestión de Clientes' }}</h1>
         <p class="subtitle">
-          {{ mode === 'selectForLoan' ? 'Busca al cliente para asignar el nuevo préstamo' : 'Administra informacion de clientes' }}
+          {{ mode === 'selectForLoan' ? 'Busca al cliente para ver sus Préstamos' : 'Administra informacion de clientes' }}
         </p>
       </div>
     </div>
@@ -108,42 +108,72 @@
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="hover-row"></tr>
     </table>
-
-    <mat-paginator [pageSizeOptions]="[10, 20]" showFirstLastButtons></mat-paginator>
-  </div>
-
-  <div class="mobile-grid" *ngIf="isMobile">
-    <mat-card class="modern-mobile-card" *ngFor="let row of dataSource.connect() | async">
-      <div class="card-accent" [ngClass]="row.estado.toLowerCase() "></div>
-      <div class="card-content">
-        <div class="card-header-mobile">
-          <span class="client-name">{{ row.nombres }} {{ row.apellidos }}</span>
-          <span class="ruta-tag">RUTA {{ row.id_ruta }}</span>
+      <mat-paginator [pageSizeOptions]="[10, 20]" showFirstLastButtons></mat-paginator>
+ 
+    </div>
+  
+   <div class="mobile-grid" *ngIf="isMobile">
+  <mat-card class="modern-mobile-card" *ngFor="let row of dataSource.connect() | async">
+    
+    <div class="card-header-mobile">
+      <div class="header-main">
+        <div class="avatar-placeholder">
+          {{ (row.nombres?.charAt(0) || 'C') | uppercase }}
         </div>
         
-        <div class="card-body-mobile">
-          <div class="data-item">
-            <label>Identificación</label>
-            <span>{{ row.numero_identificacion }}</span>
-          </div>
-          <div class="data-item">
-            <label>Teléfono</label>
-            <span>{{ row.telefono }}</span>
-          </div>
-        </div>
-
-        <div class="card-footer-mobile" *ngIf="mode === 'selectForLoan'">
-          <button mat-button color="primary" class="full-w-btn" (click)="verPrestamosCliente(row)">
-            <mat-icon>{{ mode === 'selectForLoan' ? 'check_circle' : 'visibility' }}</mat-icon>
-            {{ mode === 'selectForLoan' ? 'SELECCIONAR CLIENTE' : 'VER EXPEDIENTE' }}
-          </button>
+        <div class="client-identity">
+          <span class="client-name" [matTooltip]="row.nombres + ' ' + row.apellidos">
+            {{ row.nombres }} {{ row.apellidos }}
+          </span>
+          <span class="ruta-subtext">Ruta {{ row.id_ruta }}</span>
         </div>
       </div>
-    </mat-card>
 
-    <div *ngIf="dataSource.filteredData.length === 0" class="no-results">
-      <mat-icon>search_off</mat-icon>
-      <p>No se encontraron clientes que coincidan.</p>
+      <div class="status-badge mini" [ngClass]="row.estado?.toLowerCase() || ''">
+        <span>{{ row.estado }}</span>
+      </div>
     </div>
-  </div>
+
+    <mat-divider></mat-divider>
+
+    <div class="card-body-mobile">
+      <div class="info-row">
+        <div class="icon-wrapper"><mat-icon>badge</mat-icon></div>
+        <div class="info-content">
+          <span class="label">Identificación</span>
+          <span class="value">{{ row.numero_identificacion }}</span>
+        </div>
+      </div>
+      
+      <div class="info-row">
+        <div class="icon-wrapper"><mat-icon>phone_iphone</mat-icon></div>
+        <div class="info-content">
+          <span class="label">Móvil</span>
+          <span class="value">{{ row.telefono }}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card-footer-mobile">
+      <ng-container *ngIf="mode === 'selectForLoan'">
+        <button mat-flat-button color="primary" class="full-w-btn" (click)="verPrestamosCliente(row)">
+          <mat-icon>check_circle</mat-icon> SELECCIONAR CLIENTE
+        </button>
+      </ng-container>
+
+      <ng-container *ngIf="mode !== 'selectForLoan'">
+        <div class="mobile-action-grid">
+          <button mat-stroked-button class="btn-pill btn-edit" [routerLink]="['/cliente/editar-cliente', row.cliente_id]">
+            <mat-icon>edit</mat-icon>
+            <span>EDITAR</span>
+          </button>
+          <button mat-stroked-button class="btn-pill btn-delete" (click)="deleteCliente(row)">
+            <mat-icon>delete</mat-icon>
+            <span>ELIMINAR</span>
+          </button>
+        </div>
+      </ng-container>
+    </div>
+  </mat-card>
+</div>
 </div>

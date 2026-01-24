@@ -35,14 +35,14 @@
       <ng-container matColumnDef="saldo_pendiente">
         <th mat-header-cell *matHeaderCellDef> Saldo Pendiente </th>
         <td mat-cell *matCellDef="let row" class="amount text-danger"> 
-          {{ row.saldo_pendiente | currency:'COP':'symbol':'1.0-0' }} 
+          {{ row.saldo_pendiente | currency:'COP':'symbol-narrow':'1.0-0' }} 
         </td>
       </ng-container>
 
-      <ng-container matColumnDef="valor_cuota">
+            <ng-container matColumnDef="valor_cuota">
         <th mat-header-cell *matHeaderCellDef> Cuota </th>
         <td mat-cell *matCellDef="let row" class="amount"> 
-          {{ row.valor_cuota | currency:'COP':'symbol':'1.0-0' }} 
+          {{ row.valor_cuota | currency:'COP':'symbol-narrow':'1.0-0' }} 
         </td>
       </ng-container>
 
