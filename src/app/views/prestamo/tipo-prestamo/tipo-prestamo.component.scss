@@ -1,4 +1,4 @@
-/* VARIABLES GLOBALES */
+/* VARIABLES GLOBALES (Asegúrate de tener estas variables definidas) */
 $primary-blue: #2563eb;
 $text-dark: #1e293b;
 $text-muted: #64748b;
@@ -8,8 +8,9 @@ $bg-main: #f8fafc;
   padding: 24px;
   background-color: $bg-main;
   min-height: 100vh;
+
   @media (max-width: 600px) {
-    padding: 8px; // Reducido de 16px o 24px a solo 8px
+    padding: 8px; /* Ajuste para móvil */
   }
 }
 
@@ -33,13 +34,12 @@ $bg-main: #f8fafc;
 }
 
 .modern-form-card {
-  max-width: 800px;
+  max-width: 800px; /* Ancho máximo para el formulario */
   margin: 0 auto;
   border-radius: 16px !important;
   border: 1px solid rgba(226, 232, 240, 0.8) !important;
   box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1) !important;
   padding: 32px !important;
-  background: #fdfdfd !important;
 
   @media (max-width: 600px) {
     padding: 16px !important;
@@ -68,16 +68,16 @@ $bg-main: #f8fafc;
 
 .form-row {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr 1fr; /* Dos columnas */
   gap: 16px;
   margin-bottom: 8px;
 
   @media (max-width: 600px) {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr; /* Una columna en móvil */
   }
 }
 
-.full-width { grid-column: 1 / -1; }
+.full-width { grid-column: 1 / -1; } /* Para que un campo ocupe todo el ancho */
 
 .form-actions {
   display: flex;

@@ -45,6 +45,15 @@ export const routes: Routes = [
           ),
         data: { title: 'Detalle de Préstamo' },
       },
+      {
+        path: 'tipo-prestamo',
+        loadComponent: () =>
+          import('./tipo-prestamo/tipo-prestamo.component').then(
+            (m) => m.TipoPrestamoComponent
+          ),
+        data: { title: 'Tipo de Préstamo' },
+      },
+       
     ],
   },
 ];

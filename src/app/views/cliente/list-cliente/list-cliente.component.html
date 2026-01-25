@@ -74,9 +74,9 @@
       <ng-container matColumnDef="estado">
         <th mat-header-cell *matHeaderCellDef> Estado </th>
         <td mat-cell *matCellDef="let row">
-          <div class="status-badge" [ngClass]="row.estado?.toLowerCase() || ''">
-            <mat-icon *ngIf="row.estado?.toLowerCase() === 'activo'">check_circle</mat-icon>
-            <mat-icon *ngIf="row.estado?.toLowerCase() === 'inactivo'">cancel</mat-icon>
+          <div class="status-badge" [ngClass]="row.estado.toLowerCase() || ''">
+            <mat-icon *ngIf="row.estado.toLowerCase() === 'activo'">check_circle</mat-icon>
+            <mat-icon *ngIf="row.estado.toLowerCase() === 'inactivo'">cancel</mat-icon>
             <span>{{ row.estado }}</span>
           </div>
         </td>
@@ -118,7 +118,7 @@
     <div class="card-header-mobile">
       <div class="header-main">
         <div class="avatar-placeholder">
-          {{ (row.nombres?.charAt(0) || 'C') | uppercase }}
+          {{ (row.nombres.charAt(0) || 'C') | uppercase }}
         </div>
         
         <div class="client-identity">
@@ -129,7 +129,7 @@
         </div>
       </div>
 
-      <div class="status-badge mini" [ngClass]="row.estado?.toLowerCase() || ''">
+      <div class="status-badge mini" [ngClass]="row.estado.toLowerCase() || ''">
         <span>{{ row.estado }}</span>
       </div>
     </div>

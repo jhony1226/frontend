@@ -14,6 +14,7 @@ import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 import { ClienteService, Cliente } from '../../../services/cliente.service';
 import { ReplaySubject, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { Prestamos, PrestamoService } from '../../../services/prestamo.service';
 
 @Component({
   selector: 'app-crear-prestamo',
@@ -55,7 +56,9 @@ export class CrearPrestamoComponent implements OnInit, OnDestroy {
   constructor(
     private router: Router, 
     private route: ActivatedRoute,
-    private clienteService: ClienteService
+    private clienteService: ClienteService,
+    private prestamoService: PrestamoService // Inyectamos el servicio corregido
+  
   ) {}
 
   ngOnInit() {
@@ -126,36 +129,54 @@ export class CrearPrestamoComponent implements OnInit, OnDestroy {
     }
   }
 
-  crear() {
-    if (!this.clienteSeleccionado || !this.periodoSeleccionado || !this.valor || !this.fecha) {
-      window.alert('Completa todos los campos obligatorios.');
-      return;
-    }
-
-    const prestamo = {
-      id: this.isEditing && this.editingId ? this.editingId : Date.now(),
-      cliente: this.clienteSeleccionado,
-      periodo: this.periodoSeleccionado,
-      valor: this.valor,
-      fecha: this.fecha,
-      estado: this.estado,
-      saldoPendiente: this.saldoPendiente,
-      createdAt: new Date().toLocaleDateString(),
-    };
-
-    let prestamosGuardados = JSON.parse(localStorage.getItem('prestamos') || '[]');
-
-    if (this.isEditing) {
-      prestamosGuardados = prestamosGuardados.map((p: any) => p.id === this.editingId ? prestamo : p);
-    } else {
-      prestamosGuardados.push(prestamo);
-    }
-
-    localStorage.setItem('prestamos', JSON.stringify(prestamosGuardados));
-
-    window.alert(`¡Préstamo ${this.isEditing ? 'actualizado' : 'creado'} exitosamente!`);
-    this.cancelar();
+ crear() {
+  // 1. Validación inicial
+  if (!this.clienteSeleccionado || !this.periodoSeleccionado || !this.valor || !this.fecha) {
+    window.alert('Completa todos los campos obligatorios.');
+    return;
   }
+
+  // 2. Construir el objeto usando la INTERFAZ, no el servicio
+  // Usamos Partial<Prestamos> para que coincida con tu método del servicio
+  const datosPrestamo: Partial<Prestamos> = {
+    cliente_id: this.clienteSeleccionado.cliente_id,
+    periodo_id: this.periodoSeleccionado.periodo_id,
+    tipo_prestamo_id: 1, 
+    monto_prestamo: Number(this.valor), // Convertimos a número para evitar líos
+    saldo_pendiente: Number(this.saldoPendiente || this.valor),
+    valor_intereses: 0, 
+    valor_cuota: 0,     
+    fecha_desembolso: this.fecha,
+    fecha_fin_prestamo: null,
+    estado_prestamo: this.estado || 'ACTIVO'
+  };
+
+  if (this.isEditing && this.editingId) {
+    // --- LÓGICA DE ACTUALIZACIÓN ---
+    this.prestamoService.updatePrestamo(this.editingId, datosPrestamo).subscribe({
+      next: (res) => {
+        window.alert('¡Préstamo actualizado exitosamente!');
+        this.cancelar();
+      },
+      error: (err) => {
+        console.error('Error en update:', err);
+        window.alert('Error al actualizar el préstamo en el servidor.');
+      }
+    });
+  } else {
+    // --- LÓGICA DE CREACIÓN ---
+    this.prestamoService.createPrestamo(datosPrestamo).subscribe({
+      next: (res) => {
+        window.alert('¡Préstamo creado exitosamente en la base de datos!');
+        this.cancelar();
+      },
+      error: (err) => {
+        console.error('Error en create:', err);
+        window.alert('Error al guardar el préstamo. Verifica la conexión.');
+      }
+    });
+  }
+}
 
   cancelar() {
     this.clienteSeleccionado = null;

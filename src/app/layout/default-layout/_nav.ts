@@ -46,16 +46,23 @@ export const navItems: INavData[] = [
     url: '/prestamo',
     iconComponent: { name: 'cil-chart-pie' },
     children: [
-      {
-        name: 'Gestión de Préstamos',
-        url: '/prestamo',
+       {
+        name: 'Tipo de Préstamo',
+        url: '/prestamo/tipo-prestamo',
         icon: 'nav-icon-bullet',
       },
       {
         name: 'Crear Préstamo',
         url: '/prestamo/crear-prestamo',
         icon: 'nav-icon-bullet',
+      }, 
+      {
+        name: 'Gestión de Préstamos',
+        url: '/prestamo',
+        icon: 'nav-icon-bullet',
       },
+      
+     
     ],
   },
      

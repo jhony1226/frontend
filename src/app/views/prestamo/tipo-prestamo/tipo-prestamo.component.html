@@ -1,0 +1,48 @@
+<div class="main-container">
+  <header class="page-header">
+    <div class="title-section">
+      <button mat-icon-button (click)="cancelar()" class="back-btn" matTooltip="Volver a la lista de tipos">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+      <div>
+        <h1>{{ isEditing ? 'Editar Tipo de Préstamo' : 'Crear Nuevo Tipo de Préstamo' }}</h1>
+        <p class="subtitle">{{ isEditing ? 'Ajuste las condiciones de este crédito' : 'Establezca las condiciones para nuevos créditos' }}</p>
+      </div>
+    </div>
+  </header>
+
+  <mat-card class="modern-form-card">
+    <form class="tipo-prestamo-form" (ngSubmit)="guardar()" #tipoPrestamoForm="ngForm">
+      
+      <div class="form-section">
+        <h3 class="section-title"><mat-icon>info</mat-icon> Detalles del Tipo</h3>
+        <div class="form-row">
+          <mat-form-field appearance="outline">
+            <mat-label>Cantidad de Cuotas</mat-label>
+            <input matInput type="number" [(ngModel)]="cantidadCuotas" name="cantidadCuotas" required placeholder="Ej: 30" min="1" />
+            <mat-icon matPrefix>looks_two</mat-icon>
+            <mat-hint>Número total de pagos para este tipo de préstamo.</mat-hint>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Porcentaje de Interés</mat-label>
+            <input matInput type="number" [(ngModel)]="porcentaje" name="porcentaje" required placeholder="Ej: 10 (sin el %)" min="0" step="0.01" />
+            <mat-icon matPrefix>percent</mat-icon>
+            <mat-hint>Porcentaje de interés aplicado al monto del préstamo (ej: 10 para 10%).</mat-hint>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button mat-button class="cancel-btn" type="button" (click)="cancelar()">
+          Cancelar
+        </button>
+        <button mat-flat-button color="primary" class="submit-btn" type="submit" [disabled]="!tipoPrestamoForm.valid">
+          <mat-icon>{{ isEditing ? 'save' : 'add_circle_outline' }}</mat-icon>
+          {{ isEditing ? 'Guardar Cambios' : 'Crear Tipo' }}
+        </button>
+      </div>
+
+    </form>
+  </mat-card>
+</div>

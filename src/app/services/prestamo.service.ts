@@ -5,24 +5,17 @@ import { environment } from '../../environments/environment';
 
 export interface Prestamos {
   prestamo_id: number;
-  cliente_id: number;        // Agregado: viene en el JSON
+  cliente_id: number;         
   periodo_id: number;
-  tipo_prestamo_id: number;   // Agregado: viene en el JSON  
-  // Nota: Los montos vienen como string "1000.00"
+  tipo_prestamo_id: number;    
   monto_prestamo: string | number; 
   saldo_pendiente: string | number;
   valor_intereses: string | number;
-  valor_cuota: string | number;
-
-  // Nota: Las fechas vienen como string ISO
+  valor_cuota: string | number; 
   fecha_desembolso: string | Date; 
   fecha_fin_prestamo: string | Date | null;
-  created_at?: string;        // Agregado: viene en el JSON
-
-  estado_prestamo: string;
-  
-  // Este campo NO viene en el JSON que mostraste, 
-  // asegúrate de que el backend haga el JOIN para traerlo
+  created_at?: string;       
+  estado_prestamo: string; 
   nombre_cliente?: string; 
 }
 
@@ -81,4 +74,9 @@ export class PrestamoService {
   getPrestamoInfoById(prestamo_id: number): Observable<Prestamos> {
     return this.http.get<Prestamos>(`${this.apiUrl}/getPrestamoInfoById/${prestamo_id}`);
   }
+ 
+  createPrestamo(prestamo: Partial<Prestamos>): Observable<Prestamos> {
+    return this.http.post<Prestamos>(`${this.apiUrl}/createPrestamo`, prestamo);
+  } 
+  
 }

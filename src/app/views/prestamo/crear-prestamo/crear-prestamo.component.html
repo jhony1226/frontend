@@ -1,77 +1,89 @@
-<mat-card class="loan-card">
-  <mat-card-title>
-    {{ isEditing ? 'Editar Préstamo' : 'Crear Nuevo Préstamo' }}
-  </mat-card-title>
-
-  <form (ngSubmit)="crear()" class="loan-form">
-
-    <!-- Cliente -->
-    <mat-form-field appearance="outline">
-      <mat-label>Cliente</mat-label>
-      <mat-select [(ngModel)]="clienteSeleccionado" name="cliente" required placeholder="Seleccione Cliente">
-        <mat-option>
-          <ngx-mat-select-search [formControl]="clienteFilterCtrl" 
-                                placeholderLabel="Buscar cliente (nombre, apellido, cédula)..."
-                                noEntriesFoundLabel="No se encontraron clientes">
-          </ngx-mat-select-search>
-        </mat-option>
-        <mat-option *ngFor="let cliente of filteredClientes | async" [value]="cliente">
-          {{ cliente.nombres }} {{ cliente.apellidos }} - {{ cliente.numero_identificacion }}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-
-    <!-- Período -->
-    <mat-form-field appearance="outline">
-      <mat-label>Período</mat-label>
-      <mat-select [(ngModel)]="periodoSeleccionado" name="periodo" required>
-        <mat-option *ngFor="let periodo of periodos" [value]="periodo">
-          {{ periodo.nombre }}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-
-    <!-- Valores -->
-    <div class="grid">
-      <mat-form-field appearance="outline">
-        <mat-label>Valor</mat-label>
-        <input matInput type="number" [(ngModel)]="valor" name="valor" required />
-      </mat-form-field>
-
-      <mat-form-field appearance="outline">
-        <mat-label>Saldo Pendiente</mat-label>
-        <input matInput type="number" [(ngModel)]="saldoPendiente" name="saldoPendiente" required />
-      </mat-form-field>
+<div class="main-container">
+  <header class="page-header">
+    <div class="title-section">      
+      <div>
+        <h1>{{ isEditing ? 'Editar Préstamo' : 'Nuevo Préstamo' }}</h1>
+        <p class="subtitle">{{ isEditing ? 'Ajusta los detalles del crédito' : 'Configura los valores para el nuevo préstamo' }}</p>
+      </div>
     </div>
+  </header>
 
-    <!-- Fecha -->
-    <mat-form-field appearance="outline">
-      <mat-label>Fecha</mat-label>
-      <input matInput [matDatepicker]="picker" [(ngModel)]="fecha" name="fecha" required />
-      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-      <mat-datepicker #picker></mat-datepicker>
-    </mat-form-field>
+  <mat-card class="modern-form-card">
+    <form class="loan-form" (ngSubmit)="crear()" #loanForm="ngForm">
+      
+      <div class="form-section">
+        <h3 class="section-title"><mat-icon>person_search</mat-icon> Selección de Cliente</h3>
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Cliente Responsable</mat-label>
+            <mat-select [(ngModel)]="clienteSeleccionado" name="cliente" required>
+              <mat-icon matPrefix>account_circle</mat-icon>
+              <mat-option>
+                <ngx-mat-select-search [formControl]="clienteFilterCtrl" 
+                                      placeholderLabel="Buscar cliente (nombre o cédula)..."
+                                      noEntriesFoundLabel="No se encontraron coincidencias">
+                </ngx-mat-select-search>
+              </mat-option>
+              <mat-option *ngFor="let cliente of filteredClientes | async" [value]="cliente">
+                {{ cliente.nombres }} {{ cliente.apellidos }}  
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
 
-    <!-- Estado -->
-    <mat-form-field appearance="outline">
-      <mat-label>Estado</mat-label>
-      <mat-select [(ngModel)]="estado" name="estado">
-        <mat-option value="ACTIVO">Activo</mat-option>
-        <mat-option value="INACTIVO">Inactivo</mat-option>
-        <mat-option value="PAGADO">Pagado</mat-option>
-      </mat-select>
-    </mat-form-field>
+      <div class="form-section">
+        <h3 class="section-title"><mat-icon>monetization_on</mat-icon> Detalles Económicos</h3>
+        <div class="form-row">
+          <mat-form-field appearance="outline">
+            <mat-label>Valor del Préstamo</mat-label>
+            <input matInput type="number" [(ngModel)]="valor" name="valor" placeholder="0.00" required />
+            <mat-icon matPrefix>payments</mat-icon>
+          </mat-form-field>
 
-    <!-- Acciones -->
-    <div class="actions">
-      <button mat-raised-button color="primary" type="submit">
-        {{ isEditing ? 'Actualizar Préstamo' : 'Crear Préstamo' }}
-      </button>
+          <mat-form-field appearance="outline">
+            <mat-label>Saldo Pendiente</mat-label>
+            <input matInput type="number" [(ngModel)]="saldoPendiente" name="saldoPendiente" placeholder="0.00" required />
+            <mat-icon matPrefix>account_balance_wallet</mat-icon>
+          </mat-form-field>
+        </div>
 
-      <button mat-stroked-button color="warn" type="button" (click)="cancelar()">
-        Cancelar
-      </button>
-    </div>
+        <div class="form-row">
+          <mat-form-field appearance="outline">
+            <mat-label>Fecha de Inicio</mat-label>
+            <input matInput [matDatepicker]="picker" [(ngModel)]="fecha" name="fecha" required />
+            <mat-icon matPrefix>calendar_today</mat-icon>
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+        </div>
+      </div>
 
-  </form>
-</mat-card>
+      <div class="form-section">
+        <h3 class="section-title"><mat-icon>settings_suggest</mat-icon> Estado del Crédito</h3>
+        <div class="form-row">
+          <mat-form-field appearance="outline">
+            <mat-label>Estado Actual</mat-label>
+            <mat-select [(ngModel)]="estado" name="estado" [disabled]="!isEditing">
+              <mat-icon matPrefix>info</mat-icon>
+              <mat-option value="ACTIVO">Activo (Cobro vigente)</mat-option>
+              <mat-option value="INACTIVO">Inactivo</mat-option>
+              <mat-option value="PAGADO">Finalizado / Pagado</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button mat-button class="cancel-btn" type="button" (click)="cancelar()">
+          Cancelar
+        </button>
+        <button mat-flat-button color="primary" class="submit-btn" type="submit" [disabled]="!loanForm.valid">
+          <mat-icon>{{ isEditing ? 'save' : 'add_task' }}</mat-icon>
+          {{ isEditing ? 'Actualizar Préstamo' : 'Crear Préstamo' }}
+        </button>
+      </div>
+
+    </form>
+  </mat-card>
+</div>
