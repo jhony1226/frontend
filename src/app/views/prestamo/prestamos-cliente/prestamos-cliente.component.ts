@@ -100,6 +100,6 @@ export class PrestamosClienteComponent implements OnInit {
   }
 
   volverAClientes() {
-    this.router.navigate(['/prestamo']);
+    this.router.navigate(['cobro/crear-cobro']);
   }
 }

@@ -1,55 +1,94 @@
-<mat-card class="period-card">
-  <mat-card-title>
-    Editar Cobro
-  </mat-card-title>
-
-  <form class="period-form" [formGroup]="cobroForm" (ngSubmit)="onSubmit()">
-
-    <!-- ID Préstamo (Solo lectura) -->
-    <mat-form-field appearance="outline">
-      <mat-label>ID Préstamo</mat-label>
-      <input matInput formControlName="prestamo_id" readonly />
-    </mat-form-field>
-
-    <!-- Cliente (Solo lectura) -->
-    <mat-form-field appearance="outline">
-      <mat-label>Cliente</mat-label>
-      <input matInput formControlName="cliente_nombre" readonly />
-    </mat-form-field>
-
-    <!-- Fecha Cobro (Solo lectura) -->
-    <mat-form-field appearance="outline">
-      <mat-label>Fecha Cobro</mat-label>
-      <input matInput formControlName="fecha_cobro" readonly />
-    </mat-form-field>
-
-    <!-- Monto Cobrado (Solo lectura) -->
-    <mat-form-field appearance="outline">
-      <mat-label>Monto Cobrado</mat-label>
-      <input matInput type="number" formControlName="monto_cobrado" readonly />
-    </mat-form-field>
-
-    <!-- Estado (Editable) -->
-    <mat-form-field appearance="outline">
-      <mat-label>Estado</mat-label>
-      <mat-select formControlName="estado">
-        <mat-option value="pendiente">Pendiente</mat-option>
-        <mat-option value="pagado">Pagado</mat-option> 
-      </mat-select>
-    </mat-form-field>
-
-    <!-- Acciones -->
-    <div class="actions">
-      <button mat-raised-button color="primary" type="submit" [disabled]="cobroForm.invalid">
-        Actualizar Estado
+<div class="main-container">
+  <header class="page-header">
+    <div class="title-section">
+      <button mat-icon-button (click)="cancelar()" class="back-btn" type="button">
+        <mat-icon>arrow_back</mat-icon>
       </button>
+      <div>
+        <h1>Actualizar Estado</h1>
+        <p class="subtitle">Modifique el estado de pago del registro seleccionado</p>
+      </div>
+    </div>
+  </header>
 
-      <button mat-stroked-button color="warn" type="button" (click)="cancelar()">
-        Cancelar
-      </button>
+  <mat-card class="modern-form-card">
+    <div class="readonly-info-grid">
+      <div class="info-item">
+        <label>Cliente</label>
+        <div class="value-box">
+          <mat-icon>person</mat-icon>
+          <span>{{ cobroForm.get('cliente_nombre')?.value }}</span>
+        </div>
+      </div>
+
+      <div class="info-item">
+        <label>ID Préstamo</label>
+        <div class="value-box">
+          <mat-icon>confirmation_number</mat-icon>
+          <span>#{{ cobroForm.get('prestamo_id')?.value }}</span>
+        </div>
+      </div>
+
+      <div class="info-item">
+        <label>Fecha de Cobro</label>
+        <div class="value-box">
+          <mat-icon>calendar_today</mat-icon>
+          <span>{{ cobroForm.get('fecha_cobro')?.value | date:'dd/MM/yyyy' }}</span>
+        </div>
+      </div>
+
+      <div class="info-item">
+        <label>Monto Recaudado</label>
+        <div class="value-box highlight">
+          <mat-icon>payments</mat-icon>
+          <span>{{ cobroForm.get('monto_cobrado')?.value | currency }}</span>
+        </div>
+      </div>
     </div>
 
-  </form>
-</mat-card>
+    <hr class="divider">
 
+    <form [formGroup]="cobroForm" (ngSubmit)="onSubmit()" class="edit-section">
+      <h3 class="section-title">Gestión de Pago</h3>
+      
+     <mat-form-field appearance="outline" class="full-width">
+  <mat-label>Estado Actual</mat-label>
+  <mat-select formControlName="estado">
+    
+    <mat-select-trigger>
+      <div class="option-row" *ngIf="cobroForm.get('estado')?.value">
+        <mat-icon [class.text-warning]="cobroForm.get('estado')?.value === 'pendiente'"
+                  [class.text-success]="cobroForm.get('estado')?.value === 'pagado'">
+          {{ cobroForm.get('estado')?.value === 'pendiente' ? 'schedule' : 'check_circle' }}
+        </mat-icon>
+        <span class="ms-2">{{ cobroForm.get('estado')?.value | titlecase }}</span>
+      </div>
+    </mat-select-trigger>
 
+    <mat-option value="pendiente">
+      <div class="option-row">
+        <mat-icon class="text-warning">schedule</mat-icon> 
+        <span>Pendiente</span>
+      </div>
+    </mat-option>
+    <mat-option value="pagado">
+      <div class="option-row">
+        <mat-icon class="text-success">check_circle</mat-icon> 
+        <span>Pagado</span>
+      </div>
+    </mat-option>
+  </mat-select>
+</mat-form-field>
+
+      <div class="form-actions">
+        <button mat-button class="cancel-btn" type="button" (click)="cancelar()">
+          Cancelar
+        </button>
+        <button mat-flat-button color="primary" class="submit-btn" type="submit" [disabled]="cobroForm.invalid">
+          <mat-icon>update</mat-icon>
+          Actualizar Estado
+        </button>
+      </div>
+    </form>
+  </mat-card>
+</div>

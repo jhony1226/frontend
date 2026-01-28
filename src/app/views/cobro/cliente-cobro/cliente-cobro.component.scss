@@ -1,162 +1,125 @@
-.container {
-  padding: 20px;
+$primary: #2563eb;
+$bg-light: #f1f5f9;
+$text-dark: #0f172a;
+$text-soft: #64748b;
+
+.main-container {
+  padding: 30px 20px;
+  max-width: 1100px;
+  margin: 0 auto;
 }
 
-.header {
+.page-header {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
+  align-items: flex-end;
+  margin-bottom: 25px;
 
-  h2 {
-    margin: 0;
-    font-size: 24px;
-    font-weight: 500;
+  .title-group {
+    h1 { margin: 0; font-size: 26px; font-weight: 800; color: $text-dark; }
+    .subtitle { margin: 5px 0 0; color: $text-soft; font-size: 14px; }
   }
 
-  button {
-    mat-icon {
-      margin-right: 5px;
-    }
+  .btn-back {
+    background: white; border: 1px solid #e2e8f0; color: $text-dark;
+    border-radius: 12px; height: 45px; font-weight: 600;
   }
 }
 
-.content-card {
-  margin-top: 20px;
+.data-card {
+  border-radius: 20px !important;
+  border: 1px solid #e2e8f0 !important;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05) !important;
+  overflow: hidden;
+  padding: 0 !important; // Para que la tabla toque los bordes si es necesario
 }
 
-// VISTA ESCRITORIO
-.desktop-view {
-  display: block;
+/* DESKTOP STYLES */
+.modern-table {
+  width: 100%;
   
-  .table-responsive {
-    overflow-x: auto;
-    
-    table {
-      width: 100%;
-      
-      th {
-        font-weight: 600;
-        background-color: #f5f5f5;
-      }
-      
-      td, th {
-        padding: 12px 16px;
-      }
+  th.mat-header-cell {
+    background: #f8fafc;
+    color: $text-soft;
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 11px;
+    letter-spacing: 0.05em;
+    padding: 20px !important;
+  }
+
+  .client-cell {
+    display: flex; align-items: center; gap: 12px;
+    .avatar {
+      width: 35px; height: 35px; background: #dbeafe; color: $primary;
+      border-radius: 10px; display: grid; place-items: center; font-weight: 800;
     }
+    .client-name { font-weight: 600; color: $text-dark; }
+  }
+
+  .address-box {
+    display: flex; align-items: center; gap: 6px; color: $text-soft;
+    mat-icon { font-size: 18px; width: 18px; height: 18px; }
+  }
+
+  .phone-tag {
+    background: #f1f5f9; padding: 4px 12px; border-radius: 20px;
+    font-size: 12px; font-weight: 500; color: $text-dark;
+  }
+
+  .btn-action {
+    border-radius: 10px; font-weight: 600;
+    mat-icon { margin-right: 6px; font-size: 20px; }
   }
 }
 
-// VISTA MÓVIL
+.row-hover:hover { background: #f8fafc !important; }
+.text-right { text-align: right; padding-right: 25px !important; }
+
+/* MOBILE STYLES */
 .mobile-view {
   display: none;
-  
-  .no-data-message {
-    text-align: center;
-    padding: 20px;
-    color: #666;
-  }
-  
-  .cliente-card {
-    margin-bottom: 16px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    
-    .cliente-info {
-      .info-row {
-        display: flex;
-        align-items: flex-start;
-        padding: 12px 0;
-        
-        .info-icon {
-          color: #1976d2;
-          margin-right: 12px;
-          margin-top: 2px;
-        }
-        
-        .info-content {
-          flex: 1;
-          display: flex;
-          flex-direction: column;
-          
-          .info-label {
-            font-size: 12px;
-            color: #666;
-            margin-bottom: 4px;
-          }
-          
-          .info-value {
-            font-size: 14px;
-            color: #333;
-            font-weight: 500;
-            
-            &.pendiente-amount {
-              color: #f44336;
-              font-weight: 600;
-              font-size: 16px;
-            }
-          }
-        }
+  padding: 15px;
+
+  .client-card-mobile {
+    background: white; border: 1px solid #f1f5f9; border-radius: 16px;
+    padding: 16px; margin-bottom: 12px;
+    transition: transform 0.2s;
+
+    &:active { transform: scale(0.98); background: #f8fafc; }
+
+    .card-header {
+      display: flex; align-items: center; gap: 12px;
+      .avatar-m { width: 45px; height: 45px; background: $primary; color: white; border-radius: 50%; display: grid; place-items: center; font-weight: 700; }
+      .title-info {
+        flex: 1;
+        h3 { margin: 0; font-size: 16px; font-weight: 700; color: $text-dark; }
+        span { font-size: 13px; color: $text-soft; }
       }
-      
-      .action-row {
-        padding: 16px 0 8px;
-        text-align: center;
-        
-        .action-button {
-          width: 100%;
-          
-          mat-icon {
-            margin-right: 8px;
-          }
-        }
-      }
-      
-      mat-divider {
-        margin: 0;
+      .chevron { color: #cbd5e1; }
+    }
+
+    .card-details {
+      margin-top: 15px; padding-top: 12px; border-top: 1px solid #f1f5f9;
+      .detail-item {
+        display: flex; align-items: center; gap: 8px; color: $text-soft; font-size: 13px;
+        mat-icon { font-size: 16px; width: 16px; height: 16px; }
       }
     }
   }
 }
 
-// MEDIA QUERIES
-// Tablets y menores
+.empty-state {
+  text-align: center; padding: 40px; color: $text-soft;
+  mat-icon { font-size: 48px; width: 48px; height: 48px; }
+}
+
+/* RESPONSIVE */
 @media (max-width: 768px) {
-  .desktop-view {
-    display: none;
-  }
-  
-  .mobile-view {
-    display: block;
-  }
-  
-  .container {
-    padding: 12px;
-  }
-  
-  .header {
-    h2 {
-      font-size: 20px;
-    }
-  }
-}
-
-// Móviles pequeños
-@media (max-width: 480px) {
-  .container {
-    padding: 8px;
-  }
-  
-  .header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 12px;
-    
-    h2 {
-      font-size: 18px;
-    }
-    
-    button {
-      width: 100%;
-    }
+  .desktop-view { display: none; }
+  .mobile-view { display: block; }
+  .page-header {
+    flex-direction: column; align-items: stretch; gap: 15px;
+    .btn-back { width: 100%; }
   }
 }

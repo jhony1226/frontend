@@ -1,48 +1,74 @@
-<mat-card class="sucursal-card">
-  <mat-card-title>
-    Editar Sucursal
-  </mat-card-title>
-
-  <form (ngSubmit)="guardar()" class="sucursal-form">
-
-    <!-- Nombre -->
-    <mat-form-field appearance="outline">
-      <mat-label>Nombre de la Sucursal</mat-label>
-      <input matInput [(ngModel)]="nombre" name="nombre" placeholder="Ej: Sucursal Centro" required />
-    </mat-form-field>
-
-    <!-- Dirección -->
-    <mat-form-field appearance="outline">
-      <mat-label>Dirección</mat-label>
-      <input matInput [(ngModel)]="direccion" name="direccion" placeholder="Ej: Cra 10 #20-30" required />
-    </mat-form-field>
-
-    <!-- Teléfono -->
-    <mat-form-field appearance="outline">
-      <mat-label>Teléfono</mat-label>
-      <input matInput [(ngModel)]="telefono" name="telefono" placeholder="Ej: 300 123 4567" required />
-    </mat-form-field>
-
-    <!-- Estado -->
-    <mat-form-field appearance="outline">
-      <mat-label>Estado</mat-label>
-      <mat-select [(ngModel)]="estado" name="estado">
-        <mat-option value="Activo">Activa</mat-option>
-        <mat-option value="Inactivo">Inactiva</mat-option>
-        <mat-option value="Mantenimiento">Mantenimiento</mat-option>
-      </mat-select>
-    </mat-form-field>
-
-    <!-- Acciones -->
-    <div class="actions">
-      <button mat-raised-button color="primary" type="submit">
-        Guardar Cambios
+<div class="main-container">
+  <header class="page-header">
+    <div class="title-section">
+      <button mat-icon-button (click)="cancelar()" class="back-btn" type="button">
+        <mat-icon>arrow_back</mat-icon>
       </button>
-
-      <button mat-stroked-button color="warn" type="button" (click)="cancelar()">
-        Cancelar
-      </button>
+      <div>
+        <h1>Editar Sucursal</h1>
+        <p class="subtitle">Actualice la información de contacto y ubicación de la sede</p>
+      </div>
     </div>
+  </header>
 
-  </form>
-</mat-card>
+  <mat-card class="modern-form-card">
+    <form (ngSubmit)="guardar()" class="sucursal-form" #sucursalForm="ngForm">
+      
+      <div class="form-section">
+        <h3 class="section-title"><mat-icon>store</mat-icon> Datos Generales</h3>
+        
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Nombre de la Sucursal</mat-label>
+            <input matInput [(ngModel)]="nombre" name="nombre" placeholder="Ej: Sucursal Centro" required />
+            <mat-icon matPrefix>business</mat-icon>
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline">
+            <mat-label>Teléfono de Contacto</mat-label>
+            <input matInput [(ngModel)]="telefono" name="telefono" placeholder="Ej: 300 123 4567" required />
+            <mat-icon matPrefix>phone</mat-icon>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Estado</mat-label>
+            <mat-select [(ngModel)]="estado" name="estado">
+              <mat-option value="Activo">
+                <mat-icon class="text-success">check_circle</mat-icon> Activa
+              </mat-option>
+              <mat-option value="Inactivo">
+                <mat-icon class="text-danger">cancel</mat-icon> Inactiva
+              </mat-option>
+              <mat-option value="Mantenimiento">
+                <mat-icon class="text-warning">build</mat-icon> Mantenimiento
+              </mat-option>
+            </mat-select>
+            <mat-icon matPrefix>info</mat-icon>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <h3 class="section-title"><mat-icon>location_on</mat-icon> Ubicación Física</h3>
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Dirección Completa</mat-label>
+          <input matInput [(ngModel)]="direccion" name="direccion" placeholder="Ej: Cra 10 #20-30" required />
+          <mat-icon matPrefix>place</mat-icon>
+        </mat-form-field>
+      </div>
+
+      <div class="form-actions">
+        <button mat-button class="cancel-btn" type="button" (click)="cancelar()">
+          Cancelar
+        </button>
+        <button mat-flat-button color="primary" class="submit-btn" type="submit" [disabled]="!sucursalForm.valid">
+          <mat-icon>save</mat-icon>
+          Guardar Cambios
+        </button>
+      </div>
+
+    </form>
+  </mat-card>
+</div>

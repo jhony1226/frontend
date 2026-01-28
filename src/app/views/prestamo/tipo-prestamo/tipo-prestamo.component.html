@@ -1,45 +1,78 @@
 <div class="main-container">
   <header class="page-header">
-    <div class="title-section">
-      <button mat-icon-button (click)="cancelar()" class="back-btn" matTooltip="Volver a la lista de tipos">
+    <div class="header-content">
+      <button mat-icon-button (click)="cancelar()" class="back-btn" matTooltip="Volver">
         <mat-icon>arrow_back</mat-icon>
       </button>
       <div>
-        <h1>{{ isEditing ? 'Editar Tipo de Préstamo' : 'Crear Nuevo Tipo de Préstamo' }}</h1>
-        <p class="subtitle">{{ isEditing ? 'Ajuste las condiciones de este crédito' : 'Establezca las condiciones para nuevos créditos' }}</p>
+        <h1>{{ isEditing ? 'Editar Tipo de Préstamo' : 'Nuevo Tipo de Préstamo' }}</h1>
+        <p class="subtitle">Configura las reglas de cálculo automático para tus cobradores</p>
       </div>
     </div>
   </header>
 
-  <mat-card class="modern-form-card">
-    <form class="tipo-prestamo-form" (ngSubmit)="guardar()" #tipoPrestamoForm="ngForm">
+  <mat-card class="modern-card">
+    <form (ngSubmit)="guardar()" #tipoPrestamoForm="ngForm">
       
       <div class="form-section">
-        <h3 class="section-title"><mat-icon>info</mat-icon> Detalles del Tipo</h3>
+        <div class="section-header">
+          <mat-icon>settings_suggest</mat-icon>
+          <span>Configuración del Plan</span>
+        </div>
+        
         <div class="form-row">
-          <mat-form-field appearance="outline">
-            <mat-label>Cantidad de Cuotas</mat-label>
-            <input matInput type="number" [(ngModel)]="cantidadCuotas" name="cantidadCuotas" required placeholder="Ej: 30" min="1" />
-            <mat-icon matPrefix>looks_two</mat-icon>
-            <mat-hint>Número total de pagos para este tipo de préstamo.</mat-hint>
-          </mat-form-field>
-
-          <mat-form-field appearance="outline">
-            <mat-label>Porcentaje de Interés</mat-label>
-            <input matInput type="number" [(ngModel)]="porcentaje" name="porcentaje" required placeholder="Ej: 10 (sin el %)" min="0" step="0.01" />
-            <mat-icon matPrefix>percent</mat-icon>
-            <mat-hint>Porcentaje de interés aplicado al monto del préstamo (ej: 10 para 10%).</mat-hint>
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Nombre del Plan</mat-label>
+            <input matInput [(ngModel)]="nombrePlan" name="nombrePlan" required placeholder="Ej: Plan Diario Especial" />
+            <mat-icon matPrefix>label</mat-icon>
           </mat-form-field>
         </div>
+
+        <div class="grid-2">
+         <mat-form-field appearance="outline">
+            <mat-label>Frecuencia</mat-label>
+            <mat-icon matPrefix>update</mat-icon>
+            <mat-select [(ngModel)]="frecuencia" name="frecuencia">
+              <mat-option value="DIARIO">Diario</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Cantidad de Cuotas</mat-label>
+            <input matInput type="number" [(ngModel)]="cantidadCuotas" name="cantidadCuotas" required min="1" />
+            <mat-icon matPrefix>looks_two</mat-icon>
+          </mat-form-field>
+        </div>
+
+       <div class="grid-2">
+          <mat-form-field appearance="outline">
+            <mat-label>Porcentaje Interés (%)</mat-label>
+            <mat-icon matPrefix>percent</mat-icon> <input matInput type="number" [(ngModel)]="porcentaje" name="porcentaje" required />
+          </mat-form-field>
+           <!--
+          <mat-form-field appearance="outline">
+            <mat-label>Días de Gracia</mat-label>
+            <mat-icon matPrefix>timer</mat-icon>
+            <input matInput type="number" [(ngModel)]="diasGracia" name="diasGracia" />
+            <mat-hint>Días antes de marcar mora</mat-hint>
+          </mat-form-field>  -->
+        </div>
+       <!--
+        <div class="checkbox-box">
+          <mat-checkbox [(ngModel)]="incluyeDomingos" name="incluyeDomingos" color="primary">
+            ¿Se incluye el cobro los domingos?
+          </mat-checkbox>
+        </div>  -->
+
       </div>
 
-      <div class="form-actions">
-        <button mat-button class="cancel-btn" type="button" (click)="cancelar()">
+      <div class="actions">
+        <button mat-button type="button" (click)="cancelar()" class="cancel-btn">
           Cancelar
         </button>
         <button mat-flat-button color="primary" class="submit-btn" type="submit" [disabled]="!tipoPrestamoForm.valid">
           <mat-icon>{{ isEditing ? 'save' : 'add_circle_outline' }}</mat-icon>
-          {{ isEditing ? 'Guardar Cambios' : 'Crear Tipo' }}
+          {{ isEditing ? 'Guardar Cambios' : 'Crear Plan' }}
         </button>
       </div>
 

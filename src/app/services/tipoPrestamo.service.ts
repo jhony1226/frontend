@@ -4,8 +4,12 @@ import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 
 export interface TipoPrestamo { 
+  tipo_prestamo_id?: number;
   cantidad_cuotas: number;
-  porcentaje: number; 
+  porcentaje: number;
+  nombre_plan?: string;
+  frecuencia?: string; 
+  created_at?: string;
 }
 
 // Omitimos el ID para la creación
@@ -15,13 +19,13 @@ export type TipoPrestamoRequest = Omit<TipoPrestamo, 'tipo_prestamo_id' | 'creat
   providedIn: 'root'
 })
 export class TipoPrestamoService {
-  private apiUrl = `${environment.apiUrl}/tipo-prestamo`; // Ajusta tu endpoint
+  private apiUrl = `${environment.apiUrl}/TipoPrestamo`; // Ajusta tu endpoint
 
   constructor(private http: HttpClient) {}
 
   // Obtener todos los tipos de préstamo
   getTiposPrestamo(): Observable<TipoPrestamo[]> {
-    return this.http.get<TipoPrestamo[]>(this.apiUrl);
+    return this.http.get<TipoPrestamo[]>(`${this.apiUrl}/getTipoPrestamo`);
   }
 
   // Obtener un tipo de préstamo por ID

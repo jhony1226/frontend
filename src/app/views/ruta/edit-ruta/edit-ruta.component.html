@@ -1,67 +1,84 @@
-<mat-card class="route-card">
-  <mat-card-title>
-    Editar Ruta
-  </mat-card-title>
-
-  <form class="route-form" (ngSubmit)="actualizar()">
-
-    <!-- Nombre -->
-    <mat-form-field appearance="outline">
-      <mat-label>Nombre de la Ruta</mat-label>
-      <input matInput [(ngModel)]="ruta.nombre_ruta" name="nombre_ruta" placeholder="Ej: Ruta Centro" required />
-    </mat-form-field>
-
-    <!-- Zona -->
-    <mat-form-field appearance="outline">
-      <mat-label>Zona</mat-label>
-      <input matInput [(ngModel)]="ruta.zona" name="zona" placeholder="Ej: Zona Norte" />
-    </mat-form-field>
-
-    <!-- Estado -->
-    <mat-form-field appearance="outline">
-      <mat-label>Estado</mat-label>
-      <mat-select [(ngModel)]="ruta.estado" name="estado">
-        <mat-option value="ACTIVO">Activo</mat-option>
-        <mat-option value="INACTIVO">Inactivo</mat-option>
-      </mat-select>
-    </mat-form-field>
-
-    
-<mat-form-field appearance="outline">
-  <mat-label>Cobrador</mat-label>
-  <mat-select [(ngModel)]="cobradorSeleccionadoId" name="cobrador_id">
-    
-    <mat-option>
-      <ngx-mat-select-search 
-  [(ngModel)]="filtroCobrador"
-  (ngModelChange)="filtrarCobradores()"
-  [ngModelOptions]="{standalone: true}"  placeholderLabel="Buscar cobrador..."
-  noEntriesFoundLabel="No se encontraron cobradores"
-  ngDefaultControl>
-</ngx-mat-select-search>
-    </mat-option>
-    
-    <mat-option value="">Sin asignar</mat-option>
-    <mat-option
-      *ngFor="let cobrador of cobradoresFiltrados"
-      [value]="cobrador.usuario_id">
-      {{ cobrador.nombres }} {{ cobrador.apellidos }}
-    </mat-option>
-  </mat-select>
-</mat-form-field>
- 
-  
-
-    <!-- Acciones -->
-    <div class="actions">
-      <button mat-raised-button color="primary" type="submit">
-        Actualizar Ruta
+<div class="main-container">
+  <header class="page-header">
+    <div class="title-section">
+      <button mat-icon-button (click)="cancelar()" class="back-btn" type="button">
+        <mat-icon>arrow_back</mat-icon>
       </button>
-
-      <button mat-stroked-button color="warn" type="button" (click)="cancelar()">
-        Cancelar
-      </button>
+      <div>
+        <h1>Editar Ruta</h1>
+        <p class="subtitle">Actualice la ubicación y el personal asignado</p>
+      </div>
     </div>
+  </header>
 
-  </form>
-</mat-card>
+  <mat-card class="modern-form-card">
+    <form class="route-form" (ngSubmit)="actualizar()" #editForm="ngForm">
+      
+      <div class="form-section">
+        <h3 class="section-title"><mat-icon>map</mat-icon> Información de la Ruta</h3>
+        
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Nombre de la Ruta</mat-label>
+            <input matInput [(ngModel)]="ruta.nombre_ruta" name="nombre_ruta" required placeholder="Ej: Ruta 1" />
+            <mat-icon matPrefix>route</mat-icon>
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline">
+            <mat-label>Zona</mat-label>
+            <input matInput [(ngModel)]="ruta.zona" name="zona" placeholder="Ej: Centro" />
+            <mat-icon matPrefix>location_on</mat-icon>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Estado</mat-label>
+            <mat-select [(ngModel)]="ruta.estado" name="estado">
+              <mat-option value="ACTIVO">Activo</mat-option>
+              <mat-option value="INACTIVO">Inactivo</mat-option>
+            </mat-select>
+            <mat-icon matPrefix>info</mat-icon>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <h3 class="section-title"><mat-icon>assignment_ind</mat-icon> Asignación</h3>
+        
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Cobrador</mat-label>
+          <mat-select [(ngModel)]="cobradorSeleccionadoId" name="cobrador_id">
+            <mat-option>
+              <ngx-mat-select-search 
+                [(ngModel)]="filtroCobrador"
+                (ngModelChange)="filtrarCobradores()"
+                [ngModelOptions]="{standalone: true}"
+                placeholderLabel="Buscar cobrador..."
+                noEntriesFoundLabel="No se encontraron cobradores"
+                ngDefaultControl>
+              </ngx-mat-select-search>
+            </mat-option>
+            
+            <mat-option value="">Sin asignar</mat-option>
+            <mat-option *ngFor="let cobrador of cobradoresFiltrados" [value]="cobrador.usuario_id">
+              {{ cobrador.nombres }} {{ cobrador.apellidos }}
+            </mat-option>
+          </mat-select>
+          <mat-icon matPrefix>person</mat-icon>
+        </mat-form-field>
+      </div>
+
+      <div class="form-actions">
+        <button mat-button class="cancel-btn" type="button" (click)="cancelar()">
+          Cancelar
+        </button>
+        <button mat-flat-button color="primary" class="submit-btn" type="submit" [disabled]="!editForm.valid">
+          <mat-icon>save</mat-icon>
+          Actualizar Ruta
+        </button>
+      </div>
+
+    </form>
+  </mat-card>
+</div>

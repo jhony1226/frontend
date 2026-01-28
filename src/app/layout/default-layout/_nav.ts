@@ -48,7 +48,7 @@ export const navItems: INavData[] = [
     children: [
        {
         name: 'Tipo de Préstamo',
-        url: '/prestamo/tipo-prestamo',
+        url: '/prestamo/list-tipo',
         icon: 'nav-icon-bullet',
       },
       {

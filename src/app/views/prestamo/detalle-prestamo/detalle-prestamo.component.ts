@@ -15,7 +15,7 @@ import { PrestamoService, Prestamos, CobroDetalle } from '../../../services/pres
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner'; // <--- AGREGAR ESTO
- 
+ import { TipoPrestamo, TipoPrestamoService } from '../../../services/tipoPrestamo.service';
 
 @Component({
   selector: 'app-detalle-prestamo',
@@ -43,14 +43,16 @@ export class DetallePrestamoComponent implements OnInit {
   prestamo: Prestamos | null = null;
   prestamoId: number | null = null;
   displayedColumns: string[] = ['fecha_cobro', 'monto_cobrado', 'estado'];
-
+ tiposPrestamo: TipoPrestamo[] = []; // <--- Nuevo
   constructor(
     private route: ActivatedRoute,
     private prestamoService: PrestamoService,
+    private tipoPrestamoService: TipoPrestamoService,
     private location: Location
   ) {}
 
   ngOnInit(): void {
+    this.cargarTiposPrestamo();
     this.route.paramMap.subscribe(params => {
       const id = params.get('id');
       if (id) {
@@ -58,8 +60,12 @@ export class DetallePrestamoComponent implements OnInit {
         this.loadPrestamo(this.prestamoId);
       }
     });
-  }
-
+    }
+  cargarTiposPrestamo() {
+      this.tipoPrestamoService.getTiposPrestamo().subscribe(data => {
+        this.tiposPrestamo = data;
+      });
+    }
   loadPrestamo(id: number) {
     this.prestamoService.getPrestamoInfoById(id).subscribe({
       next: (data) => {
@@ -100,9 +106,23 @@ export class DetallePrestamoComponent implements OnInit {
       });
     }
   }
+  
 
   goBack() {
     this.location.back();
+  }
+
+  
+  limpiarCero(event: any) {
+    if (this.prestamo && this.prestamo.monto_prestamo === 0) {
+      this.prestamo.monto_prestamo = null as any;
+    }
+  }
+
+  validarVacio() {
+    if (this.prestamo && (this.prestamo.monto_prestamo === null || (this.prestamo.monto_prestamo as any) === '')) {
+      this.prestamo.monto_prestamo = 0;
+    }
   }
 }
 

@@ -8,7 +8,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatSelectModule } from '@angular/material/select';
 import { MatCardModule } from '@angular/material/card';
 import { SucursalService, Sucursal } from '../../../services/sucursal.service';
-
+import { MatIconModule } from '@angular/material/icon'; // 1. Importa el módulo
+ 
 @Component({
   selector: 'app-edit-sucursal',
   standalone: true,
@@ -20,6 +21,8 @@ import { SucursalService, Sucursal } from '../../../services/sucursal.service';
     MatButtonModule,
     MatSelectModule,
     MatCardModule,
+    MatIconModule,
+    MatButtonModule
   ],
   templateUrl: './edit-sucursal.component.html',
   styleUrls: ['./edit-sucursal.component.scss'],

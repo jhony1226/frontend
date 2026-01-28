@@ -55,6 +55,8 @@ export class ListCobroComponent implements OnInit {
   isCobrosPorRuta = false;
   nombreRuta: string = '';
   canDelete = true; // Controla si se puede eliminar
+  totalRecaudadoDia: number = 1200;
+ 
 
   constructor(
     private router: Router,
@@ -224,5 +226,15 @@ export class ListCobroComponent implements OnInit {
 
   getEditRoute(item: any): string[] {
     return ['/cobro/edit-cobro'];
+  }
+
+  aprobarTodosLosCobros() {
+    // Lógica para aprobar todos los cobros del día
+    Swal.fire({
+      icon: 'success',
+      title: 'Todos los cobros del día han sido aprobados',
+      showConfirmButton: false,
+      timer: 1500,
+    });
   }
 }

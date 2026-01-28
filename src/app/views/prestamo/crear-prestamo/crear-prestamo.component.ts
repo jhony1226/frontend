@@ -15,6 +15,7 @@ import { ClienteService, Cliente } from '../../../services/cliente.service';
 import { ReplaySubject, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { Prestamos, PrestamoService } from '../../../services/prestamo.service';
+import { TipoPrestamo, TipoPrestamoService } from '../../../services/tipoPrestamo.service';
 
 @Component({
   selector: 'app-crear-prestamo',
@@ -40,14 +41,18 @@ export class CrearPrestamoComponent implements OnInit, OnDestroy {
   clienteSeleccionado: Cliente | null = null;
   periodoSeleccionado: any;
   valor: number = 0;
-  fecha: string = '';
+  fecha: Date = new Date(); // Fecha actual del sistema
   estado: string = 'ACTIVO';
   saldoPendiente: number = 0;
 
   clientes: Cliente[] = [];
+  tiposPrestamo: TipoPrestamo[] = [];
+  selectedTipoPrestamo: TipoPrestamo | null = null;
+
   periodos: any[] = [];
   isEditing = false;
   editingId: number | null = null;
+  tipoPrestamo: string = 'DIARIO'; // Mantener por compatibilidad si es necesario, o eliminar
 
   public clienteFilterCtrl: FormControl<string | null> = new FormControl<string | null>('');
   public filteredClientes: ReplaySubject<Cliente[]> = new ReplaySubject<Cliente[]>(1);
@@ -57,12 +62,13 @@ export class CrearPrestamoComponent implements OnInit, OnDestroy {
     private router: Router, 
     private route: ActivatedRoute,
     private clienteService: ClienteService,
-    private prestamoService: PrestamoService // Inyectamos el servicio corregido
-  
+    private prestamoService: PrestamoService,
+    private tipoPrestamoService: TipoPrestamoService
   ) {}
 
   ngOnInit() {
     this.cargarClientes();
+    this.cargarTiposPrestamo();
     this.periodos = JSON.parse(localStorage.getItem('periodos') || '[]');
 
     this.route.queryParams.subscribe(params => {
@@ -88,6 +94,15 @@ export class CrearPrestamoComponent implements OnInit, OnDestroy {
         this.filteredClientes.next(this.clientes.slice());
       },
       error: (err) => console.error('Error cargando clientes', err)
+    });
+  }
+
+  cargarTiposPrestamo() {
+    this.tipoPrestamoService.getTiposPrestamo().subscribe({
+      next: (data) => {
+        this.tiposPrestamo = data;
+      },
+      error: (err) => console.error('Error cargando tipos de préstamo', err)
     });
   }
 
@@ -123,7 +138,7 @@ export class CrearPrestamoComponent implements OnInit, OnDestroy {
       this.clienteSeleccionado = prestamo.cliente;
       this.periodoSeleccionado = prestamo.periodo;
       this.valor = prestamo.valor;
-      this.fecha = prestamo.fecha;
+      this.fecha = new Date(prestamo.fecha);
       this.estado = prestamo.estado;
       this.saldoPendiente = prestamo.saldoPendiente;
     }
@@ -131,22 +146,25 @@ export class CrearPrestamoComponent implements OnInit, OnDestroy {
 
  crear() {
   // 1. Validación inicial
-  if (!this.clienteSeleccionado || !this.periodoSeleccionado || !this.valor || !this.fecha) {
-    window.alert('Completa todos los campos obligatorios.');
+  if (!this.clienteSeleccionado || !this.valor || !this.fecha || !this.selectedTipoPrestamo) {
+    window.alert('Completa todos los campos obligatorios, incluyendo el tipo de préstamo.');
     return;
   }
+
+  const totalConInteres = this.valor + (this.valor * (this.selectedTipoPrestamo.porcentaje / 100));
+const valorCuotaCalculada = totalConInteres / this.selectedTipoPrestamo.cantidad_cuotas;
 
   // 2. Construir el objeto usando la INTERFAZ, no el servicio
   // Usamos Partial<Prestamos> para que coincida con tu método del servicio
   const datosPrestamo: Partial<Prestamos> = {
     cliente_id: this.clienteSeleccionado.cliente_id,
-    periodo_id: this.periodoSeleccionado.periodo_id,
-    tipo_prestamo_id: 1, 
+    periodo_id: this.periodoSeleccionado ? this.periodoSeleccionado.periodo_id : 1, // Fallback
+    tipo_prestamo_id: this.selectedTipoPrestamo.tipo_prestamo_id!, 
     monto_prestamo: Number(this.valor), // Convertimos a número para evitar líos
     saldo_pendiente: Number(this.saldoPendiente || this.valor),
     valor_intereses: 0, 
-    valor_cuota: 0,     
-    fecha_desembolso: this.fecha,
+    valor_cuota: valorCuotaCalculada,    
+    fecha_desembolso: this.fecha, 
     fecha_fin_prestamo: null,
     estado_prestamo: this.estado || 'ACTIVO'
   };
@@ -182,11 +200,25 @@ export class CrearPrestamoComponent implements OnInit, OnDestroy {
     this.clienteSeleccionado = null;
     this.periodoSeleccionado = null;
     this.valor = 0;
-    this.fecha = '';
+    this.fecha = new Date();
     this.estado = 'ACTIVO';
     this.saldoPendiente = 0;
     this.isEditing = false;
     this.editingId = null;
     this.router.navigate(['/prestamo']);
   }
+
+  // Al entrar al campo, si es 0, lo vaciamos para que el usuario escriba limpio
+limpiarCero(event: any) {
+  if (this.valor === 0) {
+    this.valor = null as any; // Usamos null para que el input se vea vacío
+  }
+}
+
+// Al salir del campo, si no escribió nada, lo devolvemos a 0
+validarVacio() {
+  if (this.valor === null || this.valor === undefined || (this.valor as any) === '') {
+    this.valor = 0;
+  }
+}
 }

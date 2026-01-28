@@ -1,0 +1,130 @@
+/* =========================================
+   VARIABLES & CONFIGURACIÓN DE TEMA
+   ========================================= */
+$primary-blue: #234ba1;
+$primary-light: #eff6ff;
+$text-dark: #1e293b;
+$text-muted: #64748b;
+$border-light: #e2e8f0;
+$bg-app: #ffffff;
+$shadow-sm: 0 1px 3px rgba(0,0,0,0.1);
+$shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+
+.main-container {
+  padding: 24px;
+  background-color: transparent;
+  min-height: 100vh;
+  font-family: 'Inter', -apple-system, sans-serif;
+
+  @media (max-width: 600px) {
+    padding: 16px; 
+  }
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 32px;
+  flex-wrap: wrap;
+  gap: 16px;
+
+  h1 {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 800;
+    color: $text-dark;
+    letter-spacing: -0.5px;
+  }
+
+  .subtitle {
+    margin: 4px 0 0 0;
+    color: $text-muted;
+    font-size: 14px;
+  }
+
+  .add-btn {
+    background-color: $primary-blue !important;
+    color: white !important;
+    border-radius: 12px;
+    padding: 0 24px;
+    height: 48px;
+    font-weight: 600;
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+    
+    mat-icon { margin-right: 8px; }
+  }
+}
+
+.content-card {
+  background: white;
+  border-radius: 16px;
+  border: 1px solid $border-light;
+  overflow: hidden;
+  box-shadow: $shadow-md !important;
+
+  table { width: 100%; border-spacing: 0; }
+
+  th.mat-header-cell {
+    background-color: #f8fafc;
+    color: $text-muted;
+    font-weight: 700;
+    font-size: 11px;
+    text-transform: uppercase;
+    padding: 16px;
+    border-bottom: 1px solid $border-light;
+  }
+
+  td.mat-cell {
+    padding: 16px;
+    color: $text-dark;
+    border-bottom: 1px solid $border-light;
+    font-size: 14px;
+  }
+
+  .hover-row:hover { background-color: #f8fafc; cursor: pointer; }
+}
+
+.plan-info {
+  display: flex;
+  flex-direction: column;
+  .main-text { font-weight: 600; color: $text-dark; }
+  .sub-text { font-size: 12px; color: $text-muted; }
+}
+
+.badge-frecuencia {
+  background-color: $primary-light;
+  color: $primary-blue;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.text-accent {
+  color: $primary-blue;
+  font-weight: 600;
+}
+
+.text-right {
+  text-align: right;
+  justify-content: flex-end;
+}
+
+.action-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+
+  button {
+    width: 36px;
+    height: 36px;
+    line-height: 36px;
+    
+    mat-icon { font-size: 20px; }
+  }
+
+  .edit-icon { color: $primary-blue; background-color: $primary-light; }
+  .delete-icon { color: #ef4444; background-color: #fef2f2; }
+}

@@ -14,6 +14,7 @@ import { CobroService } from '../../../services/cobro.service';
 import Swal from 'sweetalert2';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '../../shared/confirm-dialog/confirm-dialog.component';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-edit-cobro',
@@ -27,6 +28,7 @@ import { ConfirmDialogComponent } from '../../shared/confirm-dialog/confirm-dial
     MatInputModule,
     MatSelectModule,
     MatButtonModule,
+    MatIconModule
   ],
   templateUrl: './edit-cobro.component.html',
   styleUrls: ['./edit-cobro.component.scss']

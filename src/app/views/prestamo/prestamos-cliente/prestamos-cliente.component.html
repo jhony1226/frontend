@@ -1,81 +1,106 @@
-<div class="container">
-
-  <!-- ENCABEZADO -->
-  <div class="header">
-    <button mat-icon-button (click)="volverAClientes()" title="Volver a clientes">
+<div class="main-wrapper">
+  <header class="page-header">
+    <button mat-icon-button (click)="volverAClientes()" class="btn-back">
       <mat-icon>arrow_back</mat-icon>
     </button>
-    <h2>Préstamos del Cliente</h2>
-  </div>
-
-  <!-- FILTROS -->
-  <div class="filters">
-    <mat-form-field appearance="outline">
-      <mat-label>Buscar préstamo</mat-label>
-      <input matInput (keyup)="applyFilter($event)" placeholder="Ej. 001..." #input>
-      <mat-icon matSuffix>search</mat-icon>
-    </mat-form-field>
-  </div>
-
-  <!-- Vista de escritorio -->
-  <div *ngIf="!isMobile" class="desktop-table">
-    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
-
-      <ng-container matColumnDef="prestamo_id">
-        <th mat-header-cell *matHeaderCellDef>ID Préstamo</th>
-        <td mat-cell *matCellDef="let row">{{ row.prestamo_id }}</td>
-      </ng-container>
-
-      <ng-container matColumnDef="saldo_pendiente">
-        <th mat-header-cell *matHeaderCellDef>Saldo Pendiente</th>
-        <td mat-cell *matCellDef="let row">{{ row.saldo_pendiente | currency:'COP':'symbol':'1.0-0' }}</td>
-      </ng-container>
-
-      <ng-container matColumnDef="valor_cuota">
-        <th mat-header-cell *matHeaderCellDef>Valor Cuota</th>
-        <td mat-cell *matCellDef="let row">{{ row.valor_cuota | currency:'COP':'symbol':'1.0-0' }}</td>
-      </ng-container>
-
-      <ng-container matColumnDef="fecha_fin_prestamo">
-        <th mat-header-cell *matHeaderCellDef>Fecha Fin</th>
-        <td mat-cell *matCellDef="let row">{{ row.fecha_fin_prestamo || 'N/A' }}</td>
-      </ng-container>
-
-      <ng-container matColumnDef="actions">
-        <th mat-header-cell *matHeaderCellDef>Acciones</th>
-        <td mat-cell *matCellDef="let row">
-          <mat-icon class="edit" (click)="verDetalles(row)" title="Ver Detalles">visibility</mat-icon>
-        </td>
-      </ng-container>
-
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-    </table>
-
-    <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
-  </div>
-
-  <!-- Vista móvil -->
-  <div *ngIf="isMobile" class="mobile-list">
-    <mat-card class="mobile-card" *ngFor="let row of dataSource.connect() | async">
-      <mat-card-title>Préstamo #{{ row.prestamo_id }}</mat-card-title>
-
-      <mat-card-content>
-        <p><strong>Saldo Pendiente:</strong> {{ row.saldo_pendiente | currency:'COP':'symbol':'1.0-0' }}</p>
-        <p><strong>Valor Cuota:</strong> {{ row.valor_cuota | currency:'COP':'symbol':'1.0-0' }}</p>
-        <p><strong>Fecha Fin:</strong> {{ row.fecha_fin_prestamo || 'N/A' }}</p>
-      </mat-card-content>
-
-      <mat-card-actions>
-        <button mat-button color="primary" (click)="verDetalles(row)">
-          <mat-icon>visibility</mat-icon> VER DETALLES
-        </button>
-      </mat-card-actions>
-    </mat-card>
-
-    <div *ngIf="dataSource.filteredData.length === 0" class="no-results">
-      No se encontraron préstamos para este cliente.
+    <div class="header-text">
+      <h1>Préstamos del Cliente</h1>
+      <p class="subtitle">Historial de créditos y saldos pendientes</p>
     </div>
-  </div>
+  </header>
 
+  <mat-card class="content-card">
+    <div class="filter-bar">
+      <mat-form-field appearance="outline" class="search-field">
+        <mat-label>Buscar préstamo por ID</mat-label>
+        <input matInput (keyup)="applyFilter($event)" placeholder="Ej. 001" #input>
+        <mat-icon matPrefix>search</mat-icon>
+      </mat-form-field>
+    </div>
+
+    <div *ngIf="!isMobile" class="table-container">
+      <table mat-table [dataSource]="dataSource" matSort class="modern-table">
+
+        <ng-container matColumnDef="prestamo_id">
+          <th mat-header-cell *matHeaderCellDef> ID </th>
+          <td mat-cell *matCellDef="let row">
+            <span class="id-badge">#{{ row.prestamo_id }}</span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="saldo_pendiente">
+          <th mat-header-cell *matHeaderCellDef> Saldo Pendiente </th>
+          <td mat-cell *matCellDef="let row">
+            <span class="amount-pending">{{ row.saldo_pendiente | currency:'COP':'symbol':'1.0-0' }}</span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="valor_cuota">
+          <th mat-header-cell *matHeaderCellDef> Valor Cuota </th>
+          <td mat-cell *matCellDef="let row">
+            <span class="amount-quota">{{ row.valor_cuota | currency:'COP':'symbol':'1.0-0' }}</span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="fecha_fin_prestamo">
+          <th mat-header-cell *matHeaderCellDef> Fecha Fin </th>
+          <td mat-cell *matCellDef="let row" class="date-cell">
+            <mat-icon>calendar_today</mat-icon>
+            {{ row.fecha_fin_prestamo ? (row.fecha_fin_prestamo | date:'dd MMM, yyyy') : 'No definido' }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef> </th>
+          <td mat-cell *matCellDef="let row" class="text-right">
+            <button mat-flat-button color="primary" class="btn-view" (click)="verDetalles(row)">
+              <mat-icon>visibility</mat-icon> Detalle
+            </button>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns" class="hover-row"></tr>
+      </table>
+      <mat-paginator [pageSizeOptions]="[5, 10]" showFirstLastButtons class="custom-paginator"></mat-paginator>
+    </div>
+
+    <div *ngIf="isMobile" class="mobile-grid">
+      <div class="loan-card" *ngFor="let row of dataSource.connect() | async">
+        <div class="card-header">
+          <span class="loan-id">Préstamo #{{ row.prestamo_id }}</span>
+          <span class="status-dot"></span>
+        </div>
+        
+        <div class="card-body">
+          <div class="data-row main-amount">
+            <label>Saldo Pendiente</label>
+            <span class="val">{{ row.saldo_pendiente | currency:'COP':'symbol':'1.0-0' }}</span>
+          </div>
+          
+          <div class="secondary-info">
+            <div class="info-item">
+              <label>Cuota</label>
+              <span>{{ row.valor_cuota | currency:'COP':'symbol':'1.0-0' }}</span>
+            </div>
+            <div class="info-item">
+              <label>Finaliza</label>
+              <span>{{ row.fecha_fin_prestamo ? (row.fecha_fin_prestamo | date:'dd/MM/yy') : '--' }}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-footer">
+          <button mat-button class="btn-full" (click)="verDetalles(row)">
+            <mat-icon>arrow_forward</mat-icon> GESTIONAR PRÉSTAMO
+          </button>
+        </div>
+      </div>
+
+      <div *ngIf="dataSource.filteredData.length === 0" class="empty-state">
+        <mat-icon>receipt_long</mat-icon>
+        <p>No hay préstamos registrados</p>
+      </div>
+    </div>
+  </mat-card>
 </div>

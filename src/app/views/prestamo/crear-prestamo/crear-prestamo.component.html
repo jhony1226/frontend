@@ -1,6 +1,9 @@
 <div class="main-container">
   <header class="page-header">
     <div class="title-section">      
+      <button mat-icon-button (click)="cancelar()" class="back-btn" title="Volver">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
       <div>
         <h1>{{ isEditing ? 'Editar Préstamo' : 'Nuevo Préstamo' }}</h1>
         <p class="subtitle">{{ isEditing ? 'Ajusta los detalles del crédito' : 'Configura los valores para el nuevo préstamo' }}</p>
@@ -34,35 +37,70 @@
 
       <div class="form-section">
         <h3 class="section-title"><mat-icon>monetization_on</mat-icon> Detalles Económicos</h3>
+        
         <div class="form-row">
-          <mat-form-field appearance="outline">
+         <mat-form-field appearance="outline">
             <mat-label>Valor del Préstamo</mat-label>
-            <input matInput type="number" [(ngModel)]="valor" name="valor" placeholder="0.00" required />
+            <input 
+              matInput 
+              type="number" 
+              [(ngModel)]="valor" 
+              name="valor" 
+              placeholder="0.00" 
+              required
+              (focus)="limpiarCero($event)"
+              (blur)="validarVacio()" />
             <mat-icon matPrefix>payments</mat-icon>
           </mat-form-field>
 
           <mat-form-field appearance="outline">
-            <mat-label>Saldo Pendiente</mat-label>
-            <input matInput type="number" [(ngModel)]="saldoPendiente" name="saldoPendiente" placeholder="0.00" required />
-            <mat-icon matPrefix>account_balance_wallet</mat-icon>
+            <mat-label>Fecha de Inicio</mat-label>
+            <input matInput [matDatepicker]="picker" [(ngModel)]="fecha" name="fecha" required disabled />
+            <mat-icon matPrefix>calendar_today</mat-icon>
+            <mat-datepicker #picker></mat-datepicker>
+            <mat-hint>Fecha del Sistema</mat-hint>
           </mat-form-field>
         </div>
 
         <div class="form-row">
-          <mat-form-field appearance="outline">
-            <mat-label>Fecha de Inicio</mat-label>
-            <input matInput [matDatepicker]="picker" [(ngModel)]="fecha" name="fecha" required />
-            <mat-icon matPrefix>calendar_today</mat-icon>
-            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-            <mat-datepicker #picker></mat-datepicker>
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Tipo de Préstamo (Plan)</mat-label>
+            <mat-icon matPrefix>event_repeat</mat-icon>
+            <mat-select [(ngModel)]="selectedTipoPrestamo" name="selectedTipoPrestamo" required>
+              <mat-option *ngFor="let tipo of tiposPrestamo" [value]="tipo">
+                 {{ tipo.nombre_plan || 'Plan ' + tipo.tipo_prestamo_id }} ({{ tipo.frecuencia || 'General' }})
+              </mat-option>
+            </mat-select>
           </mat-form-field>
+        </div>
+
+        <div *ngIf="selectedTipoPrestamo" class="plan-info-container">
+          <h4><mat-icon>info</mat-icon> Resumen del Plan</h4>
+          <div class="plan-grid">
+            <div class="plan-item">
+              <strong>Cuotas</strong>
+              <span>{{ selectedTipoPrestamo.cantidad_cuotas }}</span>
+            </div>
+            <div class="plan-item">
+              <strong>Interés</strong>
+              <span class="interest-val">{{ selectedTipoPrestamo.porcentaje }}%</span>
+            </div>
+            <div class="plan-item" *ngIf="selectedTipoPrestamo.frecuencia">
+              <strong>Frecuencia</strong>
+              <span>{{ selectedTipoPrestamo.frecuencia }}</span>
+            </div>
+            <div class="plan-item" *ngIf="valor > 0">
+              <strong>Total Estimado</strong>
+              <span class="total-val">{{ (valor + (valor * (selectedTipoPrestamo.porcentaje / 100))) | currency:'COP':'symbol':'1.0-0' }}</span>
+            </div>
+          </div>
         </div>
       </div>
 
       <div class="form-section">
         <h3 class="section-title"><mat-icon>settings_suggest</mat-icon> Estado del Crédito</h3>
         <div class="form-row">
-          <mat-form-field appearance="outline">
+          <mat-form-field appearance="outline" class="full-width">
             <mat-label>Estado Actual</mat-label>
             <mat-select [(ngModel)]="estado" name="estado" [disabled]="!isEditing">
               <mat-icon matPrefix>info</mat-icon>
