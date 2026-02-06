@@ -1,15 +1,18 @@
 /* VARIABLES GLOBALES */
-$primary-blue: #2563eb;
+$primary-blue: #234ba1;
+$accent-green: #059669;
 $text-dark: #1e293b;
 $text-muted: #64748b;
 $bg-main: #f8fafc;
+$border-color: rgba(226, 232, 240, 0.8);
 
 .main-container {
   padding: 24px;
   background-color: $bg-main;
   min-height: 100vh;
+  
   @media (max-width: 600px) {
-    padding: 8px; // Reducido de 16px o 24px a solo 8px
+    padding: 12px;
   }
 }
 
@@ -27,7 +30,13 @@ $bg-main: #f8fafc;
       color: $text-dark;
     }
 
-    h1 { margin: 0; font-size: 24px; font-weight: 800; color: $text-dark; letter-spacing: -0.5px; }
+    h1 { 
+      margin: 0; 
+      font-size: 24px; 
+      font-weight: 800; 
+      color: $text-dark; 
+      letter-spacing: -0.5px; 
+    }
     .subtitle { margin: 0; color: $text-muted; font-size: 14px; }
   }
 }
@@ -36,13 +45,13 @@ $bg-main: #f8fafc;
   max-width: 800px;
   margin: 0 auto;
   border-radius: 16px !important;
-  border: 1px solid rgba(226, 232, 240, 0.8) !important;
-  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1) !important;
+  border: 1px solid $border-color !important;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08) !important;
   padding: 32px !important;
   background: #fdfdfd !important;
 
   @media (max-width: 600px) {
-    padding: 16px !important;
+    padding: 20px 16px !important;
   }
 }
 
@@ -63,6 +72,42 @@ $bg-main: #f8fafc;
     padding-bottom: 8px;
 
     mat-icon { font-size: 18px; width: 18px; height: 18px; }
+  }
+}
+
+/* INFO DEL PLAN DINÁMICO */
+.plan-info-container {
+  background: #eff6ff;
+  border: 1px solid #dbeafe;
+  border-left: 4px solid $primary-blue;
+  border-radius: 12px;
+  padding: 20px;
+  margin: 10px 0 24px 0;
+  animation: fadeIn 0.3s ease-out;
+
+  h4 {
+    margin: 0 0 12px 0;
+    color: $primary-blue;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    mat-icon { font-size: 18px; }
+  }
+
+  .plan-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 16px;
+
+    .plan-item {
+      display: flex;
+      flex-direction: column;
+      strong { font-size: 11px; color: $text-muted; text-transform: uppercase; margin-bottom: 2px; }
+      span { font-size: 15px; font-weight: 700; color: $text-dark; }
+      .interest-val { color: $accent-green; }
+      .total-val { color: $primary-blue; }
+    }
   }
 }
 
@@ -87,9 +132,15 @@ $bg-main: #f8fafc;
   padding-top: 24px;
   border-top: 1px solid #f1f5f9;
 
+  @media (max-width: 600px) {
+    flex-direction: column;
+    .submit-btn, .cancel-btn { width: 100%; height: 50px; }
+    .cancel-btn { order: 2; }
+  }
+
   .cancel-btn {
     font-weight: 600;
-    color: #64748b;
+    color: $text-muted;
   }
 
   .submit-btn {
@@ -101,8 +152,19 @@ $bg-main: #f8fafc;
   }
 }
 
-/* Ajustes de Material para coincidir con el estilo limpio */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* OVERRIDES MATERIAL */
 ::ng-deep {
-  .mat-mdc-form-field-subscript-wrapper { display: none; } /* Quita el espacio de error si no lo usas */
-  .mat-mdc-text-field-wrapper { background-color: white !important; }
+  .mat-mdc-form-field-subscript-wrapper { display: none; }
+  .mat-mdc-text-field-wrapper { 
+    background-color: white !important; 
+    transition: box-shadow 0.2s;
+  }
+  .mat-focused .mat-mdc-text-field-wrapper {
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+  }
 }

@@ -63,5 +63,9 @@ updateCliente(id: number, cliente: Partial<Cliente>): Observable<Cliente> {
   // Eliminamos el /${id} de la URL
   return this.http.put<Cliente>(`${this.apiUrl}/updateCliente`, body);
 }
+
+deleteCliente(id: number): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/deleteCliente/${id}`);
+}
     
 }

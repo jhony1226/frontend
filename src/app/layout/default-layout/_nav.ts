@@ -38,6 +38,11 @@ export const navItems: INavData[] = [
           url: '/ruta/crear-ruta',
           icon: 'nav-icon-bullet',
         },
+        {
+          name: 'Asignar Ruta',
+          url: '/ruta/asignar-ruta',
+          icon: 'nav-icon-bullet',
+        },
       ],
   },
  
@@ -48,7 +53,7 @@ export const navItems: INavData[] = [
     children: [
        {
         name: 'Tipo de Préstamo',
-        url: '/prestamo/tipo-prestamo',
+        url: '/prestamo/list-tipo',
         icon: 'nav-icon-bullet',
       },
       {

@@ -8,6 +8,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-crear-usuario',
@@ -21,7 +22,8 @@ import { MatIconModule } from '@angular/material/icon';
     MatInputModule,
     MatSelectModule,
     MatButtonModule,
-    MatIconModule
+    MatIconModule,
+    MatProgressSpinnerModule
   ],
   templateUrl: './crear-usuario.component.html',
   styleUrls: ['./crear-usuario.component.scss']
@@ -56,6 +58,33 @@ export class CrearUsuarioComponent implements OnInit {
     });
   }
 
+  // --- GETTERS PARA LOS CONTROLES ---
+  get nombres() { return this.usuarioForm.get('nombres'); }
+  get apellidos() { return this.usuarioForm.get('apellidos'); }
+  get telefono() { return this.usuarioForm.get('telefono'); }
+  get email() { return this.usuarioForm.get('email'); }
+  get tipo_usuario() { return this.usuarioForm.get('tipo_usuario'); }
+  get estado() { return this.usuarioForm.get('estado'); }
+
+  // --- MÉTODOS DE ERROR PARA EL HTML ---
+  getNombresError(): string {
+    if (this.nombres?.hasError('required')) return 'Los nombres son requeridos';
+    if (this.nombres?.hasError('minlength')) return 'Mínimo 2 caracteres';
+    return '';
+  }
+
+  getApellidosError(): string {
+    if (this.apellidos?.hasError('required')) return 'Los apellidos son requeridos';
+    if (this.apellidos?.hasError('minlength')) return 'Mínimo 2 caracteres';
+    return '';
+  }
+
+  getEmailError(): string {
+    if (this.email?.hasError('required')) return 'El email es requerido';
+    if (this.email?.hasError('email')) return 'Email inválido';
+    return '';
+  }
+
   onSubmit(): void {
     if (this.usuarioForm.invalid) {
       this.usuarioForm.markAllAsTouched();
@@ -64,34 +93,16 @@ export class CrearUsuarioComponent implements OnInit {
 
     this.loading = true;
 
-    // TODO: Implementar llamada al servicio
-    // this.usuarioService.createUsuario(this.usuarioForm.value).subscribe({
-    //   next: (response) => {
-    //     console.log('Usuario creado:', response);
-    //     this.router.navigate(['/usuario/list']);
-    //   },
-    //   error: (error) => {
-    //     console.error('Error al crear usuario:', error);
-    //     this.loading = false;
-    //   }
-    // });
-
-    // Simulación
-    console.log('Crear usuario:', this.usuarioForm.value);
+    // Simulación de guardado (aquí iría tu usuarioService)
+    console.log('Datos a enviar:', this.usuarioForm.value);
+    
     setTimeout(() => {
       this.loading = false;
       this.router.navigate(['/usuario/list']);
-    }, 1000);
+    }, 1500);
   }
 
   onCancel(): void {
     this.router.navigate(['/usuario/list']);
   }
-
-  get nombres() { return this.usuarioForm.get('nombres'); }
-  get apellidos() { return this.usuarioForm.get('apellidos'); }
-  get telefono() { return this.usuarioForm.get('telefono'); }
-  get email() { return this.usuarioForm.get('email'); }
-  get tipo_usuario() { return this.usuarioForm.get('tipo_usuario'); }
-  get estado() { return this.usuarioForm.get('estado'); }
 }

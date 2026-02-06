@@ -1,48 +1,73 @@
-<mat-card class="route-card">
-  <mat-card-title>
-    Crear Nueva Ruta
-  </mat-card-title>
-
-  <form class="route-form" (ngSubmit)="crear()">
-
-    <!-- Nombre -->
-    <mat-form-field appearance="outline">
-      <mat-label>Nombre de la Ruta</mat-label>
-      <input matInput [(ngModel)]="ruta.nombre_ruta" name="nombre_ruta" placeholder="Ej: Ruta Centro" required />
-    </mat-form-field>
-
-    <!-- Descripción -->
-    <mat-form-field appearance="outline">
-      <mat-label>Descripción</mat-label>
-      <input matInput [(ngModel)]="ruta.descripcion" name="descripcion" placeholder="Ej: Zona céntrica" />
-    </mat-form-field>
-
-    <!-- Zona -->
-    <mat-form-field appearance="outline">
-      <mat-label>Zona</mat-label>
-      <input matInput [(ngModel)]="ruta.zona" name="zona" placeholder="Ej: Zona Norte" required />
-    </mat-form-field>
-
-    <!-- Estado -->
-    <mat-form-field appearance="outline">
-      <mat-label>Estado</mat-label>
-      <mat-select [(ngModel)]="ruta.estado" name="estado">
-        <mat-option value="ACTIVO">Activo</mat-option>
-        <mat-option value="INACTIVO">Inactivo</mat-option>
-        <mat-option value="SUSPENDIDO">Suspendido</mat-option>
-      </mat-select>
-    </mat-form-field>
-
-    <!-- Acciones -->
-    <div class="actions">
-      <button mat-raised-button color="primary" type="submit">
-        Crear Ruta
-      </button>
-
-      <button mat-stroked-button color="warn" type="button" (click)="cancelar()">
-        Cancelar
-      </button>
+<div class="main-container">
+  <header class="page-header">
+    <div class="title-section">
+      <button mat-icon-button [routerLink]="['/ruta/list-ruta']" class="back-btn">
+  <mat-icon>arrow_back</mat-icon>
+</button>
+      <div>
+        <h1>Crear Nueva Ruta</h1>
+        <p class="subtitle">Define una nueva zona geográfica para los cobros diarios</p>
+      </div>
     </div>
+  </header>
 
-  </form>
-</mat-card>
+  <mat-card class="modern-form-card">
+    <form class="route-form" (ngSubmit)="crear()" #rutaForm="ngForm">
+      
+      <div class="form-section">
+        <h3 class="section-title"><mat-icon>map</mat-icon> Información de Ubicación</h3>
+        
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Nombre de la Ruta</mat-label>
+            <input matInput [(ngModel)]="ruta.nombre_ruta" name="nombre_ruta" placeholder="Ej: Ruta Centro - Sector A" required />
+            <mat-icon matPrefix>route</mat-icon>
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline">
+            <mat-label>Zona / Barrio</mat-label>
+            <input matInput [(ngModel)]="ruta.zona" name="zona" placeholder="Ej: Zona Norte" required />
+            <mat-icon matPrefix>location_on</mat-icon>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Estado de la Ruta</mat-label>
+            <mat-select [(ngModel)]="ruta.estado" name="estado" required>
+              <mat-option value="ACTIVO">
+                <mat-icon class="text-success">check_circle</mat-icon> Activo
+              </mat-option>
+              <mat-option value="INACTIVO">
+                <mat-icon class="text-danger">pause_circle</mat-icon> Inactivo
+              </mat-option>
+              <mat-option value="SUSPENDIDO">
+                <mat-icon class="text-warning">report_problem</mat-icon> Suspendido
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <h3 class="section-title"><mat-icon>description</mat-icon> Detalles Adicionales</h3>
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Descripción o Notas</mat-label>
+          <textarea matInput [(ngModel)]="ruta.descripcion" name="descripcion" placeholder="Notas sobre el recorrido o puntos de referencia..." rows="3"></textarea>
+          <mat-icon matPrefix>notes</mat-icon>
+        </mat-form-field>
+      </div>
+
+      <div class="form-actions">
+        <button mat-button class="cancel-btn" type="button" (click)="cancelar()">
+          Cancelar
+        </button>
+        <button mat-flat-button color="primary" class="submit-btn" type="submit" [disabled]="!rutaForm.valid">
+          <mat-icon>save</mat-icon>
+          Guardar Ruta
+        </button>
+      </div>
+
+    </form>
+  </mat-card>
+</div>

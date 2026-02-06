@@ -14,6 +14,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { ConfirmDialogComponent } from '../../shared/confirm-dialog/confirm-dialog.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { RouterModule } from '@angular/router';
 @Component({
   selector: 'app-crear-ruta',
   standalone: true,
@@ -27,7 +28,8 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
   MatSelectModule,
   MatIconModule,
   MatDialogModule,
-  MatSnackBarModule
+  MatSnackBarModule,
+  RouterModule
   ],
   templateUrl: './crear-ruta.component.html',
   styleUrls: ['./crear-ruta.component.scss'],

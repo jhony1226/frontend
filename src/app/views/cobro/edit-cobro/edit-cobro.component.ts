@@ -14,6 +14,7 @@ import { CobroService } from '../../../services/cobro.service';
 import Swal from 'sweetalert2';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '../../shared/confirm-dialog/confirm-dialog.component';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-edit-cobro',
@@ -27,6 +28,7 @@ import { ConfirmDialogComponent } from '../../shared/confirm-dialog/confirm-dial
     MatInputModule,
     MatSelectModule,
     MatButtonModule,
+    MatIconModule
   ],
   templateUrl: './edit-cobro.component.html',
   styleUrls: ['./edit-cobro.component.scss']
@@ -48,7 +50,7 @@ export class EditCobroComponent implements OnInit {
       usuario_id: [{ value: null, disabled: true }],
       cliente_nombre: [{ value: '', disabled: true }],
       fecha_cobro: [{ value: '', disabled: true }],
-      monto_cobrado: [{ value: null, disabled: true }],
+      monto_cobrado: [null, [Validators.required, Validators.min(0)]],
       estado: ['pendiente', Validators.required]
     });
   }
@@ -183,5 +185,20 @@ private actualizarCobro() {
     }
   });
 }
+limpiarCeroRecaudo() {
+  const monto = this.cobroForm.get('monto_cobrado')?.value;
+  if (monto === 0) {
+    this.cobroForm.get('monto_cobrado')?.patchValue(null);
+  }
+}
+
+// Al salir del campo: si el usuario no escribió nada, devolvemos a 0 para evitar errores
+validarVacioRecaudo() {
+  const monto = this.cobroForm.get('monto_cobrado')?.value;
+  if (monto === null || monto === undefined || monto === '') {
+    this.cobroForm.get('monto_cobrado')?.patchValue(0);
+  }
+}
+
 }
 

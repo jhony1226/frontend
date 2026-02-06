@@ -8,9 +8,12 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSelectModule } from '@angular/material/select';
 import { MatIconModule } from '@angular/material/icon';
+import { MatDialogModule, MatDialog } from '@angular/material/dialog';
 import { ClienteService, Cliente } from '../../../services/cliente.service';
 import { RutasService, Rutas } from '../../../services/rutas.service'; // Nueva importación
+import { SucursalContextService } from '../../../services/sucursal-context.service';
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search'; // Nueva importación
+import { ConfirmDialogComponent, ConfirmDialogData } from '../../shared/confirm-dialog/confirm-dialog.component';
 import { ReplaySubject, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
@@ -27,6 +30,7 @@ import { takeUntil } from 'rxjs/operators';
     MatButtonModule,
     MatSelectModule,
     MatIconModule,
+    MatDialogModule,
     NgxMatSelectSearchModule // Agregado
   ],
   templateUrl: './crear-cliente.component.html',
@@ -41,6 +45,7 @@ export class CrearClienteComponent implements OnInit, OnDestroy {
   estado: string = 'ACTIVO';
   rutaId: number = 0;
   clienteId: number | null = null;
+  sucursalId: number | null = null;
   isEditMode: boolean = false;
 
   // Gestión de Rutas (Reactive)
@@ -54,16 +59,22 @@ export class CrearClienteComponent implements OnInit, OnDestroy {
     private router: Router,
     private route: ActivatedRoute,
     private clienteService: ClienteService,
-    private rutasService: RutasService // Inyección del servicio
+    private rutasService: RutasService, // Inyección del servicio
+    private sucursalContextService: SucursalContextService,
+    private dialog: MatDialog
   ) {}
 
   ngOnInit() {
     this.cargarRutas();
     
+    // Obtener sucursal actual
+    this.sucursalContextService.sucursalActual$.subscribe(sucursal => {
+      this.sucursalId = sucursal ? sucursal.id : null;
+    });
+
     // Filtro dinámico de rutas
     this.rutaFilterCtrl.valueChanges
-      .pipe(takeUntil(this._onDestroy))
-      .subscribe(() => this.filterRutas());
+      .pipe(takeUntil(this._onDestroy))      .subscribe(() => this.filterRutas());
 
     this.route.queryParams.subscribe(params => {
       if (params['id']) {
@@ -120,11 +131,34 @@ export class CrearClienteComponent implements OnInit, OnDestroy {
   guardar() {
     const selectedRutaId = this.rutaCtrl.value; 
 
-    if (!this.nombre || !this.apellido || !this.identificacion || !this.telefono || !this.direccion || !selectedRutaId) {
-      window.alert('Completa todos los campos obligatorios.');
+    if (!this.nombre || !this.apellido || !this.identificacion || !this.telefono || !this.direccion || !selectedRutaId || !this.sucursalId) {
+      window.alert('Completa todos los campos obligatorios (incluyendo sucursal).');
       return;
     }
 
+    const dialogData: ConfirmDialogData = {
+      title: this.isEditMode ? 'Actualizar Cliente' : 'Registrar Cliente',
+      message: this.isEditMode 
+        ? '¿Está seguro que desea actualizar los datos de este cliente?' 
+        : '¿Está seguro que desea registrar este nuevo cliente?',
+      confirmText: this.isEditMode ? 'Actualizar' : 'Registrar',
+      cancelText: 'Cancelar',
+      color: 'primary',
+      type: this.isEditMode ? 'info' : 'success'
+    };
+
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      data: dialogData
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.procesarGuardado(selectedRutaId);
+      }
+    });
+  }
+
+  private procesarGuardado(selectedRutaId: number) {
     const clienteData: Partial<Cliente> = {
       nombres: this.nombre,
       apellidos: this.apellido,
@@ -133,12 +167,13 @@ export class CrearClienteComponent implements OnInit, OnDestroy {
       direccion: this.direccion,
       estado: this.estado,
       id_ruta: selectedRutaId,
+      sucursal_id: this.sucursalId!
     };
 
     if (this.isEditMode && this.clienteId) {
       this.clienteService.updateCliente(this.clienteId, clienteData).subscribe({
         next: () => {
-          window.alert('¡Cliente actualizado exitosamente!');
+          // window.alert('¡Cliente actualizado exitosamente!');
           this.cancelar();
         },
         error: (err) => {
@@ -149,7 +184,7 @@ export class CrearClienteComponent implements OnInit, OnDestroy {
     } else {
       this.clienteService.createCliente(clienteData).subscribe({
         next: () => {
-          window.alert('¡Cliente creado exitosamente!');
+          // window.alert('¡Cliente creado exitosamente!');
           this.cancelar();
         },
         error: (err) => {
@@ -158,6 +193,38 @@ export class CrearClienteComponent implements OnInit, OnDestroy {
         }
       });
     }
+  }
+
+  eliminar() {
+    if (!this.clienteId) return;
+
+    const dialogData: ConfirmDialogData = {
+      title: 'Eliminar Cliente',
+      message: '¿Está seguro que desea eliminar este cliente? Esta acción no se puede deshacer.',
+      confirmText: 'Eliminar',
+      cancelText: 'Cancelar',
+      color: 'warn',
+      type: 'error'
+    };
+
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      data: dialogData
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.clienteService.deleteCliente(this.clienteId!).subscribe({
+          next: () => {
+            // window.alert('Cliente eliminado exitosamente');
+            this.cancelar();
+          },
+          error: (err) => {
+            console.error('Error eliminando cliente', err);
+            window.alert('Error al eliminar cliente');
+          }
+        });
+      }
+    });
   }
 
   cancelar() {

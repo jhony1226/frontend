@@ -89,6 +89,12 @@
         <button mat-button class="cancel-btn" type="button" (click)="cancelar()">
           Cancelar
         </button>
+
+        <button *ngIf="isEditMode" mat-flat-button color="warn" type="button" (click)="eliminar()">
+          <mat-icon>delete</mat-icon>
+          Eliminar
+        </button>
+
         <button mat-flat-button color="primary" class="submit-btn" type="submit">
           <mat-icon>{{ isEditMode ? 'save' : 'person_add' }}</mat-icon>
           {{ isEditMode ? 'Guardar Cambios' : 'Registrar Cliente' }}

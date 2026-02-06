@@ -7,7 +7,7 @@ export interface Prestamos {
   prestamo_id: number;
   cliente_id: number;         
   periodo_id: number;
-  tipo_prestamo_id: number;    
+  id_tipo_prestamo: number;    
   monto_prestamo: string | number; 
   saldo_pendiente: string | number;
   valor_intereses: string | number;
@@ -78,5 +78,6 @@ export class PrestamoService {
   createPrestamo(prestamo: Partial<Prestamos>): Observable<Prestamos> {
     return this.http.post<Prestamos>(`${this.apiUrl}/createPrestamo`, prestamo);
   } 
+
   
 }

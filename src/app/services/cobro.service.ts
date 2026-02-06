@@ -28,6 +28,13 @@ export interface Cobro {
   updated_at?: string;
 }
 
+export interface Cobrohistorial {
+  fecha: Date;
+  estado: string;
+  monto: number;
+}
+
+
 @Injectable({
   providedIn: 'root'
 })
@@ -53,12 +60,14 @@ export class CobroService {
   }
 
   createCobro(cobro: CreateCobroDto): Observable<Cobro> {
-    const url = `${this.apiUrl}/createCobro`;
-    console.log('CobroService - URL completa:', url);
-    console.log('CobroService - Datos a enviar:', cobro);
+    const url = `${this.apiUrl}/createCobro`; 
     return this.http.post<Cobro>(url, cobro);
   }
   getCobrosByRutaId(rutaId: number | string): Observable<Cobro[]> {
     return this.http.get<Cobro[]>(`${this.apiUrl}/getCobrosByRutaid/${rutaId}`);
   }
+   gethistorialcobros(prestamoId: number | string): Observable<Cobrohistorial[]> {
+    return this.http.get<Cobrohistorial[]>(`${this.apiUrl}/getCobrosByPrestamoId/${prestamoId}`);
+  }
+ 
 }

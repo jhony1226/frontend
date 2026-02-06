@@ -11,11 +11,14 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatSelectModule } from '@angular/material/select';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatDialogModule, MatDialog } from '@angular/material/dialog';
+import { MatSnackBarModule, MatSnackBar } from '@angular/material/snack-bar';
 
 // Plugins & Services
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 import { ClienteService, Cliente } from '../../../services/cliente.service';
 import { RutasService, Rutas } from '../../../services/rutas.service';
+import { ConfirmDialogComponent, ConfirmDialogData } from '../../shared/confirm-dialog/confirm-dialog.component';
 import { ReplaySubject, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
@@ -26,7 +29,8 @@ import { takeUntil } from 'rxjs/operators';
     CommonModule, FormsModule, ReactiveFormsModule,
     MatCardModule, MatFormFieldModule, MatInputModule,
     MatButtonModule, MatSelectModule, MatIconModule,
-    MatTooltipModule, NgxMatSelectSearchModule
+    MatTooltipModule, NgxMatSelectSearchModule, MatDialogModule,
+    MatSnackBarModule
   ],
   templateUrl: './edit-cliente.component.html',
   styleUrls: ['./edit-cliente.component.scss'],
@@ -55,7 +59,9 @@ export class EditClienteComponent implements OnInit, OnDestroy {
     private router: Router,
     private route: ActivatedRoute,
     private clienteService: ClienteService,
-    private rutasService: RutasService
+    private rutasService: RutasService,
+    private dialog: MatDialog,
+    private snackBar: MatSnackBar
   ) {}
 
   ngOnInit() {
@@ -132,17 +138,45 @@ export class EditClienteComponent implements OnInit, OnDestroy {
     const selectedRutaId = this.rutaCtrl.value;
 
     if (!this.nombre || !this.apellido || !this.identificacion || !selectedRutaId) {
-      alert('Por favor, completa los campos obligatorios marcados con *');
+      this.snackBar.open('Por favor, completa los campos obligatorios marcados con *', 'Cerrar', {
+        duration: 3000,
+        horizontalPosition: 'end',
+        verticalPosition: 'top',
+        panelClass: ['warning-snackbar']
+      });
       return;
     }
 
+    const dialogData: ConfirmDialogData = {
+      title: this.isEditMode ? 'Actualizar Cliente' : 'Registrar Cliente',
+      message: this.isEditMode 
+        ? '¿Está seguro que desea actualizar los datos de este cliente?' 
+        : '¿Está seguro que desea registrar este nuevo cliente?',
+      confirmText: this.isEditMode ? 'Actualizar' : 'Registrar',
+      cancelText: 'Cancelar',
+      color: 'primary',
+      type: this.isEditMode ? 'info' : 'success'
+    };
+
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      data: dialogData
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.procesarGuardado(selectedRutaId);
+      }
+    });
+  }
+
+  private procesarGuardado(selectedRutaId: number) {
     const clienteData: Partial<Cliente> = {
       nombres: this.nombre,
       apellidos: this.apellido,
       numero_identificacion: this.identificacion,
       telefono: this.telefono,
       direccion: this.direccion,
-      estado: this.estado.toUpperCase(), // API suele esperar MAYÚSCULAS
+      estado: this.estado.toUpperCase(),
       id_ruta: selectedRutaId,
       sucursal_id: 1 // TODO: Obtener de sesión/usuario
     };
@@ -157,10 +191,23 @@ export class EditClienteComponent implements OnInit, OnDestroy {
   private actualizarCliente(data: Partial<Cliente>) {
     this.clienteService.updateCliente(this.clienteId, data).subscribe({
       next: () => {
-        alert('Cliente actualizado exitosamente');
+        this.snackBar.open('Cliente actualizado exitosamente', 'Cerrar', {
+          duration: 3000,
+          horizontalPosition: 'end',
+          verticalPosition: 'top',
+          panelClass: ['success-snackbar']
+        });
         this.router.navigate(['/cliente/list-cliente']);
       },
-      error: (err) => console.error('Error al actualizar', err)
+      error: (err) => {
+        console.error('Error al actualizar', err);
+        this.snackBar.open('Error al actualizar cliente', 'Cerrar', {
+          duration: 3000,
+          horizontalPosition: 'end',
+          verticalPosition: 'top',
+          panelClass: ['error-snackbar']
+        });
+      }
     });
   }
 
@@ -168,10 +215,23 @@ export class EditClienteComponent implements OnInit, OnDestroy {
     // Asumiendo que tienes un método createCliente en tu servicio
     this.clienteService.createCliente(data as Cliente).subscribe({
       next: () => {
-        alert('Cliente creado exitosamente');
+        this.snackBar.open('Cliente creado exitosamente', 'Cerrar', {
+          duration: 3000,
+          horizontalPosition: 'end',
+          verticalPosition: 'top',
+          panelClass: ['success-snackbar']
+        });
         this.router.navigate(['/cliente/list-cliente']);
       },
-      error: (err) => console.error('Error al crear', err)
+      error: (err) => {
+        console.error('Error al crear', err);
+         this.snackBar.open('Error al crear cliente', 'Cerrar', {
+          duration: 3000,
+          horizontalPosition: 'end',
+          verticalPosition: 'top',
+          panelClass: ['error-snackbar']
+        });
+      }
     });
   }
 

@@ -15,7 +15,8 @@ import { PrestamoService, Prestamos, CobroDetalle } from '../../../services/pres
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner'; // <--- AGREGAR ESTO
- 
+ import { TipoPrestamo, TipoPrestamoService } from '../../../services/tipoPrestamo.service';
+import { CobroService } from '../../../services/cobro.service';
 
 @Component({
   selector: 'app-detalle-prestamo',
@@ -43,21 +44,56 @@ export class DetallePrestamoComponent implements OnInit {
   prestamo: Prestamos | null = null;
   prestamoId: number | null = null;
   displayedColumns: string[] = ['fecha_cobro', 'monto_cobrado', 'estado'];
-
+  tiposPrestamo: TipoPrestamo[] = [];
+  historialCobros: any[] = [];
   constructor(
     private route: ActivatedRoute,
     private prestamoService: PrestamoService,
-    private location: Location
-  ) {}
+    private tipoPrestamoService: TipoPrestamoService,
+    private location: Location,
+    private cobroService: CobroService ) {}
 
   ngOnInit(): void {
+    this.cargarTiposPrestamo();
     this.route.paramMap.subscribe(params => {
       const id = params.get('id');
       if (id) {
         this.prestamoId = +id;
         this.loadPrestamo(this.prestamoId);
+        this.cargarHistorialCobros(this.prestamoId);
       }
     });
+  }
+
+  cargarHistorialCobros(prestamoId: number) {
+    console.log('Cargando historial de cobros para prestamoId:', prestamoId);
+    this.cobroService.gethistorialcobros(prestamoId).subscribe({
+      next: (data: any) => {
+        this.historialCobros = data;
+        console.log('Historial de cobros cargado:', this.historialCobros);
+      },
+      error: (err: any) => {
+        console.error('Error cargando historial de cobros', err);
+      }
+    });
+  }
+    
+  cargarTiposPrestamo() {
+    this.tipoPrestamoService.getTiposPrestamo().subscribe(data => {
+      // Normalizamos los datos para asegurar que tengan id_tipo_prestamo
+      this.tiposPrestamo = data.map((t: any) => {
+        if (!t.id_tipo_prestamo) {
+           t.id_tipo_prestamo = t.id || t.Id || t.tipo_prestamo_id;
+        }
+        return t;
+      });
+      console.log('TiposPrestamo loaded (normalized):', this.tiposPrestamo);
+    });
+  }
+
+  // Helper para comparar objetos en el select y que se preseleccione correctamente el valor
+  compareTipos(t1: any, t2: any): boolean {
+    return t1 && t2 ? t1 === t2 : t1 === t2;
   }
 
   loadPrestamo(id: number) {
@@ -88,6 +124,7 @@ export class DetallePrestamoComponent implements OnInit {
 
   guardar() {
     if (this.prestamo && this.prestamoId) {
+      console.log('Guardando préstamo:', this.prestamo);
       this.prestamoService.updatePrestamo(this.prestamoId, this.prestamo).subscribe({
         next: () => {
           alert('Préstamo actualizado correctamente');
@@ -100,9 +137,22 @@ export class DetallePrestamoComponent implements OnInit {
       });
     }
   }
+  
 
   goBack() {
     this.location.back();
   }
-}
 
+  
+  limpiarCero(event: any) {
+    if (this.prestamo && this.prestamo.monto_prestamo === 0) {
+      this.prestamo.monto_prestamo = null as any;
+    }
+  }
+
+  validarVacio() {
+    if (this.prestamo && (this.prestamo.monto_prestamo === null || (this.prestamo.monto_prestamo as any) === '')) {
+      this.prestamo.monto_prestamo = 0;
+    }
+  }
+}

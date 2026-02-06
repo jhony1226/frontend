@@ -49,6 +49,16 @@ export const routes: Routes = [
         },
       },
       {
+        path: 'asignar-ruta',
+        loadComponent: () =>
+          import('./asignar-ruta/asignar-ruta.component').then(
+            (m) => m.AsignarRutaComponent
+          ),
+        data: {
+          title: 'Asignar Ruta',
+        },
+      },
+      {
         path: 'edit-ruta/:id',
         loadComponent: () =>
           import('./edit-ruta/edit-ruta.component').then(

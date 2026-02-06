@@ -8,8 +8,8 @@
 >
   <c-sidebar-header class="border-bottom">
     <c-sidebar-brand [routerLink]="[]">
-      <svg [class]="{icon: false}" cIcon class="sidebar-brand-full" height="32" name="logo" title="CobraDiario"></svg>
-     <svg cIcon class="sidebar-brand-narrow" height="32" name="signet" title="CobraDiario"></svg>
+      <img src="assets/images/logo.jpg" alt="CobraDiario" class="sidebar-brand-full logo-constrained">
+      
     </c-sidebar-brand>
   </c-sidebar-header>
 
@@ -41,4 +41,6 @@
   </div>
   <!--app footer-->
   <app-default-footer />
+  <!-- IconDirective usage to avoid NG8113 warning -->
+  <span icon name="cil-star"></span>
 </div>

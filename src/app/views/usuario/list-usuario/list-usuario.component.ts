@@ -10,17 +10,6 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDividerModule } from '@angular/material/divider';
 import { UsuarioService, Usuario } from '../../../services/usuario.service';
 
-export interface Usuario_OLD {
-  usuario_id: number;
-  nombres: string;
-  apellidos: string;
-  telefono?: string;
-  email?: string;
-  tipo_usuario: number;
-  tipoUsuarioNombre?: string;
-  estado: string;
-}
-
 @Component({
   selector: 'app-list-usuario',
   standalone: true,
@@ -40,9 +29,15 @@ export interface Usuario_OLD {
 })
 export class ListUsuarioComponent implements OnInit {
   usuarios: Usuario[] = [];
-  displayedColumns: string[] = ['nombres', 'apellidos', 'telefono', 'email', 'rol', 'estado', 'acciones'];
+  
+  // Hemos simplificado las columnas: 
+  // 'nombres' ahora contiene el avatar, nombre completo y email.
+  displayedColumns: string[] = ['nombres', 'telefono', 'rol', 'estado', 'acciones'];
 
-  constructor(private router: Router, private usuarioService: UsuarioService) {}
+  constructor(
+    private router: Router, 
+    private usuarioService: UsuarioService
+  ) {}
 
   ngOnInit(): void {
     this.cargarUsuarios();
@@ -52,6 +47,7 @@ export class ListUsuarioComponent implements OnInit {
     this.usuarioService.getUsuarios().subscribe({
       next: (data) => {
         this.usuarios = data;
+        console.log('Usuarios cargados:', data);
       },
       error: (error) => {
         console.error('Error al cargar usuarios:', error);
@@ -64,10 +60,21 @@ export class ListUsuarioComponent implements OnInit {
   }
 
   editarUsuario(usuario: Usuario): void {
+    // Asegúrate de que tu ruta en app.routes.ts acepte el parámetro :id
     this.router.navigate(['/usuario/editar', usuario.usuario_id]);
   }
 
   verDetalles(usuario: Usuario): void {
-    console.log('Ver detalles:', usuario);
+    // Podrías navegar a una vista de perfil o abrir un diálogo
+    this.router.navigate(['/usuario/detalle', usuario.usuario_id]);
+  }
+
+  /**
+   * Genera las iniciales para el avatar si no hay foto
+   */
+  getInitials(usuario: Usuario): string {
+    const n = usuario.nombres ? usuario.nombres[0] : '';
+    const a = usuario.apellidos ? usuario.apellidos[0] : '';
+    return (n + a).toUpperCase();
   }
 }

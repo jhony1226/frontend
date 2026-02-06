@@ -1,0 +1,22 @@
+<div *ngIf="tipoPrestamo">
+  <h2>Editar Tipo de Préstamo</h2>
+  <form>
+    <label>Nombre:
+      <input [(ngModel)]="tipoPrestamo.nombre" name="nombre" />
+    </label>
+    <label>Cantidad de Cuotas:
+      <input type="number" [(ngModel)]="tipoPrestamo.cantidad_cuotas" name="cuotas" />
+    </label>
+    <label>Porcentaje:
+      <input type="number" [(ngModel)]="tipoPrestamo.porcentaje" name="porcentaje" />
+    </label>
+    <label>Frecuencia:
+      <input [(ngModel)]="tipoPrestamo.frecuencia" name="frecuencia" />
+    </label>
+    <!-- Agrega más campos según sea necesario -->
+    <button type="submit">Guardar</button>
+  </form>
+</div>
+<div *ngIf="!tipoPrestamo">
+  <p>No hay datos para editar.</p>
+</div>

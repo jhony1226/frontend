@@ -1,313 +1,205 @@
-/* =========================================
-   CONTENEDOR PRINCIPAL
-   ========================================= */
-.container {
-  padding: 20px;
-  max-width: 1200px;
-  margin: 0 auto;
+/* CONTENEDOR BASE */
+.main-container {
+  padding: 24px;
+  background-color: #f8fafc;
+  min-height: 100vh;
+  @media (max-width: 600px) { padding: 12px 8px; }
 }
 
-.list-card {
-  background: #ffffff;
-  border-radius: 16px;
-  padding: 1.5rem;
-  box-shadow:
-    0 12px 30px rgba(0, 0, 0, 0.12),
-    0 4px 12px rgba(0, 0, 0, 0.08);
+/* HEADER */
+.page-header {
+  margin-bottom: 24px;
+  .header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  .title-group {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    .back-btn { background: white; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+    h1 { margin: 0; font-size: 24px; font-weight: 800; color: #1e293b; }
+    .subtitle { margin: 0; color: #64748b; font-size: 14px; }
+  }
+  .add-btn { height: 44px; border-radius: 10px; font-weight: 700; }
 }
-
-/* =========================================
-   ESTADOS
-   ========================================= */
-.estado-badge {
-  padding: 4px 12px;
-  border-radius: 12px;
-  font-weight: 600;
-  font-size: 12px;
-  display: inline-block;
-  text-align: center;
-  min-width: 80px;
-}
-
-.estado-pagado {
-  background-color: #d4edda;
-  color: #155724;
-}
-
-.estado-pendiente {
-  background-color: #fff3cd;
-  color: #856404;
-}
-
-.estado-parcial {
-  background-color: #d1ecf1;
-  color: #0c5460;
-}
-
-/* =========================================
-   HEADER
-   ========================================= */
-.header {
+.metrics-actions {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
-  flex-wrap: wrap;
-  gap: 10px;
-}
-
-.header h2 {
-  margin: 0;
-  font-weight: 600;
-  flex: 1;
-  min-width: 200px;
-}
-
-.header button {
-  margin-top: 0;
-  white-space: nowrap;
-}
-
-/* =========================================
-   FILTROS
-   ========================================= */
-.filters {
-  display: flex;
-  gap: 15px;
-  margin-bottom: 20px;
+  gap: 12px;
   flex-wrap: wrap;
 }
+.approve-all-btn {
+  height: 54px; // Para que coincida con la altura del widget de total
+  border-radius: 12px !important;
+  background-color: #1e293b !important; // Slate oscuro
+  color: white !important;
+  font-weight: 700 !important;
+  padding: 0 20px !important;
+  transition: all 0.3s ease !important;
 
-.filters mat-form-field {
-  flex: 1;
-  min-width: 200px;
+  mat-icon {
+    margin-right: 8px;
+  }
+
+  &:hover {
+    background-color: #0f172a !important;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(30, 41, 59, 0.2);
+  }
+
+  &:disabled {
+    background-color: #cbd5e1 !important;
+  }
 }
 
-/* Iconos de acciones en la tabla */
-mat-icon {
-  font-size: 20px;
-  width: 20px;
-  height: 20px;
-  cursor: pointer;
-  margin-right: 12px;
-  transition: transform 0.2s;
-}
-
-mat-icon:hover {
-  transform: scale(1.1);
-}
-
-mat-icon.edit {
-  color: #1565c0;
-}
-
-mat-icon.delete {
-  color: #c62828;
-}
-
-/* =========================================
-   TABLA DE ESCRITORIO (Estilo "Periodo")
-   ========================================= */
-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-/* Encabezado Gris (Igual que en Periodos) */
-th.mat-header-cell {
-  background-color: #f5f5f5;
-  color: #424242;
-  font-weight: 700;
-  font-size: 14px;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  padding: 16px;
-}
-
-/* Celdas del cuerpo */
-td.mat-cell {
-  padding: 14px 16px;
-  border-bottom: 1px solid #e0e0e0;
-  color: #333;
-  font-size: 14px;
-}
-
-/* Efecto Hover en las filas */
-tr.mat-row:hover {
-  background-color: #fafafa;
-}
-
-/* ---------- TABLE (Desktop) ---------- */
-.desktop-table {
-  display: block;
-  overflow-x: auto;
-}
-
-.desktop-table table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.desktop-table th,
-.desktop-table td {
-  padding: 12px;
-  text-align: left;
-  border-bottom: 1px solid #ddd;
-}
-
-.desktop-table th {
-  background-color: #f5f5f5;
-  font-weight: 600;
-}
-
-.desktop-table tr:hover {
-  background-color: #fafafa;
-}
-
-/* =========================================
-   BADGES DE ESTADO (Etiquetas de color)
-   ========================================= */
-.badge {
-  display: inline-block;
-  padding: 4px 10px;
-  border-radius: 12px;
-  font-size: 12px;
-  font-weight: 600;
-  text-transform: capitalize;
-}
-
-/* Estilos dinámicos según el estado */
-.badge.pagado {
-  background-color: #e8f5e9;
-  color: #2e7d32;
-  border: 1px solid #c8e6c9;
-}
-
-.badge.pendiente {
-  background-color: #fff3e0;
-  color: #f57c00;
-  border: 1px solid #ffe0b2;
-}
-
-.badge.parcial {
-  background-color: #e3f2fd;
-  color: #1976d2;
-  border: 1px solid #bbdefb;
-}
-
-.badge.anulado {
-  background-color: #ffebee;
-  color: #c62828;
-  border: 1px solid #ffcdd2;
-}
-
-/* =========================================
-   VISTA MÓVIL (Tarjetas)
-   ========================================= */
-.mobile-list {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  padding-bottom: 20px;
-}
-
-.mobile-card {
-  padding: 16px;
-  border-radius: 10px;
-  background: white;
-  border: 1px solid #e0e0e0;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-  display: flex;
-  flex-direction: column;
-  position: relative;
+/* CARD Y FILTROS */
+.modern-list-card {
+  border-radius: 20px !important;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.05) !important;
+  padding: 0 !important;
+  border: none !important;
   overflow: hidden;
 }
 
-/* Borde lateral de color según estado */
-.mobile-card.pagado {
-  border-left: 5px solid #2e7d32;
-}
-
-.mobile-card.pendiente {
-  border-left: 5px solid #f57c00;
-}
-
-.mobile-card.parcial {
-  border-left: 5px solid #1976d2;
-}
-
-.mobile-card.anulado {
-  border-left: 5px solid #c62828;
-}
-
-.mobile-card mat-card-title {
-  font-size: 18px;
-  font-weight: 600;
-  color: #1a237e;
-  margin-bottom: 8px;
-}
-
-.mobile-card mat-card-content p {
-  margin: 6px 0;
-  color: #616161;
-  font-size: 14px;
+.filters-container {
+  padding: 20px;
+  background: white;
+  border-bottom: 1px solid #f1f5f9;
   display: flex;
   justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+
+  .search-field { 
+    flex: 1; 
+    max-width: 400px; 
+    min-width: 250px; 
+  }
 }
 
-.mobile-card mat-card-actions {
-  margin-top: 12px;
-  padding-top: 12px;
-  border-top: 1px dashed #e0e0e0;
+/* WIDGET TOTAL RECAUDADO */
+.total-day-box {
   display: flex;
-  justify-content: flex-end;
-  gap: 8px;
-}
+  align-items: center;
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  padding: 8px 16px;
+  border-radius: 12px;
+  min-width: 180px;
+  transition: transform 0.2s ease;
 
-/* =========================================
-   RESPONSIVE
-   ========================================= */
-@media (max-width: 768px) {
-  .container {
-    padding: 10px;
-  }
+  &:hover { transform: translateY(-2px); }
 
-  /* Improve header layout for mobile */
-  .header {
-    /* Keep flex-direction row (default) to align back button and title */
-    align-items: center;
-  }
-
-  .header h2 {
-    font-size: 18px;
-    margin-bottom: 0;
-    /* Title takes available space next to back arrow */
-  }
-
-  /* Make back button normal size, not stretched */
-  .header button[mat-icon-button] {
-    width: 40px !important;
-    height: 40px !important;
-    margin-right: 4px;
-    min-width: unset;
-  }
-
-  /* Force "New Cobro" button to new line and full width */
-  .header button[mat-raised-button] {
-    width: 100%;
-    margin-top: 10px;
-    flex-basis: 100%; 
-  }
-
-  .filters {
+  .total-content {
+    display: flex;
     flex-direction: column;
+    .total-label { font-size: 11px; font-weight: 700; color: #166534; text-transform: uppercase; }
+    .total-amount { font-size: 18px; font-weight: 800; color: #14532d; }
   }
 
-  .filters mat-form-field {
-    width: 100%;
-    min-width: unset;
+  .total-icon {
+    margin-left: 12px;
+    background: #dcfce7;
+    color: #16a34a;
+    width: 36px; height: 36px;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    mat-icon { font-size: 20px; }
   }
 }
 
+/* TABLA MODERNA */
+.modern-table {
+  width: 100%;
+  th.mat-header-cell {
+    background: #f8fafc;
+    padding: 16px;
+    color: #94a3b8;
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 11px;
+    letter-spacing: 0.5px;
+  }
+  td.mat-cell { padding: 16px; border-bottom: 1px solid #f1f5f9; }
+  .hover-row:hover { background-color: #f1f5f9; cursor: pointer; }
+}
 
+/* ESTILOS DE CELDAS */
+.client-cell {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  .avatar-mini {
+    width: 32px; height: 32px; background: #e0f2fe; color: #0369a1;
+    border-radius: 8px; display: flex; align-items: center; justify-content: center;
+    font-weight: 800; font-size: 12px;
+  }
+  .bold-text { font-weight: 600; color: #1e293b; }
+}
 
+.icon-text {
+  display: flex; align-items: center; gap: 6px;
+  mat-icon { font-size: 18px; width: 18px; height: 18px; color: #94a3b8; }
+}
+
+.amount-text { font-weight: 800; color: #0f172a; }
+
+.status-badge {
+  padding: 4px 12px; border-radius: 20px; font-size: 11px; font-weight: 700; text-transform: uppercase;
+  &.pagado { background: #dcfce7; color: #166534; }
+  &.pendiente { background: #fef9c3; color: #854d0e; }
+  &.parcial { background: #e0f2fe; color: #0369a1; }
+}
+
+/* VISTA MÓVIL */
+.mobile-grid { display: flex; flex-direction: column; gap: 12px; }
+
+.cobro-mobile-card {
+  background: white; border-radius: 16px; padding: 16px;
+  border-left: 6px solid #cbd5e1;
+  box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+  
+  &.pagado { border-left-color: #22c55e; .status-dot { background: #22c55e; } }
+  &.pendiente { border-left-color: #eab308; .status-dot { background: #eab308; } }
+  
+  .card-header {
+    display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;
+    .client-name { font-weight: 800; font-size: 16px; color: #1e293b; }
+    .status-dot { width: 10px; height: 10px; border-radius: 50%; }
+  }
+
+  .info-row {
+    display: flex; justify-content: space-between; margin-bottom: 6px; font-size: 13px;
+    span:first-child { color: #94a3b8; }
+    .val { font-weight: 600; color: #334155; }
+    .highlight { color: #0f172a; font-weight: 800; }
+  }
+
+  .card-actions {
+    margin-top: 12px; padding-top: 12px; border-top: 1px dashed #e2e8f0;
+    display: flex; justify-content: flex-end;
+  }
+}
+
+/* RESPONSIVE */
+@media (max-width: 600px) {
+  .filters-container { flex-direction: column; align-items: stretch; gap: 12px; }
+  .search-field, .total-day-box { max-width: 100%; width: 100%; }
+}
+
+/* Ajuste móvil */
+@media (max-width: 600px) {
+  .metrics-actions {
+    width: 100%;
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .approve-all-btn {
+    width: 100%;
+  }
+}

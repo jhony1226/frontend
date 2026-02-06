@@ -1,108 +1,176 @@
-/* VARIABLES GLOBALES (Asegúrate de tener estas variables definidas) */
-$primary-blue: #2563eb;
+/* =========================================
+   VARIABLES & CONFIGURACIÓN DE TEMA
+   ========================================= */
+$primary-blue: #234ba1;
+$primary-light: #eff6ff;
 $text-dark: #1e293b;
 $text-muted: #64748b;
-$bg-main: #f8fafc;
+$border-light: #e2e8f0;
+$bg-app: #ffffff;          
+$shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
 
+/* =========================================
+   CONTENEDOR PRINCIPAL
+   ========================================= */
 .main-container {
   padding: 24px;
-  background-color: $bg-main;
-  min-height: 100vh;
-
-  @media (max-width: 600px) {
-    padding: 8px; /* Ajuste para móvil */
-  }
-}
-
-.page-header {
-  margin-bottom: 24px;
-  
-  .title-section {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-
-    .back-btn {
-      background: white;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-      color: $text-dark;
-    }
-
-    h1 { margin: 0; font-size: 24px; font-weight: 800; color: $text-dark; letter-spacing: -0.5px; }
-    .subtitle { margin: 0; color: $text-muted; font-size: 14px; }
-  }
-}
-
-.modern-form-card {
-  max-width: 800px; /* Ancho máximo para el formulario */
+  background-color: transparent; // El fondo lo maneja el layout
+  max-width: 900px;
   margin: 0 auto;
-  border-radius: 16px !important;
-  border: 1px solid rgba(226, 232, 240, 0.8) !important;
-  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1) !important;
-  padding: 32px !important;
+  font-family: 'Inter', -apple-system, sans-serif;
 
   @media (max-width: 600px) {
-    padding: 16px !important;
+    padding: 16px; 
   }
 }
 
-.form-section {
+/* =========================================
+   ENCABEZADO
+   ========================================= */
+.page-header {
   margin-bottom: 32px;
 
-  .section-title {
+  .header-content {
     display: flex;
     align-items: center;
-    gap: 8px;
-    font-size: 13px;
-    font-weight: 700;
-    color: $primary-blue;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    margin-bottom: 20px;
-    border-bottom: 1px solid #f1f5f9;
-    padding-bottom: 8px;
+    gap: 16px;
+  }
 
+  h1 { 
+    font-size: 24px; 
+    color: $text-dark; 
+    font-weight: 800; 
+    margin: 0; 
+    letter-spacing: -0.5px; 
+  }
+  .subtitle { 
+    color: $text-muted; 
+    font-size: 14px; 
+    margin-top: 4px; 
+  }
+
+  .back-btn {
+    background-color: white;
+    border: 1px solid $border-light;
+    color: $text-dark;
+    
+    &:hover {
+      background-color: $primary-light;
+      color: $primary-blue;
+    }
+  }
+}
+
+/* =========================================
+   TARJETA DEL FORMULARIO
+   ========================================= */
+.modern-card {
+  padding: 32px !important;
+  border-radius: 16px !important;
+  background: white !important;
+  border: 1px solid $border-light !important;
+  box-shadow: $shadow-md !important;
+}
+
+/* =========================================
+   SECCIONES DEL FORMULARIO
+   ========================================= */
+.form-section {
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 24px;
+    color: $primary-blue;
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 12px;
+    letter-spacing: 0.5px;
+    
     mat-icon { font-size: 18px; width: 18px; height: 18px; }
   }
 }
 
 .form-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr; /* Dos columnas */
-  gap: 16px;
-  margin-bottom: 8px;
+  margin-bottom: 16px;
+}
 
-  @media (max-width: 600px) {
-    grid-template-columns: 1fr; /* Una columna en móvil */
+.grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-bottom: 16px;
+  @media (max-width: 600px) { grid-template-columns: 1fr; }
+}
+
+.full-width { 
+  width: 100%; 
+}
+
+/* =========================================
+   ELEMENTOS DE INTERFAZ
+   ========================================= */
+.checkbox-box {
+  margin-top: 24px;
+  padding: 16px 20px;
+  background: $primary-light;
+  border-radius: 12px;
+  border: 1px solid rgba($primary-blue, 0.1);
+  display: flex;
+  align-items: center;
+
+  mat-checkbox {
+    font-weight: 500;
+    color: $text-dark;
   }
 }
 
-.full-width { grid-column: 1 / -1; } /* Para que un campo ocupe todo el ancho */
-
-.form-actions {
+.actions {
   display: flex;
   justify-content: flex-end;
   gap: 12px;
-  margin-top: 24px;
+  margin-top: 32px;
   padding-top: 24px;
-  border-top: 1px solid #f1f5f9;
+  border-top: 1px solid $border-light;
 
   .cancel-btn {
-    font-weight: 600;
-    color: #64748b;
+    color: $text-muted;
+    font-weight: 500;
   }
 
   .submit-btn {
     height: 48px;
-    padding: 0 24px;
+    padding: 0 32px;
     border-radius: 10px;
-    font-weight: 700;
-    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+    font-weight: 600;
+    font-size: 14px;
+    letter-spacing: 0.3px;
+    background-color: $primary-blue;
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
   }
 }
 
-/* Ajustes de Material para coincidir con el estilo limpio */
+/* =========================================
+   AJUSTES ANGULAR MATERIAL
+   ========================================= */
 ::ng-deep {
-  .mat-mdc-form-field-subscript-wrapper { display: none; } /* Quita el espacio de error si no lo usas */
-  .mat-mdc-text-field-wrapper { background-color: white !important; }
+  .mat-mdc-form-field-icon-prefix {
+    padding-right: 12px !important;
+    mat-icon { color: $text-muted !important; }
+  }
+  
+  .mat-mdc-text-field-wrapper {
+    background-color: white !important; 
+    border-radius: 12px !important;
+  }
+  
+  .mdc-notched-outline__leading,
+  .mdc-notched-outline__notch,
+  .mdc-notched-outline__trailing {
+    border-color: #cbd5e1 !important; // Slate-300
+  }
+
+  .mat-mdc-form-field-subscript-wrapper {
+    margin-bottom: 8px;
+  }
 }

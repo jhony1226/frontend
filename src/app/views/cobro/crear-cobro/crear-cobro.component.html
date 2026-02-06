@@ -1,76 +1,77 @@
-<div class="container">
+<div class="main-wrapper">
+  <header class="view-header">
+    <div class="title-container">
+      <h1>Cartera de Clientes</h1>
+      <span class="pill">{{ dataSource.data.length }} Clientes</span>
+    </div>
+     
+  </header>
 
-  <!-- ENCABEZADO -->
-   
-
-  <mat-card class="list-card">
-    <!-- FILTROS -->
-    <div class="filters">
+  <mat-card class="main-card">
+    <div class="search-section">
       <mat-form-field appearance="outline">
-        <mat-label>Buscar cliente</mat-label>
-        <input matInput (keyup)="applyFilter($event)" placeholder="Nombre…" />
-        <mat-icon matSuffix>search</mat-icon>
+        <mat-icon matPrefix>search</mat-icon>
+        <mat-label>Filtrar clientes...</mat-label>
+        <input matInput (keyup)="applyFilter($event)">
       </mat-form-field>
     </div>
 
-    <!-- TABLA DESKTOP -->
-    <div *ngIf="!isMobile" class="desktop-table">
-      <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
-
-        <!-- Nombre Cliente -->
+    <div *ngIf="!isMobile" class="desktop-view">
+      <table mat-table [dataSource]="dataSource" matSort>
         <ng-container matColumnDef="nombrecliente">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Nombre</th>
-          <td mat-cell *matCellDef="let cliente">{{ cliente.nombrecliente }}</td>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Cliente </th>
+          <td mat-cell *matCellDef="let cliente">
+            <div class="client-cell">
+              <div class="avatar">{{ cliente.nombrecliente.charAt(0) }}</div>
+              <span>{{ cliente.nombrecliente }}</span>
+            </div>
+          </td>
         </ng-container>
 
-        <!-- Dirección Cliente -->
         <ng-container matColumnDef="direccioncliente">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Dirección</th>
-          <td mat-cell *matCellDef="let cliente">{{ cliente.direccioncliente }}</td>
+          <th mat-header-cell *matHeaderCellDef> Dirección </th>
+          <td mat-cell *matCellDef="let cliente" class="text-soft">{{ cliente.direccioncliente }}</td>
         </ng-container>
 
-        <!-- Teléfono Cliente -->
         <ng-container matColumnDef="telefonocliente">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Teléfono</th>
+          <th mat-header-cell *matHeaderCellDef> Teléfono </th>
           <td mat-cell *matCellDef="let cliente">{{ cliente.telefonocliente }}</td>
         </ng-container>
 
-        <!-- Acciones -->
         <ng-container matColumnDef="acciones">
-          <th mat-header-cell *matHeaderCellDef>Acciones</th>
-          <td mat-cell *matCellDef="let cliente">
-            <mat-icon class="edit" (click)="verDetalles(cliente)" title="Ver Detalles">visibility</mat-icon>
+          <th mat-header-cell *matHeaderCellDef></th>
+          <td mat-cell *matCellDef="let cliente" class="text-right">
+            <button mat-flat-button color="primary" class="btn-desktop" (click)="verDetalles(cliente)">
+              <mat-icon>visibility</mat-icon> Ver detalles
+            </button>
           </td>
         </ng-container>
 
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-
+        <tr mat-row *matRowDef="let row; columns: displayedColumns" class="row-hover"></tr>
       </table>
-
-      <mat-paginator [pageSizeOptions]="[5,10,15]"></mat-paginator>
+      <mat-paginator [pageSizeOptions]="[10, 20]"></mat-paginator>
     </div>
 
-    <!-- VISTA MÓVIL - Tarjetas -->
-    <div *ngIf="isMobile" class="mobile-list">
+    <div *ngIf="isMobile" class="mobile-view">
+      <div class="mobile-card" *ngFor="let cliente of dataSource.connect() | async">
+        <div class="card-header">
+          <div class="avatar-m">{{ cliente.nombrecliente.charAt(0) }}</div>
+          <div class="card-titles">
+            <h3>{{ cliente.nombrecliente }}</h3>
+            <p>{{ cliente.telefonocliente }}</p>
+          </div>
+          <mat-icon class="chevron">chevron_right</mat-icon>
+        </div>
+        
+        <div class="card-body">
+          <mat-icon>place</mat-icon>
+          <span>{{ cliente.direccioncliente }}</span>
+        </div>
 
-      <mat-card class="mobile-card" *ngFor="let cliente of dataSource.connect() | async">
-        <mat-card-title>{{ cliente.nombrecliente }}</mat-card-title>
-
-        <mat-card-content>
-          <p><strong>Dirección:</strong> {{ cliente.direccioncliente }}</p>
-          <p><strong>Teléfono:</strong> {{ cliente.telefonocliente }}</p>
-        </mat-card-content>
-
-        <mat-card-actions>
-          <button mat-button color="primary" (click)="verDetalles(cliente)">
-            <mat-icon>visibility</mat-icon> VER DETALLES
-          </button>
-        </mat-card-actions>
-      </mat-card>
-
-      <div *ngIf="dataSource.filteredData.length === 0" style="text-align: center; padding: 20px; color: #666;">
-        No se encontraron resultados.
+        <div class="card-footer">
+          <button mat-button color="primary" (click)="verDetalles(cliente)">VER DETALLES</button>
+        </div>
       </div>
     </div>
   </mat-card>

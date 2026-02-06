@@ -1,0 +1,25 @@
+<h2 mat-dialog-title>Seleccionar Cliente</h2>
+
+<mat-dialog-content>
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>Buscar por nombre o DNI</mat-label>
+    <input matInput (keyup)="filtrarClientes($event)" placeholder="Ej: Juan Pérez">
+    <mat-icon matSuffix>search</mat-icon>
+  </mat-form-field>
+
+  <mat-action-list class="scrollable-list">
+    <button mat-list-item *ngFor="let cliente of clientesFiltrados" (click)="seleccionar(cliente)">
+      <mat-icon matListItemIcon>person</mat-icon>
+      <div matListItemTitle>{{ cliente.nombres }} {{ cliente.apellidos }}</div>
+      <div matListItemLine>{{ cliente.dni }} | {{ cliente.direccion }}</div>
+    </button>
+    
+    <div class="no-results" *ngIf="clientesFiltrados.length === 0">
+      No se encontraron clientes.
+    </div>
+  </mat-action-list>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Cancelar</button>
+</mat-dialog-actions>

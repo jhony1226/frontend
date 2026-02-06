@@ -29,7 +29,7 @@ function isOverflown(element: HTMLElement) {
 @Component({
   selector: 'app-dashboard',
   templateUrl: './default-layout.component.html',
-  styleUrls: ['./default-layout.component.scss'],
+  styleUrls: ['./default-layout.component.scss', './logo-constrained.css'],
   imports: [
     SidebarComponent,
     SidebarHeaderComponent,

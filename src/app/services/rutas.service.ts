@@ -32,7 +32,7 @@ export class RutasService {
   } 
 
   findRuta(id: string): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/findRuta/${id}`);
+    return this.http.get<any>(`${this.apiUrl}/getRutaById/${id}`);
   }
     
     createRutas(ruta: Rutas): Observable<Rutas> {
@@ -54,6 +54,13 @@ export class RutasService {
     payload
   );
 }
+
+actualizarOrdenClientes(rutaId: number, orden: any[]): Observable<any> {
+  // Enviamos el array de objetos {cliente_id, orden}
+  return this.http.put(`${this.apiUrl}/rutas/update-orden/${rutaId}`, { orden });
+}
+
+ 
 
 
 }

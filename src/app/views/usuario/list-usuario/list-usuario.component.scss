@@ -1,166 +1,134 @@
-.container {
-  padding: 20px;
+$primary: #2563eb;
+$bg-light: #f8fafc;
+$border: #e2e8f0;
+$text-main: #1e293b;
+$success: #10b981;
+$danger: #ef4444;
+
+.page-container {
+  padding: 32px;
+  background-color: $bg-light;
+  min-height: 100vh;
 }
 
-.header {
+.main-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
+  margin-bottom: 32px;
 
-  h2 {
-    margin: 0;
-    font-size: 24px;
-    font-weight: 500;
-  }
+  h1 { margin: 0; font-size: 28px; font-weight: 800; color: $text-main; letter-spacing: -0.5px; }
+  .subtitle { margin: 0; color: #64748b; font-size: 15px; }
 
-  button {
-    mat-icon {
-      margin-right: 5px;
-    }
+  .add-btn {
+    height: 48px;
+    border-radius: 12px;
+    padding: 0 24px;
+    font-weight: 600;
+    box-shadow: 0 4px 12px rgba($primary, 0.2);
   }
 }
 
 .content-card {
-  margin-top: 20px;
+  border-radius: 20px !important;
+  border: none !important;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1), 0 1px 2px rgba(0,0,0,0.06) !important;
+  overflow: hidden;
 }
 
-// VISTA ESCRITORIO
-.desktop-view {
-  display: block;
-  
-  .table-responsive {
-    overflow-x: auto;
-    
-    table {
-      width: 100%;
-      
-      th {
-        font-weight: 600;
-        background-color: #f5f5f5;
-      }
-      
-      td, th {
-        padding: 12px 16px;
-      }
+.table-actions {
+  padding: 20px 24px;
+  border-bottom: 1px solid $border;
 
-      .mat-mdc-chip {
-        font-size: 12px;
-        min-height: 24px;
-        padding: 0 8px;
-      }
-    }
+  .search-box {
+    display: flex;
+    align-items: center;
+    background: #f1f5f9;
+    padding: 8px 16px;
+    border-radius: 10px;
+    width: 100%;
+    max-width: 300px;
+    
+    mat-icon { color: #94a3b8; margin-right: 8px; font-size: 20px; }
+    input { border: none; background: transparent; outline: none; width: 100%; color: $text-main; font-size: 14px; }
   }
 }
 
-// VISTA MÓVIL
+/* TABLA ESTILIZADA */
+.table-container {
+  table {
+    width: 100%;
+    
+    th { color: #64748b; font-weight: 600; text-transform: uppercase; font-size: 12px; letter-spacing: 0.05em; padding: 16px; }
+    td { padding: 16px; border-bottom: 1px solid $border; }
+
+    tr:hover { background-color: #f8fafc; }
+  }
+}
+
+.user-cell {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  .avatar {
+    width: 40px; height: 40px; border-radius: 10px; background: #dbeafe;
+    color: $primary; font-weight: 700; display: flex; align-items: center; justify-content: center;
+  }
+  .user-details {
+    display: flex; flex-direction: column;
+    .full-name { font-weight: 600; color: $text-main; }
+    .user-email { font-size: 12px; color: #64748b; }
+  }
+}
+
+.contact-cell {
+  display: flex; align-items: center; gap: 8px; color: #475569; font-size: 14px;
+  mat-icon { font-size: 18px; width: 18px; height: 18px; }
+}
+
+/* BADGES Y ETIQUETAS */
+.role-badge {
+  padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: 600;
+  background: #f1f5f9; color: #475569;
+  &.admin { background: #fef3c7; color: #92400e; }
+}
+
+.status-tag {
+  display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px;
+  border-radius: 20px; font-size: 12px; font-weight: 600;
+  
+  .dot { width: 6px; height: 6px; border-radius: 50%; }
+  
+  &.activo { background: #ecfdf5; color: $success; .dot { background: $success; } }
+  &.inactivo { background: #fef2f2; color: $danger; .dot { background: $danger; } }
+}
+
+/* VISTA MÓVIL */
 .mobile-view {
   display: none;
-  
-  .no-data-message {
-    text-align: center;
-    padding: 20px;
-    color: #666;
-  }
-  
-  .usuario-card {
-    margin-bottom: 16px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    
-    .usuario-info {
-      .info-row {
-        display: flex;
-        align-items: flex-start;
-        padding: 12px 0;
-        
-        .info-icon {
-          color: #1976d2;
-          margin-right: 12px;
-          margin-top: 2px;
-        }
-        
-        .info-content {
-          flex: 1;
-          display: flex;
-          flex-direction: column;
-          
-          .info-label {
-            font-size: 12px;
-            color: #666;
-            margin-bottom: 4px;
-          }
-          
-          .info-value {
-            font-size: 14px;
-            color: #333;
-            font-weight: 500;
-          }
+  padding: 16px 0;
 
-          .mat-mdc-chip {
-            font-size: 12px;
-            min-height: 24px;
-            width: fit-content;
-            margin-top: 4px;
-          }
-        }
-      }
-      
-      .action-row {
-        padding: 16px 0 8px;
-        display: flex;
-        gap: 8px;
-        
-        .action-button {
-          flex: 1;
-          
-          mat-icon {
-            margin-right: 4px;
-          }
-        }
-      }
-      
-      mat-divider {
-        margin: 0;
-      }
+  .mobile-user-card {
+    margin-bottom: 12px; border-radius: 16px; border: 1px solid $border;
+    
+    .card-header {
+      display: flex; align-items: center; gap: 12px; padding-bottom: 12px;
+      .header-info { flex: 1; h3 { margin: 0; font-size: 16px; } }
     }
+    
+    .card-body {
+      padding: 12px 0;
+      .item { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; color: #64748b; font-size: 13px; mat-icon { font-size: 18px; } }
+    }
+
+    .card-footer { display: flex; gap: 8px; padding-top: 12px; border-top: 1px solid $border; button { flex: 1; } }
   }
 }
 
-// MEDIA QUERIES
 @media (max-width: 768px) {
-  .desktop-view {
-    display: none;
-  }
-  
-  .mobile-view {
-    display: block;
-  }
-  
-  .container {
-    padding: 12px;
-  }
-  
-  .header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 12px;
-    
-    h2 {
-      font-size: 20px;
-    }
-    
-    button {
-      width: 100%;
-    }
-  }
-}
-
-@media (max-width: 480px) {
-  .container {
-    padding: 8px;
-  }
-  
-  .header h2 {
-    font-size: 18px;
-  }
+  .page-container { padding: 16px; }
+  .desktop-view { display: none; }
+  .mobile-view { display: block; }
+  .main-header { flex-direction: column; align-items: flex-start; gap: 16px; .add-btn { width: 100%; } }
 }

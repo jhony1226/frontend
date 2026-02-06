@@ -53,6 +53,22 @@ export const routes: Routes = [
           ),
         data: { title: 'Tipo de Préstamo' },
       },
+      {
+        path: 'tipo-prestamo/:id',
+        loadComponent: () =>
+          import('./tipo-prestamo/tipo-prestamo.component').then(
+            (m) => m.TipoPrestamoComponent
+          ),
+        data: { title: 'Editar Tipo de Préstamo' },
+      },
+      {
+        path: 'list-tipo',
+        loadComponent: () =>
+          import('./list-tipo/list-tipo.component').then(
+            (m) => m.ListTipoComponent
+          ),
+        data: { title: 'Lista de Tipos de Préstamo' },
+      },
        
     ],
   },

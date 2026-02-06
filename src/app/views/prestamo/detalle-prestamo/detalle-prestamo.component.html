@@ -1,144 +1,139 @@
 <div class="main-page-container" *ngIf="prestamo">
   <header class="header-section">
     <div class="title-group">
-      <button mat-icon-button (click)="goBack()" class="back-btn" title="Volver">
+      <button mat-icon-button (click)="goBack()" class="back-btn">
         <mat-icon>arrow_back</mat-icon>
       </button>
       <div class="text-content">
-        <h1>Préstamo #{{ prestamo.prestamo_id }}</h1>
-        <span class="client-name" [title]="prestamo.nombre_cliente">
-          Cliente: <strong>{{ prestamo.nombre_cliente }}</strong>
-        </span>
+        <h1>Crédito #{{ prestamo.prestamo_id }}</h1>
+        <span class="client-name">Cliente: <strong>{{ prestamo.nombre_cliente }}</strong></span>
       </div>
     </div>
     
     <div class="status-badge" [ngClass]="prestamo.estado_prestamo.toLowerCase().replace(' ', '')">
-      <mat-icon *ngIf="prestamo.estado_prestamo.toLowerCase() === 'encurso'">bolt</mat-icon>
-      <mat-icon *ngIf="prestamo.estado_prestamo.toLowerCase() === 'pendiente'">schedule</mat-icon>
+      <mat-icon>check_circle</mat-icon>
       <span>{{ prestamo.estado_prestamo }}</span>
     </div>
   </header>
 
   <section class="kpi-grid">
-    <div class="kpi-card">
-      <span class="label">Monto Prestado</span>
-      <span class="value">{{ prestamo.monto_prestamo | currency:'COP':'symbol-narrow':'1.0-0' }}</span>
-    </div>
-    <div class="kpi-card highlight">
+    <div class="kpi-card primary">
       <span class="label">Saldo Pendiente</span>
-      <span class="value">{{ prestamo.saldo_pendiente | currency:'COP':'symbol-narrow':'1.0-0' }}</span>
-      <mat-icon class="icon-bg">account_balance_wallet</mat-icon>
+      <span class="value">{{ prestamo.saldo_pendiente | currency:'COP':'$':'1.0-0' }}</span>
+      <mat-icon class="icon-bg">payments</mat-icon>
     </div>
     <div class="kpi-card">
-      <span class="label">Cuota Pactada</span>
-      <span class="value">{{ prestamo.valor_cuota | currency:'COP':'symbol-narrow':'1.0-0' }}</span>
+      <span class="label">Cuota Actual</span>
+      <span class="value">{{ prestamo.valor_cuota | currency:'COP':'$':'1.0-0' }}</span>
     </div>
     <div class="kpi-card">
-      <span class="label">Intereses</span>
-      <span class="value text-warn">{{ prestamo.valor_intereses | currency:'COP':'symbol-narrow':'1.0-0' }}</span>
+      <span class="label">Intereses Acumulados</span>
+      <span class="value">{{ prestamo.valor_intereses | currency:'COP':'$':'1.0-0' }}</span>
     </div>
   </section>
 
   <div class="main-content-layout">
     
-    <div class="form-container">
-      <mat-card class="modern-card fixed-height-desktop">
+    <div class="management-column">
+      <mat-card class="modern-card">
         <mat-card-header>
-          <mat-card-title>Configuración y Fechas</mat-card-title>
+          <mat-card-title>Ajustar Condiciones</mat-card-title>
         </mat-card-header>
         
-        <mat-card-content>
-          <form class="info-grid-modern">
-            <mat-form-field appearance="outline">
-              <mat-label>Estado del Préstamo</mat-label>
-              <mat-select [(ngModel)]="prestamo.estado_prestamo" name="estado_prestamo">
-                <mat-option value="En curso">En curso</mat-option>
-                <mat-option value="Pagado">Pagado</mat-option>
-              </mat-select>
-            </mat-form-field>
+       <mat-card-content>
+  <form class="edit-form">
+    <div class="form-fields-wrapper">
+      
+      <div class="input-group-layout">
+        <mat-form-field appearance="outline">
+          <mat-label>Monto del Préstamo</mat-label>
+          <input matInput type="number" [(ngModel)]="prestamo.monto_prestamo" name="monto"
+                 (focus)="limpiarCero($event)" (blur)="validarVacio()">
+          <span matPrefix>$&nbsp;</span>
+        </mat-form-field>
 
-            <mat-form-field appearance="outline" class="amount-field">
-              <mat-label>Valor Intereses</mat-label>
-              <input matInput type="number" [(ngModel)]="prestamo.valor_intereses" name="valor_intereses">
-              <span matPrefix>$&nbsp;</span>
-            </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Plan de Préstamo</mat-label>
+          <mat-select [(ngModel)]="prestamo.id_tipo_prestamo" name="tipo">
+            <mat-option *ngFor="let tipo of tiposPrestamo" [value]="tipo.id_tipo_prestamo">
+              {{ tipo.nombre || 'Plan ' + tipo.cantidad_cuotas }} ({{ tipo.porcentaje }}%)
+            </mat-option>
+          </mat-select>
+          <mat-icon matSuffix>tune</mat-icon>
+        </mat-form-field>
+      </div>
 
-            <mat-form-field appearance="outline">
-              <mat-label>Fecha Desembolso</mat-label>
-              <input matInput [matDatepicker]="picker" [(ngModel)]="prestamo.fecha_desembolso" name="fecha_desembolso">
-              <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-              <mat-datepicker #picker></mat-datepicker>
-            </mat-form-field>
-
-            <mat-form-field appearance="outline">
-              <mat-label>Fecha Fin</mat-label>
-              <input matInput [matDatepicker]="pickerFin" [(ngModel)]="prestamo.fecha_fin_prestamo" name="fecha_fin_prestamo">
-              <mat-datepicker-toggle matIconSuffix [for]="pickerFin"></mat-datepicker-toggle>
-              <mat-datepicker #pickerFin></mat-datepicker>
-            </mat-form-field>
-
-            <mat-form-field appearance="outline" class="full-width">
-              <mat-label>Monto del Préstamo</mat-label>
-              <input matInput type="number" [(ngModel)]="prestamo.monto_prestamo" name="monto_prestamo">
-              <span matPrefix>$&nbsp;</span>
-            </mat-form-field>
-          </form>
-
-          <div class="form-actions">
-            <button mat-button color="warn" (click)="goBack()">Cancelar</button>
-            <button mat-raised-button color="primary" class="rect-btn" (click)="guardar()">
-              <mat-icon>save</mat-icon> Guardar Cambios
-            </button>
+      <div class="readonly-section">
+        <h4 class="info-title">Cronograma del Crédito</h4>
+        <div class="dates-container">
+          <div class="date-item">
+            <div class="icon-box start">
+              <mat-icon>calendar_today</mat-icon>
+            </div>
+            <div class="date-text">
+              <label>Fecha Desembolso</label>
+              <span>{{ prestamo.fecha_desembolso | date:'dd MMM, yyyy' }}</span>
+            </div>
           </div>
-        </mat-card-content>
+
+          <div class="date-separator">
+            <mat-icon>trending_flat</mat-icon>
+          </div>
+
+          <div class="date-item">
+            <div class="icon-box end">
+              <mat-icon>event_available</mat-icon>
+            </div>
+            <div class="date-text">
+              <label>Fecha Fin (Estimada)</label>
+              <span>{{ prestamo.fecha_fin_prestamo ? (prestamo.fecha_fin_prestamo | date:'dd MMM, yyyy') : 'No calculada' }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+    </div>
+  </form>
+  <form class="edit-form">
+    <div class="actions">
+      <button mat-flat-button color="primary" class="save-btn" (click)="guardar()">
+        <mat-icon>save</mat-icon>
+        Guardar Cambios
+      </button>
+    </div>
+  </form>
+</mat-card-content>
       </mat-card>
     </div>
 
-    <div class="sidebar-container">
-      <mat-card class="modern-card fixed-height-desktop">
+    <div class="history-column">
+      <mat-card class="modern-card">
         <mat-card-header>
-          <mat-card-title>Historial de Pagos</mat-card-title>
-          <span class="spacer"></span>
-          <button mat-icon-button color="accent" class="export-btn">
-            <mat-icon>file_download</mat-icon>
-          </button>
+          <mat-card-title>Últimos Movimientos</mat-card-title>
         </mat-card-header>
-        
         <mat-divider></mat-divider>
-        
-        <mat-card-content class="scroll-area">
-          <div class="table-responsive">
-            <table mat-table [dataSource]="[prestamo]" class="modern-table compact"> 
-              <ng-container matColumnDef="fecha_cobro">
-                <th mat-header-cell *matHeaderCellDef> Fecha </th>
-                <td mat-cell *matCellDef="let c"> {{ c.fecha_desembolso | date:'dd/MM/yy' }} </td>
-              </ng-container>
+        <div class="scroll-container">
+          <table mat-table [dataSource]="historialCobros" class="compact-table">
+            <ng-container matColumnDef="fecha_cobro">
+              <th mat-header-cell *matHeaderCellDef> Fecha </th>
+              <td mat-cell *matCellDef="let c"> {{ c.fecha | date:'dd/MM/yy' }} </td>
+            </ng-container>
+            <ng-container matColumnDef="monto_cobrado">
+              <th mat-header-cell *matHeaderCellDef> Cobro </th>
+              <td mat-cell *matCellDef="let c"> {{ c.monto | currency:'COP':'$':'1.0-0' }} </td>
+            </ng-container>
+            <ng-container matColumnDef="estado">
+              <th mat-header-cell *matHeaderCellDef> Estatus </th>
+              <td mat-cell *matCellDef="let c">
+                <span class="status-chip">{{ c.estado }}</span>
+              </td>
+            </ng-container>
 
-              <ng-container matColumnDef="monto_cobrado">
-                <th mat-header-cell *matHeaderCellDef> Monto </th>
-                <td mat-cell *matCellDef="let c"> <strong>{{ c.valor_cuota | currency:'COP':'symbol-narrow':'1.0-0' }}</strong> </td>
-              </ng-container>
-
-              <ng-container matColumnDef="estado">
-                <th mat-header-cell *matHeaderCellDef> Estado </th>
-                <td mat-cell *matCellDef="let c">
-                  <span class="pay-badge small" [ngClass]="c.estado_prestamo.toLowerCase().replace(' ', '')">
-                    {{ c.estado_prestamo }}
-                  </span>
-                </td>
-              </ng-container>
-
-              <tr mat-header-row *matHeaderRowDef="['fecha_cobro', 'monto_cobrado', 'estado']; sticky: true"></tr>
-              <tr mat-row *matRowDef="let row; columns: ['fecha_cobro', 'monto_cobrado', 'estado'];"></tr>
-            </table>
-          </div>
-        </mat-card-content>
+            <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+          </table>
+        </div>
       </mat-card>
     </div>
   </div>
-</div>
-
-<div class="loading-container" *ngIf="!prestamo">
-  <mat-spinner diameter="40"></mat-spinner>
-  <p>Cargando información...</p>
 </div>

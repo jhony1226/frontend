@@ -36,10 +36,10 @@ import { CobroService } from '../../../services/cobro.service';
   ],
 })
 export class ListCobroComponent implements OnInit {
+    nombreCobrador: string = '';
   displayedColumns: string[] = [
     'idprestamo',
-    'nombrecliente',
-    'cobrador',
+    'nombrecliente', 
     'fecha_cobro',
     'monto_cobrado',
     'estado',
@@ -55,6 +55,8 @@ export class ListCobroComponent implements OnInit {
   isCobrosPorRuta = false;
   nombreRuta: string = '';
   canDelete = true; // Controla si se puede eliminar
+  totalRecaudadoDia: number = 1200;
+ 
 
   constructor(
     private router: Router,
@@ -117,6 +119,7 @@ export class ListCobroComponent implements OnInit {
           this.cobroData = data;
           this.dataSource = new MatTableDataSource(this.cobroData);
           this.dataSource.paginator = this.paginator;
+           
         },
         error: (err) => {
           console.error('Error al cargar cobros', err);
@@ -125,14 +128,24 @@ export class ListCobroComponent implements OnInit {
     }
   }
 
-  obtenerNombreRuta(id: string) {
-    this.rutasService.getRutas().subscribe((rutas: any[]) => {
-      const rutaEncontrada = rutas.find((r) => r.ruta_id == id);
-      if (rutaEncontrada) {
-        this.nombreRuta = rutaEncontrada.nombre_ruta;
+ obtenerNombreRuta(id: string) {
+  this.rutasService.findRuta(id).subscribe({
+    next: (ruta) => {
+      if (ruta) {
+        this.nombreRuta = ruta.nombre_ruta;
+        
+        // PRUEBA ESTO: Agrega un log para ver qué trae exactamente el objeto 'ruta'
+        console.log('Datos de la ruta recibidos:', ruta);
+
+        // Ajusta según los nombres reales de tus campos en la base de datos
+        this.nombreCobrador = ruta.nombre_cobrador || ruta.cobrador || 'Sin asignar';
       }
-    });
-  }
+    },
+    error: (err: any) => {
+      console.error('Error al obtener la ruta:', err);
+    }
+  });
+}
 
   detectMobile() {
     this.responsive.observe([Breakpoints.Handset]).subscribe((result) => {
@@ -224,5 +237,15 @@ export class ListCobroComponent implements OnInit {
 
   getEditRoute(item: any): string[] {
     return ['/cobro/edit-cobro'];
+  }
+
+  aprobarTodosLosCobros() {
+    // Lógica para aprobar todos los cobros del día
+    Swal.fire({
+      icon: 'success',
+      title: 'Todos los cobros del día han sido aprobados',
+      showConfirmButton: false,
+      timer: 1500,
+    });
   }
 }

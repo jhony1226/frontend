@@ -8,6 +8,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { UsuarioService } from '../../../services/usuario.service';
 import { finalize } from 'rxjs/operators';
 
@@ -23,7 +24,8 @@ import { finalize } from 'rxjs/operators';
     MatInputModule,
     MatSelectModule,
     MatButtonModule,
-    MatIconModule
+    MatIconModule,
+    MatProgressSpinnerModule // Importante para el diseño moderno
   ],
   templateUrl: './editar-usuario.component.html',
   styleUrls: ['./editar-usuario.component.scss']
@@ -32,6 +34,7 @@ export class EditarUsuarioComponent implements OnInit {
   usuarioForm!: FormGroup;
   loading = false;
   usuarioId: number | null = null;
+  usuarioNombreActual = 'Cargando...'; // Para el subtítulo del diseño
 
   tiposUsuario = [
     { id: 1, nombre: 'Administrador' },
@@ -51,6 +54,18 @@ export class EditarUsuarioComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.initForm();
+    
+    // Capturar ID y cargar datos
+    this.route.params.subscribe(params => {
+      this.usuarioId = params['id'] ? +params['id'] : null;
+      if (this.usuarioId) {
+        this.cargarUsuario(this.usuarioId);
+      }
+    });
+  }
+
+  private initForm(): void {
     this.usuarioForm = this.fb.group({
       sucursal_id: [null],
       nombres: ['', [Validators.required, Validators.minLength(2)]],
@@ -61,58 +76,52 @@ export class EditarUsuarioComponent implements OnInit {
       tipo_usuario: [2, [Validators.required]],
       estado: ['activo', [Validators.required]]
     });
-
-    // Obtener ID del usuario de la ruta
-    this.route.params.subscribe(params => {
-      this.usuarioId = params['id'] ? +params['id'] : null;
-      if (this.usuarioId) {
-        this.cargarUsuario(this.usuarioId);
-      }
-    });
   }
 
   cargarUsuario(id: number): void {
     this.usuarioService.getUsuarioById(id).subscribe({
       next: (usuario) => {
         this.usuarioForm.patchValue(usuario);
+        this.usuarioNombreActual = `${usuario.nombres} ${usuario.apellidos}`;
       },
       error: (error) => {
         console.error('Error al cargar usuario:', error);
+        this.usuarioNombreActual = 'Error al cargar';
       }
     });
   }
 
+  // --- MÉTODOS DE ERROR (Requeridos por el diseño moderno) ---
+  getNombresError() {
+    if (this.nombres?.hasError('required')) return 'Los nombres son requeridos';
+    if (this.nombres?.hasError('minlength')) return 'Mínimo 2 caracteres';
+    return '';
+  }
+
+  getApellidosError() {
+    if (this.apellidos?.hasError('required')) return 'Los apellidos son requeridos';
+    if (this.apellidos?.hasError('minlength')) return 'Mínimo 2 caracteres';
+    return '';
+  }
+
+  getEmailError() {
+    if (this.email?.hasError('required')) return 'El email es requerido';
+    if (this.email?.hasError('email')) return 'Formato de email inválido';
+    return '';
+  }
+
   onSubmit(): void {
-    if (this.usuarioForm.invalid) {
+    if (this.usuarioForm.invalid || !this.usuarioId) {
       this.usuarioForm.markAllAsTouched();
       return;
     }
 
-    if (!this.usuarioId) {
-      console.error('No se ha especificado el ID del usuario');
-      return;
-    }
-
     this.loading = true;
-
-    const datosActualizados = this.usuarioForm.value;
-    console.log('Enviando datos:', datosActualizados);
-
-    this.usuarioService.updateUsuario(this.usuarioId, datosActualizados)
-      .pipe(
-        finalize(() => this.loading = false)
-      )
+    this.usuarioService.updateUsuario(this.usuarioId, this.usuarioForm.value)
+      .pipe(finalize(() => this.loading = false))
       .subscribe({
-        next: (response) => {
-          console.log('Usuario actualizado exitosamente:', response);
-          setTimeout(() => {
-            this.router.navigate(['/usuario/list']);
-          }, 0);
-        },
-        error: (error) => {
-          console.error('Error al actualizar usuario:', error);
-          alert('Error al actualizar usuario: ' + (error.error?.error || error.message));
-        }
+        next: () => this.router.navigate(['/usuario/list']),
+        error: (error) => alert('Error: ' + (error.error?.error || 'No se pudo actualizar'))
       });
   }
 
@@ -120,6 +129,7 @@ export class EditarUsuarioComponent implements OnInit {
     this.router.navigate(['/usuario/list']);
   }
 
+  // Getters
   get nombres() { return this.usuarioForm.get('nombres'); }
   get apellidos() { return this.usuarioForm.get('apellidos'); }
   get telefono() { return this.usuarioForm.get('telefono'); }

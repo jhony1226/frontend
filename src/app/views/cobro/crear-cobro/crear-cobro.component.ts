@@ -64,14 +64,11 @@ export class CrearCobroComponent implements OnInit {
     });
   }
 
-  cargarClientes(): void {
-
-    
+  cargarClientes(): void {    
     const userId = this.authService.getCurrentUserValue()?.id;
-
     console.log('--- Depuración cargarClientes ---');
-  console.log('ID del usuario logueado:', userId);
-  console.log('Tipo de dato del ID:', typeof userId);
+    console.log('ID del usuario logueado:', userId);
+    console.log('Tipo de dato del ID:', typeof userId);
     if (userId) {
       this.clienteService.getClientesByRuta(userId).subscribe({
         next: (data) => {
